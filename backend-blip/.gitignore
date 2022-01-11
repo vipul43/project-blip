@@ -1,0 +1,10 @@
+# temporary files
+.DS_Store
+.*~
+*~
+
+# npm node modules
+node_modules
+
+# env files
+.env
