@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
 import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
@@ -22,6 +23,32 @@ const routes = [
     props: (route) => ({ userId: route.params.id }),
   },
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("../views/Dashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      }
+      next();
+    },
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("../views/Settings.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      }
+      next();
+    },
+  },
+  {
     path: "/donate-blood",
     name: "DonateBlood",
     component: () => import("../views/DonateBlood.vue"),
@@ -30,6 +57,14 @@ const routes = [
     path: "/track-blood",
     name: "TrackBlood",
     component: () => import("../views/TrackBlood.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      }
+      next();
+    },
   },
   {
     path: "/blog",
