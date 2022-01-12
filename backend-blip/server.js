@@ -1,14 +1,16 @@
 // importing modules
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-require("dotenv").config();
 const db = require("./app/models");
 const connect = require("./mongodb.js");
 const userController = require("./app/controllers/user.controller.js");
 const errors = require("./app/commons/errors.js");
 const codes = require("./app/commons/codes.js");
+const auth = require("./app/auth/auth.js");
 
 // setting up express app
 const app = express();
@@ -22,26 +24,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connecting to mongodb database
 connect(db);
 
-// Admin APIs
+// User APIs
 app.post("/user/signup", async (req, res) => {
   try {
-    const result = await userController.create(req.body);
-    res.status(codes.CREATED).json({ userId: result.id });
+    const user = await userController.create(req.body);
+    const token = auth.generate({ username: req.body.name });
+    res.status(codes.CREATED).json({ token: token, user: user });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.CREATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.NOT_FOUND).json({ error: errors.NOT_FOUND });
+      res.status(codes.NOT_FOUND).json({ error: error });
     }
   }
 });
 
 app.post("/user/signin", async (req, res) => {
   try {
-    const result = await userController.findOne(req.body);
-    res.status(codes.ACCEPTED).json({ message: "Sign In Successful." });
+    const user = await userController.findOne(req.body);
+    const token = auth.generate({ username: req.body.name });
+    res.status(codes.ACCEPTED).json({ token: token, user: user });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -49,9 +55,27 @@ app.post("/user/signin", async (req, res) => {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else if (error === errors.INVALID_USER_CREDENTIALS) {
       res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.NOT_FOUND).json({ error: errors.NOT_FOUND });
+      res.status(codes.NOT_FOUND).json({ error: error });
     }
+  }
+});
+
+app.post("/user/auth", auth.authenticate, async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  }
+});
+
+app.post("/user/signout", auth.authenticate, async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
   }
 });
 
