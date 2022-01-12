@@ -6,11 +6,11 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const db = require("./app/models");
-const connect = require("./mongodb.js");
+const connect = require("./app/utils/mongodb.util.js");
 const userController = require("./app/controllers/user.controller.js");
-const errors = require("./app/commons/errors.js");
-const codes = require("./app/commons/codes.js");
-const auth = require("./app/auth/auth.js");
+const errors = require("./app/utils/errors.util.js");
+const codes = require("./app/utils/codes.util.js");
+const auth = require("./app/middlewares/auth.middleware.js");
 
 // setting up express app
 const app = express();

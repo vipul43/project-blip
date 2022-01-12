@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const codes = require("../commons/codes.js");
-const errors = require("../commons/errors.js");
+const codes = require("../utils/codes.util.js");
+const errors = require("../utils/errors.util.js");
 
 exports.generate = (username) => {
   try {

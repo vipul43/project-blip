@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const errors = require("./errors.js");
+const errors = require("./errors.util.js");
 
 exports.hashAndSalt = async (password) => {
   try {
