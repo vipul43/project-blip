@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "@/store";
 
 const httpClient = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: process.env.VUE_APP_API_BASE_URI,
   headers: { "Content-Type": "application/json", Accept: "*" },
 });
 
