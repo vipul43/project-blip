@@ -4,17 +4,17 @@ const user = db.users;
 const helper = require("../commons/helper.js");
 
 exports.create = async (doc) => {
-  try {
-    if (doc.name && doc.password) {
+  if (doc && doc.name && doc.password) {
+    try {
       const hashedPassword = await helper.hashAndSalt(doc.password);
       const new_user = new user({ name: doc.name, password: hashedPassword });
       const result = await new_user.save();
       return result;
-    } else {
-      throw errors.INVALID_PAYLOAD;
+    } catch (error) {
+      throw errors.CREATION_FAILED;
     }
-  } catch (error) {
-    throw errors.CREATION_FAILED;
+  } else {
+    throw errors.INVALID_PAYLOAD;
   }
 };
 
@@ -28,8 +28,8 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findOne = async (doc) => {
-  try {
-    if (doc.name && doc.password) {
+  if (doc && doc.name && doc.password) {
+    try {
       const cursor = user.find({ name: doc.name }).cursor();
       for (
         let user = await cursor.next();
@@ -42,11 +42,11 @@ exports.findOne = async (doc) => {
         }
       }
       throw errors.INVALID_USER_CREDENTIALS;
-    } else {
-      throw errors.INVALID_PAYLOAD;
+    } catch (error) {
+      throw errors.VALIDATION_FAILED;
     }
-  } catch (error) {
-    throw errors.VALIDATION_FAILED;
+  } else {
+    throw errors.INVALID_PAYLOAD;
   }
 };
 
