@@ -25,6 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 connect(db);
 
 // User APIs
+// Signing up user by creating entry in database,
+//generating jwt token to send as payload
 app.post("/user/signup", async (req, res) => {
   try {
     const user = await userController.create(req.body);
@@ -43,6 +45,8 @@ app.post("/user/signup", async (req, res) => {
   }
 });
 
+// Siging in user by validating user credentials in database,
+// generating jwt token to send as payload
 app.post("/user/signin", async (req, res) => {
   try {
     const user = await userController.findOne(req.body);
@@ -63,6 +67,7 @@ app.post("/user/signin", async (req, res) => {
   }
 });
 
+// Authenticating user and resending the payload
 app.post("/user/auth", auth.authenticate, async (req, res) => {
   if (req && req.body) {
     res.status(codes.ACCEPTED).json(req.body);
@@ -71,6 +76,8 @@ app.post("/user/auth", auth.authenticate, async (req, res) => {
   }
 });
 
+// Authenticating user, signing out user and
+//blacklisting the token to avoid further login with same token
 app.post("/user/signout", auth.authenticate, async (req, res) => {
   if (req && req.body) {
     res.status(codes.ACCEPTED).json(req.body);
@@ -79,7 +86,6 @@ app.post("/user/signout", auth.authenticate, async (req, res) => {
   }
 });
 
-// User APIs
 // app.get('/user/:id', (req, res) => {
 //     console.log(req.params.id);
 // })
