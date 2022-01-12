@@ -1,7 +1,7 @@
 const db = require("../models");
 const errors = require("../utils/errors.util.js");
 const user = db.users;
-const helper = require("../utils/helper.js");
+const helper = require("../utils/helper.util.js");
 
 exports.create = async (doc) => {
   if (doc && doc.name && doc.password) {
