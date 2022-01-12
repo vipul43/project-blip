@@ -4,3 +4,6 @@ exports.NOT_FOUND = "Not Found.";
 exports.HASHING_FAILED = "Hashing Failed.";
 exports.VALIDATION_FAILED = "Validation Failed.";
 exports.INVALID_USER_CREDENTIALS = "Invalid User Credentials.";
+exports.INVALID_TOKEN = "Invalid Token.";
+exports.AUTHENTICATION_FAILED = "Authentication Failed.";
+exports.TOKEN_GENERATION_FAILED = "Token Generation Failed.";
