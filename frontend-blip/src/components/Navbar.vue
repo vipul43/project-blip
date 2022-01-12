@@ -10,12 +10,29 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title class="pr-16">BLiP</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon to="/login">
+      <v-menu v-if="authenticated" left bottom close-on-click>
+        <template v-slot:activator="{ on, attrs }">
+          <v-avatar color="red" size="36" v-bind="attrs" v-on="on">
+            <span class="white--text text-h5">{{ username[0] }}</span>
+          </v-avatar>
+        </template>
+
+        <v-list>
+          <v-list-item to="/settings">
+            <v-list-item-title>Account Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="signOut">
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <v-btn v-else icon to="/login">
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <template v-slot:extension>
         <v-tabs centered slider-color="#222831" show-arrows>
-          <v-tab v-for="(tab, i) in tabs" :to="tab.src" :key="i">
+          <v-tab v-for="(tab, i) in tabs" :key="i" :to="tab.src">
             {{ tab.title }}
           </v-tab>
         </v-tabs>
@@ -25,6 +42,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Navbar",
   components: {},
@@ -56,5 +75,43 @@ export default {
       },
     ],
   }),
+  computed: {
+    ...mapGetters({
+      authenticated: "auth/authenticated",
+      username: "auth/username",
+      token: "auth/token",
+    }),
+  },
+  watch: {
+    authenticated: {
+      handler(authenticated) {
+        if (authenticated) {
+          this.tabs = this.tabs.concat({
+            title: "Dashboard",
+            src: "/dashboard",
+          });
+        }
+      },
+      immediate: true,
+    },
+  },
+  methods: {
+    ...mapActions({
+      invalidate: "auth/invalidate",
+    }),
+    signOut() {
+      this.invalidate({ token: "this.token", username: "this.username" }).then(
+        () => {
+          this.$router
+            .replace({
+              name: "Home",
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      );
+    },
+  },
 };
 </script>
