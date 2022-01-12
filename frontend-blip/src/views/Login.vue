@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { createUser, validateUser } from "@/api.js";
+import { mapActions } from "vuex";
 
 export default {
   name: "Login",
@@ -58,32 +58,44 @@ export default {
     },
   }),
   methods: {
-    async signUp() {
+    ...mapActions({
+      register: "auth/register",
+      validate: "auth/validate",
+    }),
+    signUp() {
       if (this.user.name != "" && this.user.password != "") {
-        try {
-          const result = await createUser({
-            name: this.user.name,
-            password: this.user.password,
-          });
-          console.log("result ", result);
-        } catch (error) {
-          console.log(error);
-        }
+        this.register({
+          name: this.user.name,
+          password: this.user.password,
+        }).then(() => {
+          this.$router
+            .replace({
+              name: "Dashboard",
+            })
+            .catch((error) => {
+              console.log(error);
+              //raise error alert
+            });
+        });
       } else {
         //raise snack bar
       }
     },
-    async signIn() {
+    signIn() {
       if (this.user.name != "" && this.user.password != "") {
-        try {
-          const result = await validateUser({
-            name: this.user.name,
-            password: this.user.password,
-          });
-          console.log("result ", result);
-        } catch (error) {
-          console.log(error);
-        }
+        this.validate({
+          name: this.user.name,
+          password: this.user.password,
+        }).then(() => {
+          this.$router
+            .replace({
+              name: "Dashboard",
+            })
+            .catch((error) => {
+              console.log(error);
+              //raise error alert
+            });
+        });
       } else {
         //raise snack bar
       }
