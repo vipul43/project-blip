@@ -31,14 +31,14 @@
             <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
-                name="Second Name"
+                name="Last Name"
                 rules="max:20"
               >
                 <v-text-field
                   v-model="user.lastName"
                   :counter="20"
                   :error-messages="errors"
-                  label="Second Name"
+                  label="Last Name"
                   outlined
                 ></v-text-field>
               </validation-provider>
