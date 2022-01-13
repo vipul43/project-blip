@@ -30,7 +30,11 @@ connect(db);
 app.post("/user/signup", async (req, res) => {
   try {
     const user = await userController.create(req.body);
-    const token = auth.generate({ username: req.body.name });
+    const token = auth.generate({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    });
     res.status(codes.CREATED).json({ token: token, user: user });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -50,13 +54,17 @@ app.post("/user/signup", async (req, res) => {
 app.post("/user/signin", async (req, res) => {
   try {
     const user = await userController.findOne(req.body);
-    const token = auth.generate({ username: req.body.name });
+    const token = auth.generate({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    });
     res.status(codes.ACCEPTED).json({ token: token, user: user });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.VALIDATION_FAILED) {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.INVALID_USER_CREDENTIALS) {
       res.status(codes.UNAUTHORIZED).json({ error: error });
     } else if (error === errors.TOKEN_GENERATION_FAILED) {

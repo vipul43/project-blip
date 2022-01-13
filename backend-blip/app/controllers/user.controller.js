@@ -4,10 +4,17 @@ const user = db.users;
 const helper = require("../utils/helper.util.js");
 
 exports.create = async (doc) => {
-  if (doc && doc.name && doc.password) {
+  if (doc && doc.firstName && doc.username && doc.email && doc.password) {
     try {
       const hashedPassword = await helper.hashAndSalt(doc.password);
-      const new_user = new user({ name: doc.name, password: hashedPassword });
+      const new_user = new user({
+        firstName: doc.firstName,
+        secondName: doc.secondName,
+        username: doc.username,
+        email: doc.email,
+        phone: doc.phone,
+        password: hashedPassword,
+      });
       const result = await new_user.save();
       return result;
     } catch (error) {
@@ -28,17 +35,19 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findOne = async (doc) => {
-  if (doc && doc.name && doc.password) {
+  if (doc && doc.username && doc.email && doc.password) {
     try {
-      const cursor = user.find({ name: doc.name }).cursor();
+      const cursor = user.find({ name: doc.username }).cursor();
       for (
         let user = await cursor.next();
         user != null;
         user = await cursor.next()
       ) {
-        const valid = await helper.compareHash(doc.password, user.password);
-        if (valid) {
-          return user;
+        if (doc.email === user.email) {
+          const valid = await helper.compareHash(doc.password, user.password);
+          if (valid) {
+            return user;
+          }
         }
       }
       throw errors.INVALID_USER_CREDENTIALS;

@@ -12,14 +12,28 @@ const routes = [
     component: Home,
   },
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
+    path: "/user/signin",
+    name: "UserSignIn",
+    component: () => import("../views/User/Signin.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
   },
   {
-    path: "/dashboard",
+    path: "/user/signup",
+    name: "UserSignUp",
+    component: () => import("../views/User/Signup.vue"),
+  },
+  {
+    path: "/user/dashboard",
     name: "Dashboard",
-    component: () => import("../views/Dashboard.vue"),
+    component: () => import("../views/User/Dashboard.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
@@ -31,9 +45,9 @@ const routes = [
     },
   },
   {
-    path: "/settings",
+    path: "/user/settings",
     name: "Settings",
-    component: () => import("../views/Settings.vue"),
+    component: () => import("../views/User/Settings.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
@@ -51,7 +65,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
-          name: "Login",
+          name: "UserSignIn",
         });
       }
       next();
@@ -64,7 +78,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
-          name: "Login",
+          name: "UserSignIn",
         });
       } else {
         next();

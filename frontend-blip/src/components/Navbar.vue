@@ -13,10 +13,11 @@
       <v-menu v-if="authenticated" left bottom close-on-click>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar color="red" size="36" v-bind="attrs" v-on="on">
-            <span class="white--text text-h5">{{ username[0] }}</span>
+            <span class="white--text text-h5">{{
+              user.firstName[0] + user.secondName[0]
+            }}</span>
           </v-avatar>
         </template>
-
         <v-list>
           <v-list-item to="/settings">
             <v-list-item-title>Account Settings</v-list-item-title>
@@ -26,10 +27,27 @@
           </v-list-item>
         </v-list>
       </v-menu>
-
-      <v-btn v-else icon to="/login">
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
+      <v-menu v-else left bottom close-on-click>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item to="/user/signin">
+            <v-list-item-title>User Sign In</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/user/signup">
+            <v-list-item-title>User Sign Up</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Partner Sign In</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Partner Sign Up</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <template v-slot:extension>
         <v-tabs centered slider-color="#222831" show-arrows>
           <v-tab v-for="(tab, i) in tabs" :key="i" :to="tab.src">
@@ -78,17 +96,17 @@ export default {
   computed: {
     ...mapGetters({
       authenticated: "auth/authenticated",
-      username: "auth/username",
+      user: "auth/user",
       token: "auth/token",
     }),
   },
   watch: {
     authenticated: {
       handler(authenticated) {
-        if (authenticated) {
+        if (authenticated && this.tabs.length == 6) {
           this.tabs = this.tabs.concat({
             title: "Dashboard",
-            src: "/dashboard",
+            src: "/user/dashboard",
           });
         }
       },
@@ -100,17 +118,21 @@ export default {
       invalidate: "auth/invalidate",
     }),
     signOut() {
-      this.invalidate({ token: "this.token", username: "this.username" }).then(
-        () => {
-          this.$router
-            .replace({
-              name: "Home",
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      );
+      this.invalidate({
+        firstName: this.user.firstName,
+        secondName: this.user.secondName,
+        username: this.user.username,
+        email: this.user.email,
+        phone: this.user.phone,
+      })
+        .then(() => {
+          this.$router.go({
+            name: "UserSignIn",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

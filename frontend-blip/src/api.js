@@ -23,11 +23,11 @@ export const validateUser = async (user) => {
   const response = await httpClient.post(`/user/signin`, JSON.stringify(user));
   return response.data;
 };
-export const authUser = async (token, user) => {
+export const authUser = async (user) => {
   const response = await httpClient.post(`/user/auth`, JSON.stringify(user));
   return response.data;
 };
-export const invalidateUser = async (token, user) => {
+export const invalidateUser = async (user) => {
   const response = await httpClient.post(`/user/signout`, JSON.stringify(user));
   return response.data;
 };

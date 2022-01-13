@@ -25,7 +25,11 @@
                 hide-details
               ></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="sample" :search="search">
+            <v-data-table
+              :headers="headers"
+              :items="donationDetails"
+              :search="search"
+            >
               <template #[`item.type`]="{ item }">
                 <v-chip :key="item.type">{{ item.type }}</v-chip>
               </template>
@@ -74,7 +78,7 @@ export default {
           sortable: false,
         },
       ],
-      sample: [
+      donationDetails: [
         {
           name: "First Donation",
           type: "Whole Blood",
@@ -105,7 +109,7 @@ export default {
   computed: {
     ...mapGetters({
       authenticated: "auth/authenticated",
-      username: "auth/username",
+      user: "auth/user",
     }),
   },
   metaInfo() {

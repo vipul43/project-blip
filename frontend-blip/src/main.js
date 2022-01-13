@@ -10,7 +10,7 @@ Vue.use(VueMeta);
 
 store.dispatch("auth/attempt", {
   token: JSON.parse(localStorage["blip-token"] || null),
-  username: JSON.parse(localStorage["blip-username"] || null),
+  user: JSON.parse(localStorage["blip-user"] || null),
 });
 
 new Vue({
