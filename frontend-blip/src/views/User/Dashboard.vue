@@ -33,8 +33,31 @@
               <template #[`item.type`]="{ item }">
                 <v-chip :key="item.type">{{ item.type }}</v-chip>
               </template>
-              <template #[`item.action`]="{ item }">
-                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+              <template #[`item.actions`]="{ item }">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on" @click="trackItem(item)">
+                      mdi-map-marker-account
+                    </v-icon>
+                  </template>
+                  <span>Track</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on" @click="deleteItem(item)">
+                      mdi-delete
+                    </v-icon>
+                  </template>
+                  <span>Delete</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on" @click="reportItem(item)">
+                      mdi-alert-octagon
+                    </v-icon>
+                  </template>
+                  <span>Report</span>
+                </v-tooltip>
               </template>
             </v-data-table>
           </v-card>
@@ -67,13 +90,13 @@ export default {
           filterable: false,
         },
         {
-          text: "Souls Saved",
+          text: "#Souls Saved",
           value: "doneeCount",
           filterable: false,
         },
         {
-          text: "Action",
-          value: "action",
+          text: "Actions",
+          value: "actions",
           filterable: false,
           sortable: false,
         },
