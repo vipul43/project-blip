@@ -183,7 +183,7 @@ export default {
           password: this.user.password,
         })
           .then(() => {
-            this.$router.go({
+            this.$router.replace({
               name: "UserDashboard",
             });
           })

@@ -10,7 +10,7 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title class="pr-16">BLiP</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu v-if="authenticated" left bottom close-on-click>
+      <v-menu v-if="authenticated" key="logged" left bottom close-on-click>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar color="red" size="36" v-bind="attrs" v-on="on">
             <span class="white--text text-h5">{{
@@ -27,7 +27,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-menu v-else left bottom close-on-click>
+      <v-menu v-else key="default" left bottom close-on-click>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-account</v-icon>
@@ -108,6 +108,8 @@ export default {
             title: "Dashboard",
             src: "/user/dashboard",
           });
+        } else if (!authenticated && this.tabs.length == 7) {
+          this.tabs.splice(this.tabs.length - 1, 1);
         }
       },
       immediate: true,
@@ -126,7 +128,7 @@ export default {
         phone: this.user.phone,
       })
         .then(() => {
-          this.$router.go({
+          this.$router.replace({
             name: "UserSignIn",
           });
         })
