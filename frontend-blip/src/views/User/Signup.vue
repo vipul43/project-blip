@@ -184,7 +184,7 @@ export default {
         })
           .then(() => {
             this.$router.go({
-              name: "Dashboard",
+              name: "UserDashboard",
             });
           })
           .catch((error) => {

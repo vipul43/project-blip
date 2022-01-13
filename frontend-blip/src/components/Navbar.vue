@@ -40,10 +40,10 @@
           <v-list-item to="/user/signup">
             <v-list-item-title>User Sign Up</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item to="/partner/signin">
             <v-list-item-title>Partner Sign In</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item to="/partner/signup">
             <v-list-item-title>Partner Sign Up</v-list-item-title>
           </v-list-item>
         </v-list>

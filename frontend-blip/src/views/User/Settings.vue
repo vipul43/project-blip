@@ -1,10 +1,10 @@
 <template>
-  <div id="settings">This is Settings.</div>
+  <div id="user-settings">This is Settings.</div>
 </template>
 
 <script>
 export default {
-  name: "Settings",
+  name: "UserSettings",
   metaInfo() {
     return {
       title: "Account Settings - Project BLiP",

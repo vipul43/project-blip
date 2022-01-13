@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard">
+  <div id="user-dashboard">
     <v-container>
       <v-row>
         <v-col cols="12" sm="6">
@@ -71,7 +71,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Dashboard",
+  name: "UserDashboard",
   data() {
     return {
       search: "",

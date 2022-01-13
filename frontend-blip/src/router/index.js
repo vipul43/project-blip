@@ -29,10 +29,19 @@ const routes = [
     path: "/user/signup",
     name: "UserSignUp",
     component: () => import("../views/User/Signup.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/user/dashboard",
-    name: "Dashboard",
+    name: "UserDashboard",
     component: () => import("../views/User/Dashboard.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
@@ -46,7 +55,7 @@ const routes = [
   },
   {
     path: "/user/settings",
-    name: "Settings",
+    name: "UserSettings",
     component: () => import("../views/User/Settings.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
@@ -57,6 +66,26 @@ const routes = [
         next();
       }
     },
+  },
+  {
+    path: "/partner/signin",
+    name: "PartnerSignIn",
+    component: () => import("../views/Partner/Signin.vue"),
+  },
+  {
+    path: "/partner/signup",
+    name: "PartnerSignUp",
+    component: () => import("../views/Partner/Signup.vue"),
+  },
+  {
+    path: "/partner/dashboard",
+    name: "PartnerDashboard",
+    component: () => import("../views/Partner/Dashboard.vue"),
+  },
+  {
+    path: "/partner/settings",
+    name: "PartnerSettings",
+    component: () => import("../views/Partner/Settings.vue"),
   },
   {
     path: "/donate-blood",
