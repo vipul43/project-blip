@@ -5,7 +5,7 @@ module.exports = (mongoose) => {
         type: String,
         required: [true, "First Name is Required."],
       },
-      secondName: String,
+      lastName: String,
       username: {
         type: String,
         required: [true, "Username is Required."],

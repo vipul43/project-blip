@@ -9,7 +9,7 @@ exports.create = async (doc) => {
       const hashedPassword = await helper.hashAndSalt(doc.password);
       const new_user = new user({
         firstName: doc.firstName,
-        secondName: doc.secondName,
+        lastName: doc.lastName,
         username: doc.username,
         email: doc.email,
         phone: doc.phone,

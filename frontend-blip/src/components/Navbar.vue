@@ -14,7 +14,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-avatar color="red" size="36" v-bind="attrs" v-on="on">
             <span class="white--text text-h5">{{
-              user.firstName[0] + user.secondName[0]
+              user.firstName[0] + user.lastName[0]
             }}</span>
           </v-avatar>
         </template>
@@ -122,7 +122,7 @@ export default {
     signOut() {
       this.invalidate({
         firstName: this.user.firstName,
-        secondName: this.user.secondName,
+        lastName: this.user.lastName,
         username: this.user.username,
         email: this.user.email,
         phone: this.user.phone,

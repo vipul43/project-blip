@@ -35,7 +35,7 @@
                 rules="max:20"
               >
                 <v-text-field
-                  v-model="user.secondName"
+                  v-model="user.lastName"
                   :counter="20"
                   :error-messages="errors"
                   label="Second Name"
@@ -160,7 +160,7 @@ export default {
   data: () => ({
     user: {
       firstName: "",
-      secondName: "",
+      lastName: "",
       username: "",
       email: "",
       phone: "",
@@ -176,7 +176,7 @@ export default {
       if (valid) {
         this.register({
           firstName: this.user.firstName,
-          secondName: this.user.secondName,
+          lastName: this.user.lastName,
           username: this.user.username,
           email: this.user.email,
           phone: this.user.phone,
@@ -198,7 +198,7 @@ export default {
     },
     clear() {
       this.user.firstName = "";
-      this.user.secondName = "";
+      this.user.lastName = "";
       this.user.username = "";
       this.user.email = "";
       this.user.phone = "";
