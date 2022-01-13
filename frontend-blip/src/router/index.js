@@ -17,12 +17,6 @@ const routes = [
     component: () => import("../views/Login.vue"),
   },
   {
-    path: "/user/:id",
-    name: "User",
-    component: () => import("../views/User.vue"),
-    props: (route) => ({ userId: route.params.id }),
-  },
-  {
     path: "/dashboard",
     name: "Dashboard",
     component: () => import("../views/Dashboard.vue"),
@@ -31,8 +25,9 @@ const routes = [
         return next({
           name: "Home",
         });
+      } else {
+        next();
       }
-      next();
     },
   },
   {
@@ -44,14 +39,23 @@ const routes = [
         return next({
           name: "Home",
         });
+      } else {
+        next();
       }
-      next();
     },
   },
   {
     path: "/donate-blood",
     name: "DonateBlood",
     component: () => import("../views/DonateBlood.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Login",
+        });
+      }
+      next();
+    },
   },
   {
     path: "/track-blood",
@@ -60,10 +64,11 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
-          name: "Home",
+          name: "Login",
         });
+      } else {
+        next();
       }
-      next();
     },
   },
   {
