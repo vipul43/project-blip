@@ -19,7 +19,7 @@
           </v-avatar>
         </template>
         <v-list>
-          <v-list-item to="/settings">
+          <v-list-item to="/user/settings">
             <v-list-item-title>Account Settings</v-list-item-title>
           </v-list-item>
           <v-list-item @click="signOut">
