@@ -1,12 +1,12 @@
 const db = require("../models");
 const errors = require("../utils/errors.util.js");
 const user = db.users;
-const helper = require("../utils/helper.util.js");
+const crypt = require("../utils/crypt.util.js");
 
 exports.create = async (doc) => {
   if (doc && doc.firstName && doc.username && doc.email && doc.password) {
     try {
-      const hashedPassword = await helper.hashAndSalt(doc.password);
+      const hashedPassword = await crypt.hashAndSalt(doc.password);
       const new_user = new user({
         firstName: doc.firstName,
         lastName: doc.lastName,
@@ -44,7 +44,7 @@ exports.findOne = async (doc) => {
         user = await cursor.next()
       ) {
         if (doc.email === user.email) {
-          const valid = await helper.compareHash(doc.password, user.password);
+          const valid = await crypt.compareHash(doc.password, user.password);
           if (valid) {
             return user;
           }
