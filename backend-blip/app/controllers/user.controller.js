@@ -34,7 +34,7 @@ exports.handleUserCreation = async (req, res) => {
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
-    } else if (error === errors.USER_ALREADY_EXISTS) {
+    } else if (error === errors.USER_ALREADY_EXISTS_WITH_EMAIL) {
       res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.HASHING_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
