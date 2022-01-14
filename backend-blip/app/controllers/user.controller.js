@@ -1,66 +1,99 @@
-const db = require("../models");
 const errors = require("../utils/errors.util.js");
-const user = db.users;
+const codes = require("../utils/codes.util.js");
 const crypt = require("../utils/crypt.util.js");
+const mongodb = require("../utils/mongodb.util.js");
+const auth = require("../middlewares/auth.middleware.js");
+const db = require("../models");
+const user = db.user;
+// const partner = db.partner;
 
-exports.create = async (doc) => {
-  if (doc && doc.firstName && doc.username && doc.email && doc.password) {
-    try {
-      const hashedPassword = await crypt.hashAndSalt(doc.password);
-      const new_user = new user({
-        firstName: doc.firstName,
-        lastName: doc.lastName,
-        username: doc.username,
-        email: doc.email,
-        phone: doc.phone,
-        password: hashedPassword,
-      });
-      const result = await new_user.save();
-      return result;
-    } catch (error) {
-      throw errors.CREATION_FAILED;
-    }
-  } else {
-    throw errors.INVALID_PAYLOAD;
-  }
-};
-
-exports.findAll = async (req, res) => {
+exports.handleUserCreation = async (req, res) => {
   try {
-    const result = await user.find({});
-    return result;
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    const hashedPassword = await crypt.hashAndSalt(payload.password);
+    if (!hashedPassword) throw errors.HASHING_FAILED;
+    const saveObj = {
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      username: payload.username,
+      email: payload.email,
+      phone: payload.phone,
+      password: hashedPassword,
+    };
+    const result = await mongodb.create(user, saveObj);
+    const token = auth.generate({
+      username: result.username,
+      email: result.email,
+      password: result.password,
+    });
+    if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.CREATED).json({ token: token, user: obj });
   } catch (error) {
-    console.log(error);
-  }
-};
-
-exports.findOne = async (doc) => {
-  if (doc && doc.username && doc.email && doc.password) {
-    try {
-      const cursor = user.find({ name: doc.username }).cursor();
-      for (
-        let user = await cursor.next();
-        user != null;
-        user = await cursor.next()
-      ) {
-        if (doc.email === user.email) {
-          const valid = await crypt.compareHash(doc.password, user.password);
-          if (valid) {
-            return user;
-          }
-        }
-      }
-      throw errors.INVALID_USER_CREDENTIALS;
-    } catch (error) {
-      throw errors.VALIDATION_FAILED;
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.HASHING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.CREATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     }
-  } else {
-    throw errors.INVALID_PAYLOAD;
   }
 };
 
-exports.update = (req, res) => {};
+exports.handleUserValidation = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      username: payload.username,
+      email: payload.email,
+    };
+    const result = await mongodb.findOne(user, findObj);
+    if (!result) throw errors.INVALID_USER_CREDENTIALS;
+    const valid = await crypt.compareHash(payload.password, result.password);
+    if (!valid) throw errors.VALIDATION_FAILED;
+    const token = auth.generate({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    });
+    if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json({ token: token, user: obj });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.INVALID_USER_CREDENTIALS) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    }
+  }
+};
 
-exports.delete = (req, res) => {};
+exports.handleUserAuthentication = async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  }
+};
 
-exports.deleteAll = (req, res) => {};
+exports.handleUserInvalidation = async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  }
+};

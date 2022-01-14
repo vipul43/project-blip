@@ -49,7 +49,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
-                rules="required|max:10"
+                rules="required|max:10|min:5"
               >
                 <v-text-field
                   v-model="user.username"
@@ -97,7 +97,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Password"
-                rules="required|max:12"
+                rules="required|max:12|min:8"
               >
                 <v-text-field
                   v-model="user.password"
@@ -124,7 +124,14 @@
 
 <script>
 import { mapActions } from "vuex";
-import { required, digits, email, max, regex } from "vee-validate/dist/rules";
+import {
+  required,
+  digits,
+  email,
+  min,
+  max,
+  regex,
+} from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -140,6 +147,10 @@ extend("digits", {
 extend("required", {
   ...required,
   message: "{_field_} can not be empty",
+});
+extend("min", {
+  ...min,
+  message: "{_field_} may not be less than {length} characters",
 });
 extend("max", {
   ...max,
