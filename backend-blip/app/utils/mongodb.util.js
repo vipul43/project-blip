@@ -1,4 +1,4 @@
-const connect = (db) => {
+exports.connect = (db) => {
   db.mongoose
     .connect(db.url, {
       useNewUrlParser: true,
@@ -12,5 +12,3 @@ const connect = (db) => {
       process.exit();
     });
 };
-
-module.exports = connect;
