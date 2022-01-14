@@ -185,14 +185,7 @@ export default {
     async signUp() {
       const valid = await this.$refs.observer.validate();
       if (valid) {
-        this.register({
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          username: this.user.username,
-          email: this.user.email,
-          phone: this.user.phone,
-          password: this.user.password,
-        })
+        this.register(this.user)
           .then(() => {
             this.$router.replace({
               name: "UserDashboard",

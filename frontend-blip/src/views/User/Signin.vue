@@ -118,11 +118,7 @@ export default {
     async signIn() {
       const valid = await this.$refs.observer.validate();
       if (valid) {
-        this.validate({
-          username: this.user.username,
-          email: this.user.email,
-          password: this.user.password,
-        })
+        this.validate(this.user)
           .then(() => {
             this.$router.replace({
               name: "UserDashboard",
