@@ -14,7 +14,7 @@ httpClient.interceptors.request.use((config) => {
   return config;
 });
 
-// User Level APIs
+/*************************** User APIs ***************************/
 export const createUser = async (user) => {
   const response = await httpClient.post(`/user/signup`, JSON.stringify(user));
   return response.data;
@@ -29,5 +29,32 @@ export const authUser = async (user) => {
 };
 export const invalidateUser = async (user) => {
   const response = await httpClient.post(`/user/signout`, JSON.stringify(user));
+  return response.data;
+};
+
+/*************************** Partner APIs ***************************/
+export const createPartner = async (user) => {
+  const response = await httpClient.post(
+    `/partner/signup`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const validatePartner = async (user) => {
+  const response = await httpClient.post(
+    `/partner/signin`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const authPartner = async (user) => {
+  const response = await httpClient.post(`/partner/auth`, JSON.stringify(user));
+  return response.data;
+};
+export const invalidatePartner = async (user) => {
+  const response = await httpClient.post(
+    `/partner/signout`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
