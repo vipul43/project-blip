@@ -8,6 +8,7 @@ const cors = require("cors");
 const db = require("./app/models");
 const connect = require("./app/utils/mongodb.util.js");
 const userController = require("./app/controllers/user.controller.js");
+const partnerController = require("./app/controllers/partner.controller.js");
 const errors = require("./app/utils/errors.util.js");
 const codes = require("./app/utils/codes.util.js");
 const auth = require("./app/middlewares/auth.middleware.js");
@@ -24,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connecting to mongodb database
 connect(db);
 
-// User APIs
+/*************************** User APIs ***************************/
 // Signing up user by creating entry in database,
 //generating jwt token to send as payload
 app.post("/user/signup", async (req, res) => {
@@ -94,9 +95,7 @@ app.post("/user/signout", auth.authenticate, async (req, res) => {
   }
 });
 
-// app.get('/user/:id', (req, res) => {
-//     console.log(req.params.id);
-// })
+/*************************** Partner APIs ***************************/
 
 // listening
 const PORT = process.env.PORT || 8000;
