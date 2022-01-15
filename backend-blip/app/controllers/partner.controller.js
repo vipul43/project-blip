@@ -21,7 +21,6 @@ exports.handlePartnerCreation = async (req, res) => {
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "Partner";
-    console.log(payload);
     const result = await mongodb.create(partner, payload);
     const token = auth.generate({
       partnerName: result.partnerName,
