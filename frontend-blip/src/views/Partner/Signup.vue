@@ -12,7 +12,7 @@
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="submit">
           <v-row justify="center">
-            <v-col sm="3">
+            <v-col cols="12" sm="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="Organisation Name"
@@ -76,7 +76,7 @@
                 ></v-autocomplete>
               </validation-provider>
             </v-col>
-            <v-col sm="3">
+            <v-col cols="12" sm="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="Partner Name"
@@ -157,7 +157,7 @@
                 ></v-text-field>
               </validation-provider>
             </v-col>
-            <v-col sm="3">
+            <v-col cols="12" sm="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="Email"
