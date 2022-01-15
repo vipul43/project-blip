@@ -26,29 +26,24 @@
 
 ---
 
-| METHOD |               URL                |               ACTION                |
-| :----: | :------------------------------: | :---------------------------------: |
-|  POST  |          `/user/signup`          |   adds new user donation details    |
-|  POST  |          `/user/signin`          | validates existing user credentials |
-|  POST  |           `/user/auth`           | validates existing user credentials |
-|  POST  |         `/user/signout`          | validates existing user credentials |
-|  GET   | `/user/donation-details/:userId` | gets donation details of user by id |
-|  POST  | `/user/donation-details/:userId` |    add new donation for tracking    |
+| METHOD |               URL                |               ACTION                | STATUS  |
+| :----: | :------------------------------: | :---------------------------------: | :-----: |
+|  POST  |          `/user/signup`          |            adds new user            |  DONE   |
+|  POST  |          `/user/signin`          |     validates user credentials      |  DONE   |
+|  POST  |           `/user/auth`           |   authenticates user credentials    |  DONE   |
+|  POST  |         `/user/signout`          |    invalidates user credentials     |  DONE   |
+|  GET   | `/user/donation-details/:userId` | gets donation details of user by id | PENDING |
+|  POST  | `/user/donation-details/:userId` |    add new donation for tracking    | PENDING |
 
-### API - DONATION CENTER LEVEL
-
----
-
-| METHOD |         URL         |               ACTION               |
-| :----: | :-----------------: | :--------------------------------: |
-|  GET   | `/partner/:user-id` | get donation details of user by id |
-|  POST  | `/partner/:user-id` |     add user to donation list      |
-
-### API - HOSPITAL LEVEL
+### API - PARTNER LEVEL
 
 ---
 
-| METHOD |         URL         |             ACTION              |
-| :----: | :-----------------: | :-----------------------------: |
-|  GET   | `/partner/:user-id` | get usage details of user by id |
-|  POST  | `/partner/:user-id` |      add user to hospital       |
+| METHOD |                  URL                   |                 ACTION                 | STATUS  |
+| :----: | :------------------------------------: | :------------------------------------: | :-----: |
+|  POST  |           `/partner/signup`            |            adds new partner            |  DONE   |
+|  POST  |           `/partner/signin`            |     validates partner credentials      |  DONE   |
+|  POST  |            `/partner/auth`             |   authenticates partner credentials    |  DONE   |
+|  POST  |           `/partner/signout`           |    invalidates partner credentials     |  DONE   |
+|  GET   | `/partner/donation-details/:partnerId` | gets donation details of partner by id | PENDING |
+|  POST  | `/partner/donation-details/:partnerId` |     add new donation for tracking      | PENDING |
