@@ -12,7 +12,7 @@
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="submit()">
           <v-row justify="center">
-            <v-col cols="12" sm="4">
+            <v-col sm="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
@@ -25,10 +25,9 @@
                   label="User Name *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Email"
@@ -40,12 +39,9 @@
                   label="E-mail *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Password"
@@ -58,6 +54,7 @@
                   outlined
                   required
                   type="password"
+                  dense
                 ></v-text-field>
               </validation-provider>
             </v-col>

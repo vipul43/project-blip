@@ -12,40 +12,22 @@
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="submit">
           <v-row justify="center">
-            <v-col cols="12" sm="4">
+            <v-col sm="3">
               <validation-provider
                 v-slot="{ errors }"
-                name="Partner Name"
-                rules="required|max:20"
+                name="Organisation Name"
+                rules="required|max:50|min:10"
               >
                 <v-text-field
-                  v-model="partner.partnerName"
-                  autocomplete="username"
-                  :counter="20"
+                  v-model="partner.orgName"
+                  :counter="50"
                   :error-messages="errors"
-                  label="Partner Name *"
+                  label="Organisation Name *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Email"
-                rules="required|email"
-              >
-                <v-text-field
-                  v-model="partner.email"
-                  autocomplete="off"
-                  :error-messages="errors"
-                  label="E-mail *"
-                  outlined
-                  required
-                ></v-text-field>
-              </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Phone Number"
@@ -58,63 +40,9 @@
                   :error-messages="errors"
                   label="Phone Number *"
                   outlined
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Type"
-                rules="required"
-              >
-                <v-select
-                  v-model="partner.type"
-                  :items="['Donation Center', 'Hospital']"
-                  :error-messages="errors"
-                  label="Type *"
-                  outlined
-                  required
-                ></v-select>
-              </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Houseno"
-                rules="required|max:10"
-              >
-                <v-text-field
-                  v-model="partner.address.houseno"
-                  autocomplete="off"
-                  :counter="10"
-                  :error-messages="errors"
-                  label="House No *"
-                  outlined
-                  required
-                ></v-text-field>
-              </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Landmark"
-                rules="max:50"
-              >
-                <v-text-field
-                  v-model="partner.address.landmark"
-                  autocomplete="off"
-                  :counter="50"
-                  :error-messages="errors"
-                  label="Landmark"
-                  outlined
-                ></v-text-field>
-              </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="8">
               <validation-provider
                 v-slot="{ errors }"
                 name="Area and Street"
@@ -128,30 +56,9 @@
                   label="Area and Street *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Country"
-                rules="required"
-              >
-                <v-autocomplete
-                  v-model="partner.address.country"
-                  autocomplete="off"
-                  :items="countries"
-                  :error-messages="errors"
-                  label="Country *"
-                  outlined
-                  required
-                  disabled
-                ></v-autocomplete>
-              </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="State"
@@ -165,27 +72,57 @@
                   label="State *"
                   outlined
                   required
+                  dense
                 ></v-autocomplete>
               </validation-provider>
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col sm="3">
               <validation-provider
                 v-slot="{ errors }"
-                name="Pincode"
-                rules="required|digits:6"
+                name="Partner Name"
+                rules="required|max:20"
               >
                 <v-text-field
-                  v-model="partner.address.pincode"
-                  autocomplete="off"
-                  :counter="6"
+                  v-model="partner.partnerName"
+                  autocomplete="username"
+                  :counter="20"
                   :error-messages="errors"
-                  label="Pincode *"
+                  label="Partner Name *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Type"
+                rules="required"
+              >
+                <v-select
+                  v-model="partner.type"
+                  :items="['Donation Center', 'Hospital']"
+                  :error-messages="errors"
+                  label="Type *"
+                  outlined
+                  required
+                  dense
+                ></v-select>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Landmark"
+                rules="max:50"
+              >
+                <v-text-field
+                  v-model="partner.address.landmark"
+                  autocomplete="off"
+                  :counter="50"
+                  :error-messages="errors"
+                  label="Landmark"
+                  outlined
+                  dense
+                ></v-text-field>
+              </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
                 name="City/Town/District"
@@ -199,12 +136,9 @@
                   label="City/Town/District *"
                   outlined
                   required
+                  dense
                 ></v-autocomplete>
               </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Password"
@@ -219,6 +153,73 @@
                   outlined
                   required
                   type="password"
+                  dense
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+            <v-col sm="3">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Email"
+                rules="required|email"
+              >
+                <v-text-field
+                  v-model="partner.email"
+                  autocomplete="off"
+                  :error-messages="errors"
+                  label="E-mail *"
+                  outlined
+                  required
+                  dense
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Houseno"
+                rules="required|max:10"
+              >
+                <v-text-field
+                  v-model="partner.address.houseno"
+                  autocomplete="off"
+                  :counter="10"
+                  :error-messages="errors"
+                  label="House No *"
+                  outlined
+                  required
+                  dense
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Country"
+                rules="required"
+              >
+                <v-autocomplete
+                  v-model="partner.address.country"
+                  autocomplete="off"
+                  :items="countries"
+                  :error-messages="errors"
+                  label="Country *"
+                  outlined
+                  required
+                  disabled
+                  dense
+                ></v-autocomplete>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Pincode"
+                rules="required|digits:6"
+              >
+                <v-text-field
+                  v-model="partner.address.pincode"
+                  autocomplete="off"
+                  :counter="6"
+                  :error-messages="errors"
+                  label="Pincode *"
+                  outlined
+                  required
+                  dense
                 ></v-text-field>
               </validation-provider>
             </v-col>
@@ -282,6 +283,7 @@ export default {
   components: { ValidationProvider, ValidationObserver },
   data: () => ({
     partner: {
+      orgName: "",
       partnerName: "",
       email: "",
       phone: "",
@@ -321,6 +323,7 @@ export default {
       await this.$refs.observer.validate();
     },
     clear() {
+      this.partner.orgName = "";
       this.partner.partnerName = "";
       this.partner.email = "";
       this.partner.phone = "";

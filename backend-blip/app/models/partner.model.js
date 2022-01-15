@@ -1,6 +1,16 @@
 module.exports = (mongoose) => {
   const partnerSchema = mongoose.Schema(
     {
+      orgName: {
+        type: String,
+        required: [true, "Organisation Name is Required."],
+        validate: {
+          validator: (orgName) => {
+            return !!orgName && orgName.length >= 10 && orgName.length <= 50;
+          },
+          message: "Invalid Organisation Name.",
+        },
+      },
       partnerName: {
         type: String,
         required: [true, "Partner Name is Required."],
@@ -12,7 +22,7 @@ module.exports = (mongoose) => {
               partnerName.length <= 10
             );
           },
-          message: "Invalid Partnername.",
+          message: "Invalid Partner Name.",
         },
       },
       email: {

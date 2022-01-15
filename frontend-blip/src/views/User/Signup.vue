@@ -12,7 +12,7 @@
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="submit">
           <v-row justify="center">
-            <v-col cols="12" sm="4">
+            <v-col sm="3">
               <validation-provider
                 v-slot="{ errors }"
                 name="First Name"
@@ -26,28 +26,9 @@
                   label="First Name *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Last Name"
-                rules="max:20"
-              >
-                <v-text-field
-                  v-model="user.lastName"
-                  autocomplete="off"
-                  :counter="20"
-                  :error-messages="errors"
-                  label="Last Name"
-                  outlined
-                ></v-text-field>
-              </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
@@ -61,28 +42,9 @@
                   label="User Name *"
                   outlined
                   required
+                  dense
                 ></v-text-field>
               </validation-provider>
-            </v-col>
-            <v-col cols="12" sm="4">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Email"
-                rules="required|email"
-              >
-                <v-text-field
-                  v-model="user.email"
-                  autocomplete="off"
-                  :error-messages="errors"
-                  label="E-mail *"
-                  outlined
-                  required
-                ></v-text-field>
-              </validation-provider>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12" sm="4">
               <validation-provider
                 v-slot="{ errors }"
                 name="Phone Number"
@@ -95,10 +57,41 @@
                   :error-messages="errors"
                   label="Phone Number"
                   outlined
+                  dense
                 ></v-text-field>
               </validation-provider>
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col sm="3">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Last Name"
+                rules="max:20"
+              >
+                <v-text-field
+                  v-model="user.lastName"
+                  autocomplete="off"
+                  :counter="20"
+                  :error-messages="errors"
+                  label="Last Name"
+                  outlined
+                  dense
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="Email"
+                rules="required|email"
+              >
+                <v-text-field
+                  v-model="user.email"
+                  autocomplete="off"
+                  :error-messages="errors"
+                  label="E-mail *"
+                  outlined
+                  required
+                  dense
+                ></v-text-field>
+              </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
                 name="Password"
@@ -113,6 +106,7 @@
                   outlined
                   required
                   type="password"
+                  dense
                 ></v-text-field>
               </validation-provider>
             </v-col>
