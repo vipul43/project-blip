@@ -21,6 +21,7 @@ exports.handleUserCreation = async (req, res) => {
     const hashedPassword = await crypt.hashAndSalt(payload.password);
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
+    payload.role = "User";
     const result = await mongodb.create(user, payload);
     const token = auth.generate({
       username: result.username,

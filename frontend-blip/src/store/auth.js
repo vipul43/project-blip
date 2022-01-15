@@ -49,7 +49,6 @@ export default {
         if (response.error) {
           throw response.error;
         }
-        response.userType = userType;
         return dispatch("attempt", response);
       } catch (error) {
         console.log(error);
@@ -60,7 +59,7 @@ export default {
       if (data && data.token && data.user) {
         commit("SET_TOKEN", data.token);
         try {
-          const apiName = `auth${data.userType}`;
+          const apiName = `auth${data.user.role}`;
           const response = await api[apiName](data.user);
           if (response.error) {
             throw response.error;
@@ -74,8 +73,8 @@ export default {
         }
       }
     },
-    invalidate({ commit }, { data, userType }) {
-      const apiName = `invalidate${userType}`;
+    invalidate({ commit }, data) {
+      const apiName = `invalidate${data.role}`;
       return api[apiName](data)
         .then(() => {
           commit("SET_TOKEN", null);

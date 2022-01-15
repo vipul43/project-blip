@@ -65,6 +65,13 @@ module.exports = (mongoose) => {
         type: String,
         required: [true, "Password is Required."],
       },
+      role: {
+        type: String,
+        required: [true, "User Role is Required."],
+        enum: {
+          values: ["User", "Partner"],
+        },
+      },
     },
     { timestamps: true }
   );

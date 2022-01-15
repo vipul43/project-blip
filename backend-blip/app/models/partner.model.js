@@ -45,6 +45,7 @@ module.exports = (mongoose) => {
       },
       type: {
         type: String,
+        required: [true, "User Type is Required."],
         enum: {
           values: ["Donation Center", "Hospital"],
           message: "{VALUE} is not supported",
@@ -119,6 +120,13 @@ module.exports = (mongoose) => {
       password: {
         type: String,
         required: [true, "Password is Required."],
+      },
+      role: {
+        type: String,
+        required: [true, "User Role is Required."],
+        enum: {
+          values: ["user", "partner"],
+        },
       },
     },
     { timestamps: true }
