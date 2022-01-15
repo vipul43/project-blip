@@ -16,11 +16,10 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
-                rules="required|max:10"
+                rules="required|max:10|min:5"
               >
                 <v-text-field
                   v-model="user.username"
-                  :counter="10"
                   :error-messages="errors"
                   label="User Name *"
                   outlined
@@ -49,11 +48,10 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Password"
-                rules="required|max:10"
+                rules="required"
               >
                 <v-text-field
                   v-model="user.password"
-                  :counter="10"
                   :error-messages="errors"
                   label="Password *"
                   outlined
@@ -76,7 +74,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { required, email, max } from "vee-validate/dist/rules";
+import { required, email, min, max } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -85,17 +83,18 @@ import {
 } from "vee-validate";
 
 setInteractionMode("eager");
-
 extend("required", {
   ...required,
   message: "{_field_} can not be empty",
 });
-
+extend("min", {
+  ...min,
+  message: "{_field_} may not be less than {length} characters",
+});
 extend("max", {
   ...max,
   message: "{_field_} may not be greater than {length} characters",
 });
-
 extend("email", {
   ...email,
   message: "Email must be valid",
