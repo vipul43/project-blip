@@ -109,7 +109,6 @@
                   :error-messages="errors"
                   label="Landmark"
                   outlined
-                  required
                 ></v-text-field>
               </validation-provider>
             </v-col>

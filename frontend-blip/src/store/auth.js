@@ -44,7 +44,6 @@ export default {
     async validate({ dispatch }, { credentials, userType }) {
       try {
         const apiName = `validate${userType}`;
-        console.log(apiName);
         const response = await api[apiName](credentials);
         if (response.error) {
           throw response.error;

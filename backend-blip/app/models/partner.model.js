@@ -86,7 +86,7 @@ module.exports = (mongoose) => {
                 return true;
               }
             },
-            message: "Invalid Last Name.",
+            message: "Invalid Landmark",
           },
         },
         country: {
@@ -125,7 +125,7 @@ module.exports = (mongoose) => {
         type: String,
         required: [true, "User Role is Required."],
         enum: {
-          values: ["user", "partner"],
+          values: ["User", "Partner"],
         },
       },
     },

@@ -1,66 +1,105 @@
-const db = require("../models");
 const errors = require("../utils/errors.util.js");
-const user = db.users;
+const codes = require("../utils/codes.util.js");
 const crypt = require("../utils/crypt.util.js");
+const mongodb = require("../utils/mongodb.util.js");
+const auth = require("../middlewares/auth.middleware.js");
+const db = require("../models");
+const partner = db.partner;
 
-exports.create = async (doc) => {
-  //   if (doc && doc.firstName && doc.username && doc.email && doc.password) {
-  //     try {
-  //       const hashedPassword = await helper.hashAndSalt(doc.password);
-  //       const new_user = new user({
-  //         firstName: doc.firstName,
-  //         lastName: doc.lastName,
-  //         username: doc.username,
-  //         email: doc.email,
-  //         phone: doc.phone,
-  //         password: hashedPassword,
-  //       });
-  //       const result = await new_user.save();
-  //       return result;
-  //     } catch (error) {
-  //       throw errors.CREATION_FAILED;
-  //     }
-  //   } else {
-  //     throw errors.INVALID_PAYLOAD;
-  //   }
+exports.handlePartnerCreation = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      email: payload.email,
+    };
+    const invalid = await mongodb.findOne(partner, findObj);
+    if (invalid) throw errors.USER_ALREADY_EXISTS;
+    if (!payload.password) throw errors.INVALID_PAYLOAD;
+    const hashedPassword = await crypt.hashAndSalt(payload.password);
+    if (!hashedPassword) throw errors.HASHING_FAILED;
+    payload.password = hashedPassword;
+    payload.role = "Partner";
+    console.log(payload);
+    const result = await mongodb.create(partner, payload);
+    const token = auth.generate({
+      partnerName: result.partnerName,
+      email: result.email,
+      password: result.password,
+    });
+    if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.CREATED).json({ token: token, user: obj });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.USER_ALREADY_EXISTS_WITH_EMAIL) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.HASHING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.CREATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    }
+  }
 };
 
-exports.findAll = async (req, res) => {
-  //   try {
-  //     const result = await user.find({});
-  //     return result;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+exports.handlePartnerValidation = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.partnerName) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      partnerName: payload.partnerName,
+      email: payload.email,
+    };
+    const result = await mongodb.findOne(partner, findObj);
+    if (!result) throw errors.INVALID_USER_CREDENTIALS;
+    if (!payload.password) throw errors.INVALID_PAYLOAD;
+    const valid = await crypt.compareHash(payload.password, result.password);
+    if (!valid) throw errors.VALIDATION_FAILED;
+    const token = auth.generate({
+      partnerName: result.partnerName,
+      email: result.email,
+      password: result.password,
+    });
+    if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json({ token: token, user: obj });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.INVALID_USER_CREDENTIALS) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    }
+  }
 };
 
-exports.findOne = async (doc) => {
-  //   if (doc && doc.username && doc.email && doc.password) {
-  //     try {
-  //       const cursor = user.find({ name: doc.username }).cursor();
-  //       for (
-  //         let user = await cursor.next();
-  //         user != null;
-  //         user = await cursor.next()
-  //       ) {
-  //         if (doc.email === user.email) {
-  //           const valid = await helper.compareHash(doc.password, user.password);
-  //           if (valid) {
-  //             return user;
-  //           }
-  //         }
-  //       }
-  //       throw errors.INVALID_USER_CREDENTIALS;
-  //     } catch (error) {
-  //       throw errors.VALIDATION_FAILED;
-  //     }
-  //   } else {
-  //     throw errors.INVALID_PAYLOAD;
-  //   }
+exports.handlePartnerAuthentication = async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  }
 };
 
-exports.update = (req, res) => {};
-
-exports.delete = (req, res) => {};
-
-exports.deleteAll = (req, res) => {};
+exports.handlePartnerInvalidation = async (req, res) => {
+  if (req && req.body) {
+    res.status(codes.ACCEPTED).json(req.body);
+  } else {
+    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  }
+};

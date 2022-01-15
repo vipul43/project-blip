@@ -49,6 +49,11 @@ const routes = [
           name: "Home",
         });
       } else {
+        if (store.getters["auth/user"].role === "Partner") {
+          return next({
+            name: "Home",
+          });
+        }
         next();
       }
     },
@@ -63,6 +68,11 @@ const routes = [
           name: "Home",
         });
       } else {
+        if (store.getters["auth/user"].role === "Partner") {
+          return next({
+            name: "Home",
+          });
+        }
         next();
       }
     },
@@ -71,21 +81,67 @@ const routes = [
     path: "/partner/signin",
     name: "PartnerSignIn",
     component: () => import("../views/Partner/Signin.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/partner/signup",
     name: "PartnerSignUp",
     component: () => import("../views/Partner/Signup.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/partner/dashboard",
     name: "PartnerDashboard",
     component: () => import("../views/Partner/Dashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        if (store.getters["auth/user"].role === "User") {
+          return next({
+            name: "Home",
+          });
+        }
+        next();
+      }
+    },
   },
   {
     path: "/partner/settings",
     name: "PartnerSettings",
     component: () => import("../views/Partner/Settings.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        if (store.getters["auth/user"].role === "User") {
+          return next({
+            name: "Home",
+          });
+        }
+        next();
+      }
+    },
   },
   {
     path: "/donate-blood",
@@ -96,8 +152,9 @@ const routes = [
         return next({
           name: "UserSignIn",
         });
+      } else {
+        next();
       }
-      next();
     },
   },
   {

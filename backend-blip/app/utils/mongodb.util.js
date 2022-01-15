@@ -20,6 +20,7 @@ exports.create = async (saveModel, saveObj) => {
     const newObj = new saveModel(saveObj);
     const error = newObj.validateSync();
     if (error) {
+      console.log(error);
       throw errors.INVALID_PAYLOAD;
     }
     const result = await newObj.save();
