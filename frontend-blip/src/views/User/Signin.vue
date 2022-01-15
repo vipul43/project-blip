@@ -16,10 +16,11 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
-                rules="required|max:10|min:5"
+                rules="required"
               >
                 <v-text-field
                   v-model="user.username"
+                  autocomplete="username"
                   :error-messages="errors"
                   label="User Name *"
                   outlined
@@ -74,7 +75,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { required, email, min, max } from "vee-validate/dist/rules";
+import { required, email } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
@@ -86,14 +87,6 @@ setInteractionMode("eager");
 extend("required", {
   ...required,
   message: "{_field_} can not be empty",
-});
-extend("min", {
-  ...min,
-  message: "{_field_} may not be less than {length} characters",
-});
-extend("max", {
-  ...max,
-  message: "{_field_} may not be greater than {length} characters",
 });
 extend("email", {
   ...email,
@@ -117,7 +110,7 @@ export default {
     async signIn() {
       const valid = await this.$refs.observer.validate();
       if (valid) {
-        this.validate(this.user)
+        this.validate({ credentials: this.user, userType: "User" })
           .then(() => {
             this.$router.replace({
               name: "UserDashboard",

@@ -20,6 +20,7 @@
               >
                 <v-text-field
                   v-model="user.firstName"
+                  autocomplete="off"
                   :counter="20"
                   :error-messages="errors"
                   label="First Name *"
@@ -36,6 +37,7 @@
               >
                 <v-text-field
                   v-model="user.lastName"
+                  autocomplete="off"
                   :counter="20"
                   :error-messages="errors"
                   label="Last Name"
@@ -53,6 +55,7 @@
               >
                 <v-text-field
                   v-model="user.username"
+                  autocomplete="username"
                   :counter="10"
                   :error-messages="errors"
                   label="User Name *"
@@ -69,6 +72,7 @@
               >
                 <v-text-field
                   v-model="user.email"
+                  autocomplete="off"
                   :error-messages="errors"
                   label="E-mail *"
                   outlined
@@ -86,6 +90,7 @@
               >
                 <v-text-field
                   v-model="user.phone"
+                  autocomplete="off"
                   :counter="10"
                   :error-messages="errors"
                   label="Phone Number"
@@ -101,6 +106,7 @@
               >
                 <v-text-field
                   v-model="user.password"
+                  autocomplete="off"
                   :counter="12"
                   :error-messages="errors"
                   label="Password *"
@@ -185,7 +191,7 @@ export default {
     async signUp() {
       const valid = await this.$refs.observer.validate();
       if (valid) {
-        this.register(this.user)
+        this.register({ credentials: this.user, userType: "User" })
           .then(() => {
             this.$router.replace({
               name: "UserDashboard",

@@ -120,13 +120,7 @@ export default {
       invalidate: "auth/invalidate",
     }),
     signOut() {
-      this.invalidate({
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        username: this.user.username,
-        email: this.user.email,
-        phone: this.user.phone,
-      })
+      this.invalidate({ credentials: this.user, userType: "User" })
         .then(() => {
           this.$router.replace({
             name: "UserSignIn",

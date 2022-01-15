@@ -1,4 +1,4 @@
-import { createUser, validateUser, authUser, invalidateUser } from "@/api.js";
+import * as api from "@/api.js";
 
 export default {
   namespaced: true,
@@ -28,9 +28,10 @@ export default {
     },
   },
   actions: {
-    async register({ dispatch }, credentials) {
+    async register({ dispatch }, { credentials, userType }) {
       try {
-        const response = await createUser(credentials);
+        const apiName = `create${userType}`;
+        const response = await api[apiName](credentials);
         if (response.error) {
           throw response.error;
         }
@@ -40,12 +41,15 @@ export default {
         throw error;
       }
     },
-    async validate({ dispatch }, credentials) {
+    async validate({ dispatch }, { credentials, userType }) {
       try {
-        const response = await validateUser(credentials);
+        const apiName = `validate${userType}`;
+        console.log(apiName);
+        const response = await api[apiName](credentials);
         if (response.error) {
           throw response.error;
         }
+        response.userType = userType;
         return dispatch("attempt", response);
       } catch (error) {
         console.log(error);
@@ -56,7 +60,8 @@ export default {
       if (data && data.token && data.user) {
         commit("SET_TOKEN", data.token);
         try {
-          const response = await authUser(data.user);
+          const apiName = `auth${data.userType}`;
+          const response = await api[apiName](data.user);
           if (response.error) {
             throw response.error;
           }
@@ -69,8 +74,9 @@ export default {
         }
       }
     },
-    invalidate({ commit }, data) {
-      return invalidateUser(data)
+    invalidate({ commit }, { data, userType }) {
+      const apiName = `invalidate${userType}`;
+      return api[apiName](data)
         .then(() => {
           commit("SET_TOKEN", null);
           commit("SET_USER", null);
