@@ -1,5 +1,25 @@
 <template>
   <div id="partner-sign-in">
+    <v-snackbar
+      v-model="snackbar.active"
+      :color="snackbar.color"
+      timeout="4000"
+      :top="true"
+    >
+      <v-layout align-center pr-4>
+        <v-icon class="pr-3" dark large>{{ snackbar.icon }}</v-icon>
+        <v-layout column>
+          <div>
+            <strong>{{ snackbar.title }}</strong>
+          </div>
+          <div>{{ snackbar.text }}</div>
+        </v-layout>
+      </v-layout>
+
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="deactivateSnackar()"> Close </v-btn>
+      </template>
+    </v-snackbar>
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="2"
@@ -97,7 +117,16 @@ export default {
     partner: {
       partnerName: "giveIndia",
       email: "giveindia@gmail.com",
-      password: "12345678",
+      password: "12345679",
+    },
+    snackbar: {
+      active: false,
+      color: "",
+      icon: "",
+      timeout: 3000,
+      top: "true",
+      title: "",
+      text: "",
     },
   }),
   methods: {
@@ -114,8 +143,11 @@ export default {
             });
           })
           .catch((error) => {
-            console.log(error);
-            //raise error alert
+            this.snackbar.color = "error";
+            this.snackbar.icon = "mdi-alert-circle";
+            this.snackbar.title = "Error";
+            this.snackbar.text = "Invalid User Credentials.";
+            this.snackbar.active = true;
           });
       }
     },
@@ -127,6 +159,9 @@ export default {
       this.partner.email = "";
       this.partner.password = "";
       this.$refs.observer.reset();
+    },
+    deactivateSnackar() {
+      this.snackbar.active = false;
     },
   },
   metaInfo() {
