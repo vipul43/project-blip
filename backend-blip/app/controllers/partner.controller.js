@@ -26,6 +26,7 @@ exports.handlePartnerCreation = async (req, res) => {
       partnerName: result.partnerName,
       email: result.email,
       password: result.password,
+      role: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     const obj = result.toObject();
@@ -67,6 +68,7 @@ exports.handlePartnerValidation = async (req, res) => {
       partnerName: result.partnerName,
       email: result.email,
       password: result.password,
+      role: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     const obj = result.toObject();
