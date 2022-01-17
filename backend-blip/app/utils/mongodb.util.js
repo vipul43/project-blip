@@ -20,7 +20,6 @@ exports.create = async (saveModel, saveObj) => {
     const newObj = new saveModel(saveObj);
     const error = newObj.validateSync();
     if (error) {
-      console.log(error);
       throw errors.INVALID_PAYLOAD;
     }
     const result = await newObj.save();
@@ -40,5 +39,13 @@ exports.findOne = async (findModel, findObj) => {
     return result;
   } catch (error) {
     throw errors.VALIDATION_FAILED;
+  }
+};
+
+exports.updateOne = async (updateModel, findObj, updateObj, updateConfig) => {
+  try {
+    await updateModel.updateOne(findObj, updateObj, updateConfig);
+  } catch (error) {
+    throw errors.UPDATION_FAILED;
   }
 };

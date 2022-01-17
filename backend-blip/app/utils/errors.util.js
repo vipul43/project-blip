@@ -8,3 +8,5 @@ exports.INVALID_TOKEN = "Invalid Token.";
 exports.AUTHENTICATION_FAILED = "Authentication Failed.";
 exports.TOKEN_GENERATION_FAILED = "Token Generation Failed.";
 exports.USER_ALREADY_EXISTS_WITH_EMAIL = "User Already Exists with this Email.";
+exports.COULD_NOT_SIGNOUT = "Could Not Sign Out.";
+exports.UPDATION_FAILED = "Could Not Update.";

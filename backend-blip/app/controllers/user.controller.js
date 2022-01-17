@@ -4,6 +4,7 @@ const crypt = require("../utils/crypt.util.js");
 const mongodb = require("../utils/mongodb.util.js");
 const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
+const tokenController = require("./token.controller.js");
 const user = db.user;
 // const partner = db.partner;
 
@@ -29,6 +30,7 @@ exports.handleUserCreation = async (req, res) => {
       password: result.password,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    await tokenController.save(result._id, token);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.CREATED).json({ token: token, user: obj });
@@ -42,6 +44,8 @@ exports.handleUserCreation = async (req, res) => {
     } else if (error === errors.CREATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
@@ -70,6 +74,7 @@ exports.handleUserValidation = async (req, res) => {
       password: result.password,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    await tokenController.save(result._id, token);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ token: token, user: obj });
@@ -82,6 +87,8 @@ exports.handleUserValidation = async (req, res) => {
       res.status(codes.UNAUTHORIZED).json({ error: error });
     } else if (error === errors.TOKEN_GENERATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === error.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     }
@@ -89,17 +96,54 @@ exports.handleUserValidation = async (req, res) => {
 };
 
 exports.handleUserAuthentication = async (req, res) => {
-  if (req && req.body) {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    const valid = await tokenController.find(req.body._id, token);
+    if (!valid) throw errors.AUTHENTICATION_FAILED;
     res.status(codes.ACCEPTED).json(req.body);
-  } else {
-    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.AUTHENTICATION_FAILED) {
+      res.status(codes.FORBIDDEN).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res
+        .status(codes.INTERNAL_SERVER_ERROR)
+        .json({ error: errors.COULD_NOT_SIGNOUT });
+    }
   }
 };
 
 exports.handleUserInvalidation = async (req, res) => {
-  if (req && req.body) {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    await tokenController.delete(req.body._id, token);
     res.status(codes.ACCEPTED).json(req.body);
-  } else {
-    res.status(codes.BAD_REQUEST).json({ error: errors.INVALID_PAYLOAD });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res
+        .status(codes.INTERNAL_SERVER_ERROR)
+        .json({ error: errors.COULD_NOT_SIGNOUT });
+    }
   }
 };
