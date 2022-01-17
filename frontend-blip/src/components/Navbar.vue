@@ -126,9 +126,9 @@ export default {
     }),
     signOut() {
       this.invalidate(this.user)
-        .then(() => {
+        .then((res) => {
           this.$router.replace({
-            name: "UserSignIn",
+            name: "Home",
           });
         })
         .catch((error) => {
