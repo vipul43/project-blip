@@ -59,9 +59,9 @@ const routes = [
     },
   },
   {
-    path: "/user/settings",
-    name: "UserSettings",
-    component: () => import("../views/User/Settings.vue"),
+    path: "/user/profile",
+    name: "UserProfile",
+    component: () => import("../views/User/Profile.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
@@ -125,9 +125,9 @@ const routes = [
     },
   },
   {
-    path: "/partner/settings",
-    name: "PartnerSettings",
-    component: () => import("../views/Partner/Settings.vue"),
+    path: "/partner/profile",
+    name: "PartnerProfile",
+    component: () => import("../views/Partner/Profile.vue"),
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({

@@ -117,7 +117,7 @@ export default {
     user: {
       username: "vipul43",
       email: "sfdc@gmail.com",
-      password: "12345679",
+      password: "12345678",
     },
     snackbar: {
       active: false,

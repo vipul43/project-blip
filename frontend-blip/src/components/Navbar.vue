@@ -17,8 +17,8 @@
           </v-avatar>
         </template>
         <v-list>
-          <v-list-item :to="`/${user.role.toLowerCase()}/settings`">
-            <v-list-item-title>Account Settings</v-list-item-title>
+          <v-list-item :to="`/${user.role.toLowerCase()}/profile`">
+            <v-list-item-title>Account Profile</v-list-item-title>
           </v-list-item>
           <v-list-item @click="signOut">
             <v-list-item-title>Sign Out</v-list-item-title>
@@ -95,7 +95,6 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
-      token: "auth/token",
     }),
   },
   watch: {
