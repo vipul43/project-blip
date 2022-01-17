@@ -70,6 +70,11 @@ app.post("/partner/signout", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerInvalidation(req, res);
 });
 
+/*************************** Admin APIs ***************************/
+// app.post("/admin/expire", auth.authenticate, async (req, res) => {
+//   await adminController.handleAdminExpire(req, res);
+// });
+
 // listening
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
