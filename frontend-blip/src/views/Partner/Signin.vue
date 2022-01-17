@@ -95,9 +95,9 @@ export default {
   components: { ValidationProvider, ValidationObserver },
   data: () => ({
     partner: {
-      partnerName: "",
-      email: "",
-      password: "",
+      partnerName: "giveIndia",
+      email: "giveindia@gmail.com",
+      password: "12345678",
     },
   }),
   methods: {

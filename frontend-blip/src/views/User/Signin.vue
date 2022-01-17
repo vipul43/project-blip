@@ -95,9 +95,9 @@ export default {
   components: { ValidationProvider, ValidationObserver },
   data: () => ({
     user: {
-      username: "",
-      email: "",
-      password: "",
+      username: "vipul43",
+      email: "sfdc@gmail.com",
+      password: "12345678",
     },
   }),
   methods: {
