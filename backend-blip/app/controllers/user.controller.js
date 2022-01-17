@@ -6,7 +6,6 @@ const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenController = require("./token.controller.js");
 const user = db.user;
-// const partner = db.partner;
 
 exports.handleUserCreation = async (req, res) => {
   try {
