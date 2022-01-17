@@ -1,8 +1,8 @@
 <template>
   <div id="user-profile">
     <v-container>
-      <v-card>
-        <v-tabs vertical grow :height="400">
+      <v-card height="100%">
+        <v-tabs vertical grow>
           <v-tab>
             <v-icon left> mdi-account </v-icon>
             Account
