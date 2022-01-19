@@ -3,12 +3,14 @@ module.exports = (mongoose) => {
     {
       userId: {
         type: mongoose.ObjectId,
+        unique: [true, "User Id Already Exists."],
         required: [true, "User Id is Required."],
       },
       tokens: [
         {
           token: {
             type: String,
+            trim: true,
             required: [true, "Token is Required."],
           },
           creation: {

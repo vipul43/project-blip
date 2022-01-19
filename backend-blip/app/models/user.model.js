@@ -8,7 +8,7 @@ module.exports = (mongoose) => {
           validator: (firstName) => {
             return !!firstName && firstName.length <= 20;
           },
-          message: "Invalid First Name.",
+          message: "{VALUE} is not a valid First Name.",
         },
       },
       lastName: {
@@ -21,21 +21,27 @@ module.exports = (mongoose) => {
               return true;
             }
           },
-          message: "Invalid Last Name.",
+          message: "{VALUE} is not a valid Last Name.",
         },
       },
       username: {
         type: String,
+        unique: [true, "Username Already Exists."],
+        lowercase: true,
+        trim: true,
         required: [true, "Username is Required."],
         validate: {
           validator: (username) => {
             return !!username && username.length >= 5 && username.length <= 10;
           },
-          message: "Invalid Username.",
+          message: "{VALUE} is not a valid Username.",
         },
       },
       email: {
         type: String,
+        unique: [true, "Email Already Exists."],
+        lowercase: true,
+        trim: true,
         required: [true, "Email is Required."],
         validate: {
           validator: (email) => {
@@ -44,11 +50,12 @@ module.exports = (mongoose) => {
             );
             return re.test(email);
           },
-          message: "Invalid Email.",
+          message: "{VALUE} is not a valid Email.",
         },
       },
       phone: {
         type: String,
+        trim: true,
         validate: {
           validator: (phone) => {
             if (phone) {
@@ -58,7 +65,7 @@ module.exports = (mongoose) => {
               return true;
             }
           },
-          message: "Invalid Phone Number.",
+          message: "{VALUE} is not a valid Phone Number.",
         },
       },
       password: {

@@ -8,11 +8,14 @@ module.exports = (mongoose) => {
           validator: (orgName) => {
             return !!orgName && orgName.length >= 10 && orgName.length <= 50;
           },
-          message: "Invalid Organisation Name.",
+          message: "{VALUE} is not a valid Organisation Name.",
         },
       },
       partnerName: {
         type: String,
+        unique: [true, "Partnername Already Exists."],
+        lowercase: true,
+        trim: true,
         required: [true, "Partner Name is Required."],
         validate: {
           validator: (partnerName) => {
@@ -22,11 +25,14 @@ module.exports = (mongoose) => {
               partnerName.length <= 10
             );
           },
-          message: "Invalid Partner Name.",
+          message: "{VALUE} is not a valid Partner Name.",
         },
       },
       email: {
         type: String,
+        unique: [true, "Email Already Exists."],
+        lowercase: true,
+        trim: true,
         required: [true, "Email is Required."],
         validate: {
           validator: (email) => {
@@ -35,11 +41,12 @@ module.exports = (mongoose) => {
             );
             return re.test(email);
           },
-          message: "Invalid Email.",
+          message: "{VALUE} is not a valid Email.",
         },
       },
       phone: {
         type: String,
+        trim: true,
         required: [true, "Phone Number is Required."],
         validate: {
           validator: (phone) => {
@@ -50,7 +57,7 @@ module.exports = (mongoose) => {
               return true;
             }
           },
-          message: "Invalid Phone Number.",
+          message: "{VALUE} is not a valid Phone Number.",
         },
       },
       type: {
@@ -69,7 +76,7 @@ module.exports = (mongoose) => {
             validator: (houseno) => {
               return !!houseno && houseno.length <= 10;
             },
-            message: "Invalid Area And Street.",
+            message: "{VALUE} is not a House Number.",
           },
         },
         area_and_street: {
@@ -83,7 +90,7 @@ module.exports = (mongoose) => {
                 area_and_street.length <= 100
               );
             },
-            message: "Invalid Area And Street.",
+            message: "{VALUE} is not a valid Area And Street.",
           },
         },
         landmark: {
@@ -96,7 +103,7 @@ module.exports = (mongoose) => {
                 return true;
               }
             },
-            message: "Invalid Landmark",
+            message: "{VALUE} is not a valid Landmark",
           },
         },
         country: {
@@ -109,6 +116,7 @@ module.exports = (mongoose) => {
         },
         pincode: {
           type: String,
+          trim: true,
           required: [true, "Pincode is Required."],
           validate: {
             validator: (pincode) => {
@@ -119,7 +127,7 @@ module.exports = (mongoose) => {
                 return true;
               }
             },
-            message: "Invalid Pincode.",
+            message: "{VALUE} is not a valid Pincode.",
           },
         },
         city_town_district: {
