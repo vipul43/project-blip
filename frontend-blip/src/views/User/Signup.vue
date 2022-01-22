@@ -32,7 +32,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Username"
-                rules="required|max:10|min:5"
+                rules="required|max:10|min:5|alpha_dash"
               >
                 <v-text-field
                   v-model="user.username"
@@ -131,6 +131,7 @@ import {
   min,
   max,
   regex,
+  alpha_dash,
 } from "vee-validate/dist/rules";
 import {
   extend,
@@ -162,7 +163,11 @@ extend("regex", {
 });
 extend("email", {
   ...email,
-  message: "Email must be valid",
+  message: "{_field_} must be valid",
+});
+extend("alpha_dash", {
+  ...alpha_dash,
+  message: "{_field_} can not have spaces",
 });
 
 export default {
