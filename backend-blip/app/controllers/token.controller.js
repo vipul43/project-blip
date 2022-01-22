@@ -1,6 +1,13 @@
 const mongodb = require("../utils/mongodb.util.js");
+const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenModel = db.token;
+
+// helper functions
+function tokenExpired (creationDateTime) {
+  const currDateTime = new Date();
+  return currDateTime - creationDateTime > auth.tokenExpirySeconds * 1000;
+}
 
 exports.save = async (userId, token) => {
   const findObj = {
@@ -62,18 +69,19 @@ exports.find = async (userId, token) => {
   }
 };
 
-exports.expire = async (userId) => {
-  const findObj = {
-    userId: userId,
-  };
-  const updateObj = {
-    $set: {
-      tokens: [],
-    },
-  };
-  const updateConfig = {};
+exports.expireAll = async () => {
+  const findObj = {};
   try {
-    await mongodb.updateOne(tokenModel, findObj, updateObj, updateConfig);
+    const result = await mongodb.findAll(tokenModel, findObj);
+    result.forEach((user) => {
+      const userId = user.userId;
+      const tokens = user.tokens;
+      tokens.forEach((item) => {
+        if(tokenExpired(item.creation)) {
+          module.exports.delete(userId, item.token);
+        }
+      })
+    })
   } catch (error) {
     throw error;
   }

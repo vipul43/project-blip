@@ -10,3 +10,4 @@ exports.TOKEN_GENERATION_FAILED = "Token Generation Failed.";
 exports.USER_ALREADY_EXISTS_WITH_EMAIL = "User Already Exists with this Email.";
 exports.COULD_NOT_SIGNOUT = "Could Not Sign Out.";
 exports.UPDATION_FAILED = "Could Not Update.";
+exports.COULD_NOT_EXPIRE_ALL_TOKENS = "Could Not Expire All Tokens.";

@@ -8,7 +8,9 @@ const db = require("./app/models");
 const mongodb = require("./app/utils/mongodb.util.js");
 const userController = require("./app/controllers/user.controller.js");
 const partnerController = require("./app/controllers/partner.controller.js");
+const adminController = require("./app/controllers/admin.controller.js");
 const auth = require("./app/middlewares/auth.middleware.js");
+const cron = require("node-cron");
 
 // setting up express app
 const app = express();
@@ -70,10 +72,12 @@ app.post("/partner/signout", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerInvalidation(req, res);
 });
 
-/*************************** Admin APIs ***************************/
-// app.post("/admin/expire", auth.authenticate, async (req, res) => {
-//   await adminController.handleAdminExpire(req, res);
-// });
+/*************************** Admin Crons ***************************/
+cron.schedule("30 2 * * *", async () => {
+  console.log("Initiating Removal of Expired Tokens.");
+  await adminController.handleExpiredTokens();
+  console.log("Ending Removal of Expired Tokens.");
+});
 
 // listening
 const PORT = process.env.PORT || 8000;

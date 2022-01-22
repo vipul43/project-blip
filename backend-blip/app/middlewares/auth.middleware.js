@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const codes = require("../utils/codes.util.js");
 const errors = require("../utils/errors.util.js");
 
+// helper functions
 function getSecret(userType) {
   if (userType === "User") {
     return process.env.USER_JWT_TOKEN_SECRET;
@@ -12,10 +13,12 @@ function getSecret(userType) {
   }
 }
 
+exports.tokenExpirySeconds = 1800;
+
 exports.generate = (user) => {
   try {
     const token = jwt.sign(user, getSecret(user.role), {
-      expiresIn: "1800s",
+      expiresIn: module.exports.tokenExpirySeconds.toString() + "s",
     });
     return token;
   } catch (error) {

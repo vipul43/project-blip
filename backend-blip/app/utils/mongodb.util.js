@@ -49,3 +49,12 @@ exports.updateOne = async (updateModel, findObj, updateObj, updateConfig) => {
     throw errors.UPDATION_FAILED;
   }
 };
+
+exports.findAll = async (findAllModel, findObj) => {
+  try {
+    const result = await findAllModel.find(findObj);
+    return result;
+  } catch(error) {
+    throw errors.VALIDATION_FAILED;
+  }
+}
