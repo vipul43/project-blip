@@ -4,23 +4,23 @@
 
 ---
 
-| METHOD |                     URL                      |             ACTION             |
-| :----: | :------------------------------------------: | :----------------------------: |
-|  GET   |             `/stats/users-count`             |    gets total donated users    |
-|  GET   |           `/stats/donations-count`           |      gets total donations      |
-|  GET   | `/stats/donations-count/:donation-center-id` | gets total donations by center |
+| METHOD |                     URL                      |             ACTION             | STATUS  |
+| :----: | :------------------------------------------: | :----------------------------: | :-----: |
+|  GET   |             `/stats/users-count`             |    gets total donated users    | PENDING |
+|  GET   |           `/stats/donations-count`           |      gets total donations      | PENDING |
+|  GET   | `/stats/donations-count/:donation-center-id` | gets total donations by center | PENDING |
 
 ### API - ADMIN LEVEL
 
 ---
 
-| METHOD |            URL            |             ACTION              |
-| :----: | :-----------------------: | :-----------------------------: |
-|  GET   |      `/admin/users`       | gets all users donation details |
-|  GET   | `/admin/donation-centres` |    gets all donation centres    |
-|  POST  | `/admin/donation-centres` |    adds new donation centre     |
-|  GET   |    `/admin/hospitals`     |       gets all hospitals        |
-|  POST  |    `/admin/hospitals`     |        adds new hospital        |
+| METHOD |            URL            |             ACTION              | STATUS  |
+| :----: | :-----------------------: | :-----------------------------: | :-----: |
+|  GET   |      `/admin/users`       | gets all users donation details | PENDING |
+|  GET   | `/admin/donation-centres` |    gets all donation centres    | PENDING |
+|  POST  | `/admin/donation-centres` |    adds new donation centre     | PENDING |
+|  GET   |    `/admin/hospitals`     |       gets all hospitals        | PENDING |
+|  POST  |    `/admin/hospitals`     |        adds new hospital        | PENDING |
 
 ### API - USER LEVEL
 
@@ -32,6 +32,8 @@
 |  POST  |          `/user/signin`          |     validates user credentials      |  DONE   |
 |  POST  |           `/user/auth`           |   authenticates user credentials    |  DONE   |
 |  POST  |         `/user/signout`          |    invalidates user credentials     |  DONE   |
+|  POST  |          `/user/update`          |       update user credentials       |  DONE   |
+|  POST  |          `/user/delete`          |       delete user credentials       |  DONE   |
 |  GET   | `/user/donation-details/:userId` | gets donation details of user by id | PENDING |
 |  POST  | `/user/donation-details/:userId` |    add new donation for tracking    | PENDING |
 
