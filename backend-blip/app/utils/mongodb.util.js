@@ -15,7 +15,7 @@ exports.connect = (db) => {
     });
 };
 
-exports.create = async (saveModel, saveObj) => {
+exports.createOne = async (saveModel, saveObj) => {
   try {
     const newObj = new saveModel(saveObj);
     const error = newObj.validateSync();

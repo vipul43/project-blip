@@ -48,6 +48,11 @@ app.post("/user/signout", auth.authenticate, async (req, res) => {
   await userController.handleUserInvalidation(req, res);
 });
 
+// Authenticating user, updating using details in the database
+app.post("/user/update", auth.authenticate, async (req, res) => {
+  await userController.handleUserUpdation(req, res);
+});
+
 /*************************** Partner APIs ***************************/
 // Signing up user by creating entry in database,
 //generating jwt token to send as payload

@@ -52,7 +52,8 @@
     },
     "rules": {
       "no-console": "off",
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
+      "no-extra-boolean-cast": "off"
     }
   },
   "browserslist": [

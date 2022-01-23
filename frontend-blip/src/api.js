@@ -37,6 +37,10 @@ export const invalidateUser = async (user) => {
   const response = await httpClient.post(`/user/signout`, JSON.stringify(user));
   return response.data;
 };
+export const updateUser = async (user) => {
+  const response = await httpClient.post(`/user/update`, JSON.stringify(user));
+  return response.data;
+}
 
 /*************************** Partner APIs ***************************/
 export const createPartner = async (user) => {

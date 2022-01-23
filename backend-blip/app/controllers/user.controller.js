@@ -16,13 +16,13 @@ exports.handleUserCreation = async (req, res) => {
       email: payload.email,
     };
     const invalid = await mongodb.findOne(user, findObj);
-    if (invalid) throw errors.USER_ALREADY_EXISTS;
+    if (invalid) throw errors.USER_ALREADY_EXISTS_WITH_EMAIL;
     if (!payload.password) throw errors.INVALID_PAYLOAD;
     const hashedPassword = await crypt.hashAndSalt(payload.password);
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "User";
-    const result = await mongodb.create(user, payload);
+    const result = await mongodb.createOne(user, payload);
     const token = auth.generate({
       username: result.username,
       email: result.email,
@@ -134,8 +134,8 @@ exports.handleUserInvalidation = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(req.body._id, token);
-    res.status(codes.ACCEPTED).json(req.body);
+    await tokenController.delete(payload._id, token);
+    res.status(codes.ACCEPTED).json(payload);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -148,3 +148,37 @@ exports.handleUserInvalidation = async (req, res) => {
     }
   }
 };
+
+exports.handleUserUpdation = async (req, res) => {
+  try {
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    const payload = req.body;
+    if(!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      email: payload.email,
+    };
+    const invalid = await mongodb.findOne(user, findObj);
+    if (!invalid) throw errors.USER_NOT_FOUND;
+    const updateConfig = {
+      upsert: false,
+    }
+    await mongodb.updateOne(user, findObj, payload, updateConfig);
+    res.status(codes.OK).json({ token: token, user: payload });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.USER_NOT_FOUND) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    }
+  }
+}

@@ -136,7 +136,11 @@ export default {
     },
     getAvatar(user) {
       if (user.role === "User") {
-        return user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase();
+        if(!!user.lastName) {
+          return user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase();
+        } else {
+          return user.firstName[0].toUpperCase();
+        }
       } else if (user.role === "Partner") {
         return user.orgName[0].toUpperCase();
       } else {

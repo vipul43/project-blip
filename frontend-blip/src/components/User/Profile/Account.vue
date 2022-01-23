@@ -1,4 +1,25 @@
 <template>
+  <div id="user-profile-account">
+  <v-snackbar
+    v-model="snackbar.active"
+    :color="snackbar.color"
+    timeout="4000"
+    :top="true"
+  >
+    <v-layout align-center pr-4>
+      <v-icon class="pr-3" dark large>{{ snackbar.icon }}</v-icon>
+      <v-layout column>
+        <div>
+          <strong>{{ snackbar.title }}</strong>
+        </div>
+        <div>{{ snackbar.text }}</div>
+      </v-layout>
+    </v-layout>
+
+    <template v-slot:action="{ attrs }">
+      <v-btn text v-bind="attrs" @click="deactivateSnackar()"> Close </v-btn>
+    </template>
+  </v-snackbar>
   <v-container>
     <v-card flat>
       <v-card-title>
@@ -103,6 +124,7 @@
               <v-btn :disabled="!editable || invalid" @click="updateProfile">
                 Update
               </v-btn>
+              <v-btn :disabled="!editable || invalid" @click="reset"> Reset </v-btn>
             </v-card-actions>
           </form>
         </validation-observer>
@@ -213,10 +235,11 @@
       </v-card-actions>
     </v-card>
   </v-container>
+</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
   required,
   digits,
@@ -281,6 +304,15 @@ export default {
       email: "",
       password: "",
     },
+    snackbar: {
+      active: false,
+      color: "",
+      icon: "",
+      timeout: 3000,
+      top: "true",
+      title: "",
+      text: "",
+    },
   }),
   computed: {
     ...mapGetters({
@@ -293,10 +325,41 @@ export default {
     // console.log(this.user);
   },
   methods: {
+    ...mapActions({
+      update: "auth/update",
+    }),
     toggleEditable() {
       this.editable = !this.editable;
     },
-    updateProfile() {},
+    async submit() {
+      await this.$refs.observer.validate();
+    },
+    reset() {
+      Object.assign(this.user, this._user);
+      this.$refs.observer.reset();
+    },
+    async updateProfile() {
+      const valid = await this.$refs.observer.validate();
+      if (valid) {
+        this.update({ credentials: this.user, userType: "User" })
+          .then(() => {
+            this.snackbar.color = "success";
+            this.snackbar.icon = "mdi-check-circle";
+            this.snackbar.title = "Success";
+            this.snackbar.text = "Update Successful.";
+            this.snackbar.active = true;
+            this.toggleEditable();
+          })
+          .catch((error) => {
+            this.snackbar.color = "error";
+            this.snackbar.icon = "mdi-alert-circle";
+            this.snackbar.title = "Error";
+            this.snackbar.text = "Failed to Update.";
+            this.snackbar.active = true;
+            this.toggleEditable();
+          });
+      }
+    },
     verifyEmail() {},
     verifyPhone() {},
     formatDateTime(dirtyDateTime) {
@@ -306,6 +369,9 @@ export default {
         const time = dirtyDateTimeArray[1].split(".")[0];
         return `${date} ${time}`;
       }
+    },
+    deactivateSnackar() {
+      this.snackbar.active = false;
     },
   },
 };

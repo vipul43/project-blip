@@ -83,5 +83,18 @@ export default {
           console.log(error);
         });
     },
+    async update({ dispatch }, { credentials, userType }) {
+      try {
+        const apiName = `update${userType}`;
+        const response = await api[apiName](credentials);
+        if (response.error) {
+          throw response.error;
+        }
+        return dispatch("attempt", response);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
   },
 };
