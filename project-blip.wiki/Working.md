@@ -1,5 +1,3 @@
-# Working
-
 ## User POV
 
 - The User gets to register on the Project BLiP web application as a _donor_. After registering the User is redirected to their personal donations dashboard where they will get to track all their donations made using the Project BLiP platform. Whenever a donation is made at Project BLiP associated Donation Center User will receive a unique _Donation Id_ to their email or mobile phone. Which they can use to add that donation to their personal donations list and later track it through various stages.
