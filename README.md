@@ -8,8 +8,6 @@ A comprehensive system to track donated blood, its components during various pha
 
 ## Process Flow
 
----
-
 1. **start**(customer) logs into _start.projectblip.org_ and makes **donation** in project-blip associated **bank**(first party) --> _DONATED_
 2. **bank**(first party) logs into _bank.projectblip.com_ and enters the **donation** and **start**(customer) details. A **D-id** corresponding to that **start**(customer) and that **donation** is generated. --> _REGISTERED_
 3. **donation** is tracked by the **start**(customer) using only the **D-id**. --> _ASSIGNED_
@@ -22,8 +20,6 @@ A comprehensive system to track donated blood, its components during various pha
 10. **donation** is always kept upto date in the database, so that, **start**(customer) querying for their **donation** **status** is served well.
 
 ## Brainstorming
-
----
 
 - front-end:
   - start.projectblip.com: gives customers(start) interface to view the donation travel through various stages and finally gets terminated
