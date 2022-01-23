@@ -231,7 +231,7 @@
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="error" @click="deleteUser()">Delete User Account</v-btn>
+        <v-btn :disabled="allowDelete()" color="error" @click="deleteUser()">Delete User Account</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -322,11 +322,11 @@ export default {
   },
   mounted() {
     Object.assign(this.user, this._user);
-    // console.log(this.user);
   },
   methods: {
     ...mapActions({
       update: "auth/update",
+      delete: "auth/delete",
     }),
     toggleEditable() {
       this.editable = !this.editable;
@@ -337,6 +337,14 @@ export default {
     reset() {
       Object.assign(this.user, this._user);
       this.$refs.observer.reset();
+    },
+    allowDelete() {
+      if(this.del && this.del.username && this.del.email
+                  && this.del.password) {
+        return false;
+      } else {
+        return true;
+      }
     },
     async updateProfile() {
       const valid = await this.$refs.observer.validate();
@@ -360,6 +368,18 @@ export default {
           });
       }
     },
+    deleteUser() {
+      Object.assign(this.user, this.del);
+      this.delete({ credentials: this.user, userType: "User" })
+        .then(() => {
+          this.$router.replace({
+            name: "Home",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
     verifyEmail() {},
     verifyPhone() {},
     formatDateTime(dirtyDateTime) {
@@ -367,7 +387,7 @@ export default {
         const dirtyDateTimeArray = dirtyDateTime.split("T");
         const date = dirtyDateTimeArray[0];
         const time = dirtyDateTimeArray[1].split(".")[0];
-        return `${date} ${time}`;
+        return `${date} ${time} UTC`;
       }
     },
     deactivateSnackar() {

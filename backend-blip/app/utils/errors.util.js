@@ -12,3 +12,4 @@ exports.COULD_NOT_SIGNOUT = "Could Not Sign Out.";
 exports.UPDATION_FAILED = "Could Not Update.";
 exports.COULD_NOT_EXPIRE_ALL_TOKENS = "Could Not Expire All Tokens.";
 exports.USER_NOT_FOUND = "User Not Found.";
+exports.DELETION_FAILED = "Could Not Delete.";

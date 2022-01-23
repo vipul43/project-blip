@@ -106,9 +106,9 @@ exports.handleUserAuthentication = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(req.body._id, token);
+    const valid = await tokenController.find(payload._id, token);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
-    res.status(codes.ACCEPTED).json(req.body);
+    res.status(codes.ACCEPTED).json(payload);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -169,12 +169,55 @@ exports.handleUserUpdation = async (req, res) => {
       upsert: false,
     }
     await mongodb.updateOne(user, findObj, payload, updateConfig);
-    res.status(codes.OK).json({ token: token, user: payload });
+    res.status(codes.ACCEPTED).json({ token: token, user: payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.USER_NOT_FOUND) {
       res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    }
+  }
+};
+
+exports.handleUserDeletion = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.username) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      username: payload.username,
+      email: payload.email,
+    };
+    const result = await mongodb.findOne(user, findObj);
+    if (!result) throw errors.INVALID_USER_CREDENTIALS;
+    if (!payload.password) throw errors.INVALID_PAYLOAD;
+    const valid = await crypt.compareHash(payload.password, result.password);
+    if (!valid) throw errors.VALIDATION_FAILED;
+    await mongodb.deleteOne(user, result);
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    await tokenController.delete(result._id, token);
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json({ user: obj });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.INVALID_USER_CREDENTIALS) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.DELETION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {

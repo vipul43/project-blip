@@ -32,7 +32,7 @@ exports.authenticate = (req, res, next) => {
   if (!token) {
     return res.status(codes.UNAUTHORIZED).json({ error: errors.INVALID_TOKEN });
   }
-  if (!req || !req.body || !req.body || !req.body.role) {
+  if (!req || !req.body || !req.body.role) {
     return res
       .status(codes.UNAUTHORIZED)
       .json({ error: errors.INVALID_USER_CREDENTIALS });

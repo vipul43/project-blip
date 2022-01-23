@@ -53,6 +53,11 @@ app.post("/user/update", auth.authenticate, async (req, res) => {
   await userController.handleUserUpdation(req, res);
 });
 
+// Authenticating user, deleting user from the database
+app.post("/user/delete", auth.authenticate, async (req, res) => {
+  await userController.handleUserDeletion(req, res);
+});
+
 /*************************** Partner APIs ***************************/
 // Signing up user by creating entry in database,
 //generating jwt token to send as payload

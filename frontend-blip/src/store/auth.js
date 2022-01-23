@@ -80,7 +80,7 @@ export default {
           commit("SET_USER", null);
         })
         .catch((error) => {
-          console.log(error);
+          throw error;
         });
     },
     async update({ dispatch }, { credentials, userType }) {
@@ -95,6 +95,17 @@ export default {
         console.log(error);
         throw error;
       }
+    },
+    delete({ commit }, { credentials, userType }) {
+      const apiName = `delete${userType}`;
+      return api[apiName](credentials)
+        .then(() => {
+          commit("SET_TOKEN", null);
+          commit("SET_USER", null);
+        })
+        .catch((error) => {
+          throw error;
+        });
     },
   },
 };
