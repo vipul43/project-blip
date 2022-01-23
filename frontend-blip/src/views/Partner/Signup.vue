@@ -68,11 +68,14 @@
                   v-model="partner.address.state"
                   autocomplete="off"
                   :items="states"
+                  item-text="name"
+                  item-value="iso2"
                   :error-messages="errors"
                   label="State *"
                   outlined
                   required
                   dense
+                  :disabled="partner.address.country === ''"
                 ></v-autocomplete>
               </validation-provider>
             </v-col>
@@ -132,11 +135,14 @@
                   v-model="partner.address.city_town_district"
                   autocomplete="off"
                   :items="cities_towns_districts"
+                  item-text="name"
+                  item-value="iso2"
                   :error-messages="errors"
                   label="City/Town/District *"
                   outlined
                   required
                   dense
+                  :disabled="partner.address.state === ''"
                 ></v-autocomplete>
               </validation-provider>
               <validation-provider
@@ -198,11 +204,12 @@
                   v-model="partner.address.country"
                   autocomplete="off"
                   :items="countries"
+                  item-text="name"
+                  item-value="iso2"
                   :error-messages="errors"
                   label="Country *"
                   outlined
                   required
-                  disabled
                   dense
                 ></v-autocomplete>
               </validation-provider>
@@ -252,6 +259,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from "vee-validate";
+import { getAllCountries, getStatesByCountry, getCitiesByStateAndCountry } from "../../api.js";
 
 setInteractionMode("eager");
 extend("digits", {
@@ -297,13 +305,16 @@ export default {
         houseno: "",
         area_and_street: "",
         landmark: "",
-        country: "India",
+        country: "IN",
         state: "",
         pincode: "",
         city_town_district: "",
       },
       password: "",
     },
+    countries: [],
+    states: [],
+    cities_towns_districts: [],
   }),
   methods: {
     ...mapActions({
@@ -337,7 +348,7 @@ export default {
         houseno: "",
         area_and_street: "",
         landmark: "",
-        country: "India",
+        country: "IN",
         state: "",
         pincode: "",
         city_town_district: "",
@@ -345,37 +356,35 @@ export default {
       this.partner.password = "";
       this.$refs.observer.reset();
     },
+    async getCountries() {
+      const countriesResponse = await getAllCountries();
+      this.countries = countriesResponse;
+    },
+    async getStates(ciso) {
+      const statesResponse = await getStatesByCountry(ciso);
+      this.states = statesResponse;
+    },
+    async getCities(ciso, siso) {
+      const citiesResponse = await getCitiesByStateAndCountry(ciso, siso);
+      this.cities_towns_districts = citiesResponse;
+    }
   },
-  computed: {
-    countries() {
-      return [
-        "India",
-        "Pakistan",
-        "Sri Lanka",
-        "Indonesia",
-        "Burma",
-        "Bangladesh",
-        "Myanmar",
-      ];
-    },
-    states() {
-      return [
-        "Telangana",
-        "Kerala",
-        "Maharashtra",
-        "Madhya Pradesh",
-        "Uttar Pradesh",
-      ];
-    },
-    cities_towns_districts() {
-      return [
-        "Warangal",
-        "Palakkad",
-        "Coimnbatore",
-        "Vishakapatnam",
-        "Vijaywada",
-      ];
-    },
+  watch: {
+    partner: {
+      async handler(partner) {
+        if(partner.address.country != ""){
+          await this.getStates(partner.address.country);
+        }
+        if(partner.address.state != "") {
+          await this.getCities(partner.address.country, partner.address.state)
+        }
+      },
+      deep: true,
+    }
+  },
+  async created() {
+    await this.getCountries();
+    await this.getStates(this.partner.address.country);
   },
   metaInfo() {
     return {
