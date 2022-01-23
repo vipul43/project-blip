@@ -8,7 +8,7 @@ Every person can start to donate blood from the age of 18 yrs to the age of 65yr
 ## What Project BLiP Does?
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/vipul43/project_Blip/main/logos/logo-v2-color-300dpi.png" alt="logo-v1"/> <br />
+  <img src="https://raw.githubusercontent.com/vipul43/project-blip/main/logos/logo-v2-color-300dpi.png" alt="logo-v2-color-300dpi"/> <br />
 </p>
 
 `Motto: Don't let your humanity go in vain`
@@ -20,7 +20,7 @@ Healthy donors can now **track thier donated blood**, like **what components the
 
 Project BLiP ties up with blood banks and hospitals, hosts blood donation campaigns upon the requirement by banks and hospitals. Also, issues alerts upon urgent requirement of blood. Collects statistics regarding each blood donation made and serves it to trusted and authorised Organisations to help them identify the underlying problem of donation in backward areas, and conduct more blood donation camps in such areas.
 
-## Proofs
+## Sources
 
 - [The New Indian Express](https://www.newindianexpress.com/cities/delhi/2019/jul/15/tracking-every-drop-of-donated-blood-2004103.html)
 - [Who can give blood? by WHO](https://www.who.int/campaigns/world-blood-donor-day/2018/who-can-give-blood)
