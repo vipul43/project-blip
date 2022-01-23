@@ -105,8 +105,10 @@
                   label="Password *"
                   outlined
                   required
-                  type="password"
+                  :type="showPassword ? 'text' : 'password'"
                   dense
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
                 ></v-text-field>
               </validation-provider>
             </v-col>
@@ -182,6 +184,7 @@ export default {
       phone: "",
       password: "",
     },
+    showPassword: false,
   }),
   methods: {
     ...mapActions({
