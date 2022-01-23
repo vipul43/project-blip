@@ -7,14 +7,22 @@ const httpClient = axios.create({
 });
 const httpClient2 = axios.create({
   baseURL: process.env.VUE_APP_API_COUNTRY_STATE_CITY,
-  headers: { "Content-Type": "application/json", Accept: "*",
-              "X-CSCAPI-KEY": process.env.VUE_APP_APIKEY_COUNTRY_STATE_CITY },
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "*",
+    "X-CSCAPI-KEY": process.env.VUE_APP_APIKEY_COUNTRY_STATE_CITY,
+  },
 });
 
 httpClient.interceptors.request.use((config) => {
   const token = store.getters["auth/token"];
-  if (token && config.url != "/user/signin" && config.url != "/user/signup"
-            && config.url != "/partner/signin" && config.url != "/partner/signup") {
+  if (
+    token &&
+    config.url != "/user/signin" &&
+    config.url != "/user/signup" &&
+    config.url != "/partner/signin" &&
+    config.url != "/partner/signup"
+  ) {
     config.headers["Authorization"] = `Bearer ${store.getters["auth/token"]}`;
   }
   return config;

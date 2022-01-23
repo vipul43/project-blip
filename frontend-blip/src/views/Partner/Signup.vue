@@ -261,7 +261,11 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from "vee-validate";
-import { getAllCountries, getStatesByCountry, getCitiesByStateAndCountry } from "../../api.js";
+import {
+  getAllCountries,
+  getStatesByCountry,
+  getCitiesByStateAndCountry,
+} from "../../api.js";
 
 setInteractionMode("eager");
 extend("digits", {
@@ -370,20 +374,20 @@ export default {
     async getCities(ciso, siso) {
       const citiesResponse = await getCitiesByStateAndCountry(ciso, siso);
       this.cities_towns_districts = citiesResponse;
-    }
+    },
   },
   watch: {
     partner: {
       async handler(partner) {
-        if(partner.address.country != ""){
+        if (partner.address.country != "") {
           await this.getStates(partner.address.country);
         }
-        if(partner.address.state != "") {
-          await this.getCities(partner.address.country, partner.address.state)
+        if (partner.address.state != "") {
+          await this.getCities(partner.address.country, partner.address.state);
         }
       },
       deep: true,
-    }
+    },
   },
   async created() {
     await this.getCountries();

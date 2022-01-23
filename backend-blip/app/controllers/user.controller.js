@@ -158,7 +158,7 @@ exports.handleUserUpdation = async (req, res) => {
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
     const payload = req.body;
-    if(!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload) throw errors.INVALID_PAYLOAD;
     if (!payload.email) throw errors.INVALID_PAYLOAD;
     const findObj = {
       email: payload.email,
@@ -167,7 +167,7 @@ exports.handleUserUpdation = async (req, res) => {
     if (!invalid) throw errors.USER_NOT_FOUND;
     const updateConfig = {
       upsert: false,
-    }
+    };
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     res.status(codes.ACCEPTED).json({ token: token, user: payload });
   } catch (error) {
@@ -224,4 +224,4 @@ exports.handleUserDeletion = async (req, res) => {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     }
   }
-}
+};

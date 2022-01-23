@@ -4,7 +4,7 @@ const db = require("../models");
 const tokenModel = db.token;
 
 // helper functions
-function tokenExpired (creationDateTime) {
+function tokenExpired(creationDateTime) {
   const currDateTime = new Date();
   return currDateTime - creationDateTime > auth.tokenExpirySeconds * 1000;
 }
@@ -76,11 +76,11 @@ exports.expireAll = async () => {
       const userId = user.userId;
       const tokens = user.tokens;
       tokens.forEach((item) => {
-        if(tokenExpired(item.creation)) {
+        if (tokenExpired(item.creation)) {
           module.exports.delete(userId, item.token);
         }
-      })
-    })
+      });
+    });
   } catch (error) {
     throw error;
   }

@@ -44,7 +44,11 @@ exports.findOne = async (findModel, findObj) => {
 
 exports.updateOne = async (updateModel, findObj, updateObj, updateConfig) => {
   try {
-    const result = await updateModel.updateOne(findObj, updateObj, updateConfig);
+    const result = await updateModel.updateOne(
+      findObj,
+      updateObj,
+      updateConfig
+    );
     return result;
   } catch (error) {
     throw errors.UPDATION_FAILED;
@@ -56,7 +60,7 @@ exports.findAll = async (findAllModel) => {
     const findObj = {};
     const result = await findAllModel.find(findObj);
     return result;
-  } catch(error) {
+  } catch (error) {
     throw errors.VALIDATION_FAILED;
   }
 };
