@@ -1,4 +1,4 @@
-## DB Documentation
+## DB DOCUMENTATION
 
 ### MongoDB Database - `project_blip`
 
