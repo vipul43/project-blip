@@ -71,7 +71,8 @@ exports.find = async (userId, token) => {
 
 exports.expireAll = async () => {
   try {
-    const result = await mongodb.findAll(tokenModel);
+    const findObj = {};
+    const result = await mongodb.findAll(tokenModel, findObj);
     result.forEach((user) => {
       const userId = user.userId;
       const tokens = user.tokens;
