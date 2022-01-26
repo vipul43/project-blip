@@ -55,9 +55,8 @@ exports.updateOne = async (updateModel, findObj, updateObj, updateConfig) => {
   }
 };
 
-exports.findAll = async (findAllModel) => {
+exports.findAll = async (findAllModel, findObj) => {
   try {
-    const findObj = {};
     const result = await findAllModel.find(findObj);
     return result;
   } catch (error) {
