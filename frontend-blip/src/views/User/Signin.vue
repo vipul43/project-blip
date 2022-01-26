@@ -109,7 +109,7 @@ extend("required", {
 });
 extend("email", {
   ...email,
-  message: "Email must be valid",
+  message: "{_field_} must be valid",
 });
 
 export default {
