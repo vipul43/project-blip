@@ -32,12 +32,12 @@ exports.authenticate = (req, res, next) => {
   if (!token) {
     return res.status(codes.UNAUTHORIZED).json({ error: errors.INVALID_TOKEN });
   }
-  if (!req || !req.body || !req.body.role) {
+  if (!req || !req.query || !req.query.role) {
     return res
       .status(codes.UNAUTHORIZED)
       .json({ error: errors.INVALID_USER_CREDENTIALS });
   }
-  jwt.verify(token, getSecret(req.body.role), (error, user) => {
+  jwt.verify(token, getSecret(req.query.role), (error, user) => {
     if (error) {
       return res
         .status(codes.FORBIDDEN)
