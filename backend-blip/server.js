@@ -58,6 +58,22 @@ app.post("/user/delete", auth.authenticate, async (req, res) => {
   await userController.handleUserDeletion(req, res);
 });
 
+app.post(
+  "/user/donation-details/:userId",
+  auth.authenticate,
+  async (req, res) => {
+    await userController.handleUserDonation(req, res);
+  }
+);
+
+app.get(
+  "/user/donation-details/:userId",
+  auth.authenticate,
+  async (req, res) => {
+    await userController.handleUserDonation(req, res);
+  }
+);
+
 /*************************** Partner APIs ***************************/
 // Signing up user by creating entry in database,
 //generating jwt token to send as payload
@@ -81,6 +97,22 @@ app.post("/partner/auth", auth.authenticate, async (req, res) => {
 app.post("/partner/signout", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerInvalidation(req, res);
 });
+
+app.post(
+  "/partner/donation-details/:partnerId",
+  auth.authenticate,
+  async (req, res) => {
+    await partnerController.handlePartnerDonation(req, res);
+  }
+);
+
+app.get(
+  "/partner/donation-details/:partnerId",
+  auth.authenticate,
+  async (req, res) => {
+    await partnerController.handlePartnerDonation(req, res);
+  }
+);
 
 /*************************** Admin Crons ***************************/
 cron.schedule("30 2 * * *", async () => {
