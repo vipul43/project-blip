@@ -6,6 +6,7 @@ const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenController = require("./token.controller.js");
 const partner = db.partner;
+const donation = db.donation;
 
 exports.handlePartnerCreation = async (req, res) => {
   try {
@@ -22,7 +23,7 @@ exports.handlePartnerCreation = async (req, res) => {
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "Partner";
-    const result = await mongodb.create(partner, payload);
+    const result = await mongodb.createOne(partner, payload);
     const token = auth.generate({
       partnerName: result.partnerName,
       email: result.email,
@@ -146,5 +147,54 @@ exports.handlePartnerInvalidation = async (req, res) => {
         .status(codes.INTERNAL_SERVER_ERROR)
         .json({ error: errors.COULD_NOT_SIGNOUT });
     }
+  }
+};
+
+exports.handlePartnerDonation = async (req, res) => {
+  switch (req.method) {
+    case "GET":
+      try {
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const partnerId = req.params.partnerId;
+        if (!partnerId) throw errors.INVALID_PAYLOAD;
+        const findObj = {
+          partnerId: partnerId,
+        };
+        const result = await mongodb.findAll(donation, findObj);
+        res.status(codes.ACCEPTED).json({ donations: result });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.VALIDATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    case "POST":
+      try {
+        const payload = req.body;
+        if (!payload) throw errors.INVALID_PAYLOAD;
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const partnerId = req.params.partnerId;
+        if (!partnerId) throw errors.INVALID_PAYLOAD;
+        payload.partnerId = partnerId;
+        const result = await mongodb.createOne(donation, payload);
+        const obj = result.toObject();
+        res.status(codes.CREATED).json({ donation: obj });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.CREATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    default:
+      res.status(codes.BAD_REQUEST).json({ error: errors.HTTP_NOT_ALLOWED });
+      break;
   }
 };

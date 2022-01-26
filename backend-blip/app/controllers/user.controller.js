@@ -6,6 +6,7 @@ const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenController = require("./token.controller.js");
 const user = db.user;
+const donation = db.donation;
 
 exports.handleUserCreation = async (req, res) => {
   try {
@@ -223,5 +224,63 @@ exports.handleUserDeletion = async (req, res) => {
     } else {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     }
+  }
+};
+
+exports.handleUserDonation = async (req, res) => {
+  switch (req.method) {
+    case "GET":
+      try {
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const userId = req.params.userId;
+        if (!userId) throw errors.INVALID_PAYLOAD;
+        const findObj = {
+          userId: userId,
+        };
+        const result = await mongodb.findAll(donation, findObj);
+        res.status(codes.ACCEPTED).json({ donations: result });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.VALIDATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    case "POST":
+      try {
+        const payload = req.body;
+        if (!payload) throw errors.INVALID_PAYLOAD;
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const userId = req.params.userId;
+        if (!userId) throw errors.INVALID_PAYLOAD;
+        payload.isAssigned = true;
+        payload.userId = userId;
+        payload.donationStatus = "ASSIGNED";
+        if (!payload.donationId) throw errors.INVALID_PAYLOAD;
+        const findObj = {
+          _id: payload.donationId,
+        };
+        delete payload.donationId;
+        const updateConfig = {
+          upsert: false,
+        };
+        await mongodb.updateOne(donation, findObj, payload, updateConfig);
+        res.status(codes.CREATED).json({ donation: payload });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.CREATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    default:
+      res.status(codes.BAD_REQUEST).json({ error: errors.HTTP_NOT_ALLOWED });
+      break;
   }
 };
