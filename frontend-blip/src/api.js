@@ -38,20 +38,46 @@ export const validateUser = async (user) => {
   return response.data;
 };
 export const authUser = async (user) => {
-  const response = await httpClient.post(`/user/auth`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/auth?role=User`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const invalidateUser = async (user) => {
-  const response = await httpClient.post(`/user/signout`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/signout?role=User`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const updateUser = async (user) => {
-  const response = await httpClient.post(`/user/update`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/update?role=User`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const deleteUser = async (user) => {
-  const response = await httpClient.post(`/user/delete`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/delete?role=User`,
+    JSON.stringify(user)
+  );
   return response.data;
+};
+export const addUserDonation = async (user, userId) => {
+  const response = await httpClient.post(
+    `/user/dontion-details/${userId}?role=User`,
+    JSON.stringify(user)
+  );
+  return reponse.data;
+};
+export const getUserDonation = async (user, userId) => {
+  const response = await httpClient.get(
+    `/user/dontion-details/${userId}?role=User`,
+    JSON.stringify(user)
+  );
+  return reponse.data;
 };
 
 /*************************** Partner APIs ***************************/
@@ -70,13 +96,30 @@ export const validatePartner = async (user) => {
   return response.data;
 };
 export const authPartner = async (user) => {
-  const response = await httpClient.post(`/partner/auth`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/partner/auth?role=Partner`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const invalidatePartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/signout`,
+    `/partner/signout?role=Partner`,
     JSON.stringify(user)
+  );
+  return response.data;
+};
+export const addPartnerDonation = async (donation, partnerId) => {
+  const response = await httpClient.post(
+    `/partner/donation-details/${partnerId}?role=Partner`,
+    JSON.stringify(donation)
+  );
+  return response.data;
+};
+export const getPartnerDonation = async (donation, partnerId) => {
+  const response = await httpClient.get(
+    `/partner/donation-details/${partnerId}?role=Partner`,
+    JSON.stringify(donation)
   );
   return response.data;
 };
