@@ -70,14 +70,14 @@ export const addUserDonation = async (user, userId) => {
     `/user/dontion-details/${userId}?role=User`,
     JSON.stringify(user)
   );
-  return reponse.data;
+  return response.data;
 };
 export const getUserDonation = async (user, userId) => {
   const response = await httpClient.get(
     `/user/dontion-details/${userId}?role=User`,
     JSON.stringify(user)
   );
-  return reponse.data;
+  return response.data;
 };
 
 /*************************** Partner APIs ***************************/
