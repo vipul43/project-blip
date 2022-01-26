@@ -9,7 +9,8 @@ Collections
 {
     users,
     partners,
-    tokens
+    tokens,
+    donations
 }
 ```
 
@@ -83,5 +84,38 @@ Schema
         }
     ],
     updatedAt: Date
+}
+```
+
+#### Donations Collections - `donations`
+
+---
+
+```
+Schema
+{
+    _id: ObjectId,
+    partnerId: ObjectId,
+    donorName: String,
+    donorPhone: String,
+    donorEmail: String,
+    donationType: enum("Whole Blood", "Power Red", "Platelet", "Plasma"),
+    donationQuantity: String,
+    donationDescription: String,
+    donationStatus: enum("DONATED", "ASSIGNED", "SEPARATED" "TRANSFERRED", "REACHED", "TERMINATED"),
+    isAssigned: Boolean,
+    userId: ObjectId,
+    donationName: String,
+    isArchived: Boolean,
+    issues: [
+        {
+            issueName: String,
+            issueDescription: String,
+            issueRaised: Date,
+        },
+    ],
+    createdAt: Date,
+    updatedAt: Date,
+    _v: 0
 }
 ```
