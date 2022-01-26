@@ -344,6 +344,7 @@ export default {
     reset() {
       Object.assign(this.user, this._user);
       this.$refs.observer.reset();
+      this.toggleEditable();
     },
     allowDelete() {
       if (
