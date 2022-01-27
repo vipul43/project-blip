@@ -158,20 +158,6 @@ const routes = [
     },
   },
   {
-    path: "/track-blood",
-    name: "TrackBlood",
-    component: () => import("../views/TrackBlood.vue"),
-    beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/authenticated"]) {
-        return next({
-          name: "UserSignIn",
-        });
-      } else {
-        next();
-      }
-    },
-  },
-  {
     path: "/blog",
     name: "Blog",
     component: () => import("../views/Blog.vue"),
