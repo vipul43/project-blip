@@ -67,15 +67,14 @@ export const deleteUser = async (user) => {
 };
 export const addUserDonation = async (user, userId) => {
   const response = await httpClient.post(
-    `/user/dontion-details/${userId}?role=User`,
+    `/user/donation-details/${userId}?role=User`,
     JSON.stringify(user)
   );
   return response.data;
 };
-export const getUserDonation = async (user, userId) => {
+export const getUserDonation = async (userId) => {
   const response = await httpClient.get(
-    `/user/dontion-details/${userId}?role=User`,
-    JSON.stringify(user)
+    `/user/donation-details/${userId}?role=User`
   );
   return response.data;
 };
@@ -116,10 +115,9 @@ export const addPartnerDonation = async (donation, partnerId) => {
   );
   return response.data;
 };
-export const getPartnerDonation = async (donation, partnerId) => {
+export const getPartnerDonation = async (partnerId) => {
   const response = await httpClient.get(
-    `/partner/donation-details/${partnerId}?role=Partner`,
-    JSON.stringify(donation)
+    `/partner/donation-details/${partnerId}?role=Partner`
   );
   return response.data;
 };
