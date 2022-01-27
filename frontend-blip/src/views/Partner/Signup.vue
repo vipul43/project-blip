@@ -88,7 +88,7 @@
                 <v-text-field
                   v-model="partner.partnerName"
                   autocomplete="username"
-                  :counter="20"
+                  :counter="10"
                   :error-messages="errors"
                   label="Partner Name *"
                   outlined
