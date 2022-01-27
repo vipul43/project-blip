@@ -238,7 +238,15 @@ exports.handleUserDonation = async (req, res) => {
           userId: userId,
         };
         const result = await mongodb.findAll(donation, findObj);
-        res.status(codes.ACCEPTED).json({ donations: result });
+        const objArray = result.map((d) => {
+          const obj = d.toObject();
+          delete obj.partnerId;
+          delete obj.donorName;
+          delete obj.donorPhone;
+          delete obj.donorEmail;
+          return obj;
+        });
+        res.status(codes.ACCEPTED).json({ donations: objArray });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });

@@ -161,7 +161,16 @@ exports.handlePartnerDonation = async (req, res) => {
           partnerId: partnerId,
         };
         const result = await mongodb.findAll(donation, findObj);
-        res.status(codes.ACCEPTED).json({ donations: result });
+        const objArray = result.map((d) => {
+          const obj = d.toObject();
+          delete obj.isAssigned;
+          delete obj.userId;
+          delete obj.donationName;
+          delete obj.isArchived;
+          delete obj.issues;
+          return obj;
+        });
+        res.status(codes.ACCEPTED).json({ donations: objArray });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });
