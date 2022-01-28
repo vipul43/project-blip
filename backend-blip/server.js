@@ -121,6 +121,28 @@ cron.schedule("30 2 * * *", async () => {
   console.log("Ending Removal of Expired Tokens.");
 });
 
+/*************************** Admin APIs ***************************/
+// Siging in Admin user by validating Admin user credentials in database,
+// generating jwt token to send as payload
+app.post("/admin/signin", async (req, res) => {
+  await adminController.handleAdminValidation(req, res);
+});
+
+// Authenticating Admin user and resending the payload
+app.post("/admin/auth", auth.authenticate, async (req, res) => {
+  await adminController.handleAdminAuthentication(req, res);
+});
+
+// Authenticating Admin user, signing out Admin user and
+//blacklisting the token to avoid further login with same token
+app.post("/admin/signout", auth.authenticate, async (req, res) => {
+  await adminController.handleAdminInvalidation(req, res);
+});
+
+app.get("/admin/users", auth.authenticate, async (req, res) => {
+  await adminController.handleAdminFetchUsers(req, res);
+});
+
 // listening
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

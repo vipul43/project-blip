@@ -8,6 +8,8 @@ function getSecret(userType) {
     return process.env.USER_JWT_TOKEN_SECRET;
   } else if (userType === "Partner") {
     return process.env.PARTNER_JWT_TOKEN_SECRET;
+  } else if (userType === "Admin") {
+    return process.env.ADMIN_JWT_TOKEN_SECRET;
   } else {
     throw errors.TOKEN_GENERATION_FAILED;
   }

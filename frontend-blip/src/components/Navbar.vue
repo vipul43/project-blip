@@ -135,7 +135,7 @@ export default {
         });
     },
     getAvatar(user) {
-      if (user.role === "User") {
+      if (user.role === "User" || user.role === "Admin") {
         if (!!user.lastName) {
           return (
             user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()

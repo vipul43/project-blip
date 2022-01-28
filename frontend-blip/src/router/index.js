@@ -12,6 +12,21 @@ const routes = [
     component: Home,
   },
   {
+    path: "/admin/signin",
+    alias: ["/admin"],
+    name: "AdminSignIn",
+    component: () => import("../views/Admin/Signin.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
+  },
+  {
     path: "/user/signin",
     name: "UserSignIn",
     component: () => import("../views/User/Signin.vue"),
@@ -49,7 +64,10 @@ const routes = [
           name: "Home",
         });
       } else {
-        if (store.getters["auth/user"].role === "Partner") {
+        if (
+          store.getters["auth/user"].role === "Partner" ||
+          store.getters["auth/user"].role === "Admin"
+        ) {
           return next({
             name: "Home",
           });
@@ -68,7 +86,10 @@ const routes = [
           name: "Home",
         });
       } else {
-        if (store.getters["auth/user"].role === "Partner") {
+        if (
+          store.getters["auth/user"].role === "Partner" ||
+          store.getters["auth/user"].role === "Admin"
+        ) {
           return next({
             name: "Home",
           });
@@ -115,7 +136,10 @@ const routes = [
           name: "Home",
         });
       } else {
-        if (store.getters["auth/user"].role === "User") {
+        if (
+          store.getters["auth/user"].role === "User" ||
+          store.getters["auth/user"].role === "Admin"
+        ) {
           return next({
             name: "Home",
           });
@@ -134,7 +158,10 @@ const routes = [
           name: "Home",
         });
       } else {
-        if (store.getters["auth/user"].role === "User") {
+        if (
+          store.getters["auth/user"].role === "User" ||
+          store.getters["auth/user"].role === "Admin"
+        ) {
           return next({
             name: "Home",
           });

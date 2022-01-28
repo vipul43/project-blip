@@ -122,6 +122,30 @@ export const getPartnerDonation = async (partnerId) => {
   return response.data;
 };
 
+/*************************** Admin APIs ***************************/
+export const validateAdmin = async (user) => {
+  const response = await httpClient.post(`/admin/signin`, JSON.stringify(user));
+  return response.data;
+};
+export const authAdmin = async (user) => {
+  const response = await httpClient.post(
+    `/admin/auth?role=Admin`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const invalidateAdmin = async (user) => {
+  const response = await httpClient.post(
+    `/admin/signout?role=Admin`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const getUsers = async () => {
+  const response = await httpClient.get(`admin/users?role=Admin`);
+  return response.data;
+};
+
 /*************************** External APIs ***************************/
 // Country, State and City APIs
 export const getAllCountries = async () => {
