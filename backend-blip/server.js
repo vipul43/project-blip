@@ -58,19 +58,39 @@ app.post("/user/delete", auth.authenticate, async (req, res) => {
   await userController.handleUserDeletion(req, res);
 });
 
+// Add new donation to user by adding assiging the donation to user
 app.post(
   "/user/donation-details/:userId",
   auth.authenticate,
   async (req, res) => {
-    await userController.handleUserDonation(req, res);
+    await userController.handleUserDonation(req, res, null);
   }
 );
 
+// Get all user associated donations(unarchived only)
 app.get(
   "/user/donation-details/:userId",
   auth.authenticate,
   async (req, res) => {
-    await userController.handleUserDonation(req, res);
+    await userController.handleUserDonation(req, res, false);
+  }
+);
+
+// Update archived status and issues of a donation
+app.put(
+  "/user/donation-details/:userId/update/:donationId",
+  auth.authenticate,
+  async (req, res) => {
+    await userController.handleUserDonation(req, res, null);
+  }
+);
+
+// get archived user associated donations
+app.get(
+  "/user/donation-details/archived/:userId",
+  auth.authenticate,
+  async (req, res) => {
+    await userController.handleUserDonation(req, res, true);
   }
 );
 

@@ -4,6 +4,7 @@ module.exports = (mongoose) => {
       partnerId: {
         type: mongoose.ObjectId,
         required: [true, "Partner Id is Required."],
+        immutable: true,
       },
       donorName: {
         type: String,
@@ -14,6 +15,7 @@ module.exports = (mongoose) => {
           },
           message: "{VALUE} is not a valid Donor Name.",
         },
+        immutable: true,
       },
       donorPhone: {
         type: String,
@@ -30,6 +32,7 @@ module.exports = (mongoose) => {
           },
           message: "{VALUE} is not a valid Phone Number.",
         },
+        immutable: true,
       },
       donorEmail: {
         type: String,
@@ -45,6 +48,7 @@ module.exports = (mongoose) => {
           },
           message: "{VALUE} is not a valid Email.",
         },
+        immutable: true,
       },
       donationType: {
         type: String,
@@ -53,10 +57,12 @@ module.exports = (mongoose) => {
           values: ["Whole Blood", "Power Red", "Platelet", "Plasma"],
           message: "{VALUE} is not supported.",
         },
+        immutable: true,
       },
       donationQuantity: {
         type: String,
         required: [true, "Donation Quantity is Required."],
+        immutable: true,
       },
       donationDescription: {
         type: String,
@@ -71,6 +77,7 @@ module.exports = (mongoose) => {
           },
           message: "{VALUE} is not a valid Donation Description.",
         },
+        immutable: true,
       },
       donationStatus: {
         type: String,

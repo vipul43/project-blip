@@ -227,7 +227,7 @@ exports.handleUserDeletion = async (req, res) => {
   }
 };
 
-exports.handleUserDonation = async (req, res) => {
+exports.handleUserDonation = async (req, res, isArchived) => {
   switch (req.method) {
     case "GET":
       try {
@@ -236,7 +236,9 @@ exports.handleUserDonation = async (req, res) => {
         if (!userId) throw errors.INVALID_PAYLOAD;
         const findObj = {
           userId: userId,
+          isArchived: isArchived,
         };
+        delete req.body.isArchived;
         const result = await mongodb.findAll(donation, findObj);
         const objArray = result.map((d) => {
           const obj = d.toObject();
@@ -277,6 +279,36 @@ exports.handleUserDonation = async (req, res) => {
         };
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         res.status(codes.CREATED).json({ donation: payload });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.CREATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    case "PUT":
+      try {
+        const payload = req.body;
+        if (!payload) throw errors.INVALID_PAYLOAD;
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const userId = req.params.userId;
+        if (!userId) errors.INVALID_PAYLOAD;
+        const donationId = req.params.donationId;
+        if (!donationId) throw errors.INVALID_PAYLOAD;
+        const findObj = {
+          _id: donationId,
+          userId: userId,
+        };
+        const updateConfig = {
+          upsert: false,
+        };
+        await mongodb.updateOne(donation, findObj, payload, updateConfig);
+        payload.userId = userId;
+        payload.donationId = donationId;
+        res.status(codes.OK).json({ donation: payload });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });

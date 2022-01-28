@@ -78,6 +78,27 @@ export const getUserDonation = async (userId) => {
   );
   return response.data;
 };
+export const archiveUserDonation = async (userId, donationId, donation) => {
+  const response = await httpClient.put(
+    `/user/donation-details/${userId}/update/${donationId}?role=User`,
+    donation
+  );
+  return response.data;
+};
+export const unarchiveUserDonation = async (userId, donationId, donation) => {
+  const response = await httpClient.put(
+    `/user/donation-details/${userId}/update/${donationId}?role=User`,
+    donation
+  );
+  return response.data;
+};
+export const issueUserDonation = async (userId, donationId, donation) => {
+  const response = await httpClient.put(
+    `/user/donation-details/${userId}/update/${donationId}?role=User`,
+    donation
+  );
+  return response.data;
+};
 
 /*************************** Partner APIs ***************************/
 export const createPartner = async (user) => {
