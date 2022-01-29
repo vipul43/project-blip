@@ -7,6 +7,7 @@ const db = require("../models");
 const tokenController = require("./token.controller.js");
 const partner = db.partner;
 const donation = db.donation;
+const user = db.user;
 
 exports.handlePartnerCreation = async (req, res) => {
   try {
@@ -157,19 +158,40 @@ exports.handlePartnerDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const partnerId = req.params.partnerId;
         if (!partnerId) throw errors.INVALID_PAYLOAD;
-        const findObj = {
-          partnerId: partnerId,
-        };
+        if (!req.query) throw errors.INVALID_PAYLOAD;
+        const isArchived = req.query.isArchived;
+        const findObj = {};
+        if (isArchived) {
+          findObj.partnerId = partnerId;
+          findObj.isPartnerArchived = isArchived;
+        } else {
+          findObj.partnerId = partnerId;
+        }
         const result = await mongodb.findAll(donation, findObj);
-        const objArray = result.map((d) => {
-          const obj = d.toObject();
-          delete obj.isAssigned;
-          delete obj.userId;
-          delete obj.donationName;
-          delete obj.isArchived;
-          delete obj.issues;
-          return obj;
-        });
+        const objArray = await Promise.all(
+          result.map(async (d) => {
+            const obj = d.toObject();
+            const findObj2 = {
+              _id: obj.userId,
+            };
+            delete obj.userId;
+            delete obj.donationName;
+            delete obj.isUserArchived;
+            if (obj.isAssigned) {
+              const result2 = await mongodb.findOne(user, findObj2);
+              const obj2 = result2.toObject();
+              delete obj2._id;
+              delete obj2.username;
+              delete obj2.password;
+              delete obj2.role;
+              delete obj2.__v;
+              delete obj2.createdAt;
+              delete obj2.updatedAt;
+              Object.assign(obj, obj2);
+            }
+            return obj;
+          })
+        );
         res.status(codes.ACCEPTED).json({ donations: objArray });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
@@ -192,6 +214,36 @@ exports.handlePartnerDonation = async (req, res) => {
         const result = await mongodb.createOne(donation, payload);
         const obj = result.toObject();
         res.status(codes.CREATED).json({ donation: obj });
+      } catch (error) {
+        if (error === errors.INVALID_PAYLOAD) {
+          res.status(codes.BAD_REQUEST).json({ error: error });
+        } else if (error === errors.CREATION_FAILED) {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        } else {
+          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+        }
+      }
+      break;
+    case "PUT":
+      try {
+        const payload = req.body;
+        if (!payload) throw errors.INVALID_PAYLOAD;
+        if (!req.params) throw errors.INVALID_PAYLOAD;
+        const partnerId = req.params.partnerId;
+        if (!partnerId) errors.INVALID_PAYLOAD;
+        const donationId = req.params.donationId;
+        if (!donationId) throw errors.INVALID_PAYLOAD;
+        const findObj = {
+          _id: donationId,
+          partnerId: partnerId,
+        };
+        const updateConfig = {
+          upsert: false,
+        };
+        await mongodb.updateOne(donation, findObj, payload, updateConfig);
+        payload.partnerId = partnerId;
+        payload.donationId = donationId;
+        res.status(codes.OK).json({ donation: payload });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });
