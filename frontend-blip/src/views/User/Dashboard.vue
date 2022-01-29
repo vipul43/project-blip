@@ -97,7 +97,7 @@
                 >{{ formatDateTime(item.createdAt) }}
               </template>
               <template #[`item.actions`]="{ item }">
-                <v-tooltip v-if="item.isArchived" bottom>
+                <v-tooltip v-if="item.isUserArchived" bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
@@ -334,7 +334,6 @@ export default {
       getUserDonation(this.user._id, this.isArchived)
         .then((response) => response.donations)
         .then((donations) => {
-          console.log(donations);
           this.donationDetails = donations;
           this.tableLoading = false;
         })
@@ -346,12 +345,11 @@ export default {
       this.trackDialog = false;
       addUserDonation(this.track, this.user._id)
         .then((response) => response.donation)
-        .then(async (donation) => {
-          console.log(donation);
+        .then(async () => {
           this.snackbar.color = "success";
           this.snackbar.icon = "mdi-check-circle";
           this.snackbar.title = "Success";
-          this.snackbar.text = "Update Successful.";
+          this.snackbar.text = "Save Successful";
           this.snackbar.active = true;
           this.clear();
           await this.getDonation();
@@ -361,7 +359,7 @@ export default {
           this.snackbar.color = "error";
           this.snackbar.icon = "mdi-alert-circle";
           this.snackbar.title = "Error";
-          this.snackbar.text = "Failed to Update.";
+          this.snackbar.text = "Failed to Save";
           this.snackbar.active = true;
         });
     },
@@ -369,14 +367,13 @@ export default {
       this.snackbar.active = false;
     },
     async archiveDonation(donation) {
-      updateUserDonation(this.user._id, donation._id, { isArchived: true })
+      updateUserDonation(this.user._id, donation._id, { isUserArchived: true })
         .then((response) => response.donation)
-        .then(async (donation) => {
-          console.log(donation);
+        .then(async () => {
           this.snackbar.color = "success";
           this.snackbar.icon = "mdi-check-circle";
           this.snackbar.title = "Success";
-          this.snackbar.text = "Archive Successful.";
+          this.snackbar.text = "Archive Successful";
           this.snackbar.active = true;
           await this.getDonation();
         })
@@ -385,19 +382,18 @@ export default {
           this.snackbar.color = "error";
           this.snackbar.icon = "mdi-alert-circle";
           this.snackbar.title = "Error";
-          this.snackbar.text = "Archive Unsuccessful.";
+          this.snackbar.text = "Failed to Archive";
           this.snackbar.active = true;
         });
     },
     async unarchiveDonation(donation) {
-      updateUserDonation(this.user._id, donation._id, { isArchived: false })
+      updateUserDonation(this.user._id, donation._id, { isUserArchived: false })
         .then((response) => response.donation)
-        .then(async (donation) => {
-          console.log(donation);
+        .then(async () => {
           this.snackbar.color = "success";
           this.snackbar.icon = "mdi-check-circle";
           this.snackbar.title = "Success";
-          this.snackbar.text = "Unarchive Successful.";
+          this.snackbar.text = "Unarchive Successful";
           this.snackbar.active = true;
           await this.getDonation();
         })
@@ -406,7 +402,7 @@ export default {
           this.snackbar.color = "error";
           this.snackbar.icon = "mdi-alert-circle";
           this.snackbar.title = "Error";
-          this.snackbar.text = "Unarchive Unsuccessful.";
+          this.snackbar.text = "Failed to Unarchive";
           this.snackbar.active = true;
         });
     },
@@ -474,6 +470,11 @@ export default {
       ret.push({
         key: "Donor Phone",
         value: item.donorPhone,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Donation Description",
+        value: item.donationDescription,
         index: (i += 1),
       });
       return ret;
