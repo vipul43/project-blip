@@ -116,9 +116,14 @@ module.exports = (mongoose) => {
         },
         default: "Not Yet Assigned.",
       },
-      isArchived: {
+      isUserArchived: {
         type: Boolean,
-        required: [true, "Is Archived? is Required."],
+        required: [true, "Is User Archived? is Required."],
+        default: false,
+      },
+      isPartnerArchived: {
+        type: Boolean,
+        required: [true, "Is Partner Archived? is Required."],
         default: false,
       },
       issues: [

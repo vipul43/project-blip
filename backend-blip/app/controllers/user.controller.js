@@ -240,7 +240,7 @@ exports.handleUserDonation = async (req, res) => {
         const findObj = {};
         if (isArchived) {
           findObj.userId = userId;
-          findObj.isArchived = isArchived;
+          findObj.isUserArchived = isArchived;
         } else {
           findObj.userId = userId;
         }
@@ -252,6 +252,7 @@ exports.handleUserDonation = async (req, res) => {
               _id: obj.partnerId,
             };
             delete obj.partnerId;
+            delete obj.isPartnerArchived;
             const result2 = await mongodb.findOne(partner, findObj2);
             const obj2 = result2.toObject();
             delete obj2._id;
