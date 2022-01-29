@@ -1,6 +1,6 @@
 <template>
   <div id="navbar">
-    <v-app-bar elevate-on-scroll color="#fd7014" dark dense>
+    <v-app-bar elevate-on-scroll color="#fd7014" dark dense app>
       <v-app-bar-nav-icon class="pa-1">
         <v-img
           src="https://vipul43.sirv.com/projectblip/logos/logo-v2-color-300dpi.png"
