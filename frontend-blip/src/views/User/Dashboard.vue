@@ -49,7 +49,7 @@
                 class="ml-4"
                 v-model="isArchived"
                 inset
-                label="Show Archived"
+                label="View Archived"
               ></v-switch>
             </v-card-title>
             <v-data-table
@@ -59,6 +59,30 @@
               :loading="tableLoading"
               mobile-breakpoint
             >
+              <template #[`item.donationId`]="{ item }">
+                <v-menu open-on-hover transition="scale-y-transition">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn text v-bind="attrs" v-on="on">
+                      {{ item._id }}
+                    </v-btn>
+                  </template>
+                  <v-card height="200">
+                    <v-card-title class="text--h6">
+                      Donation Center Details
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-list>
+                      <template v-for="(ob, value, index) in getItems(item)">
+                        <v-list-item :key="index">
+                          <v-list-item-content class="text--h6">
+                            {{ ob.key }}: {{ ob.value }}
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-list>
+                  </v-card>
+                </v-menu>
+              </template>
               <template #[`item.donationType`]="{ item }">
                 <v-chip :key="item.donationType">{{
                   item.donationType
@@ -219,7 +243,8 @@ export default {
       headers: [
         {
           text: "Donation Id",
-          value: "_id",
+          value: "donationId",
+          sortable: false,
         },
         {
           text: "Donation Name",
@@ -309,6 +334,7 @@ export default {
       getUserDonation(this.user._id, this.isArchived)
         .then((response) => response.donations)
         .then((donations) => {
+          console.log(donations);
           this.donationDetails = donations;
           this.tableLoading = false;
         })
@@ -347,10 +373,20 @@ export default {
         .then((response) => response.donation)
         .then(async (donation) => {
           console.log(donation);
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          this.snackbar.text = "Archive Successful.";
+          this.snackbar.active = true;
           await this.getDonation();
         })
         .catch((error) => {
           console.log(error);
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Archive Unsuccessful.";
+          this.snackbar.active = true;
         });
     },
     async unarchiveDonation(donation) {
@@ -358,14 +394,89 @@ export default {
         .then((response) => response.donation)
         .then(async (donation) => {
           console.log(donation);
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          this.snackbar.text = "Unarchive Successful.";
+          this.snackbar.active = true;
           await this.getDonation();
         })
         .catch((error) => {
           console.log(error);
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Unarchive Unsuccessful.";
+          this.snackbar.active = true;
         });
     },
     async reportDonation(donation) {
       console.log(donation.donationName);
+    },
+    getItems(item) {
+      let i = 0;
+      const ret = [];
+      ret.push({
+        key: "Name",
+        value: item.orgName,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Email",
+        value: item.email,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Phone",
+        value: item.phone,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "HouseNo",
+        value: item.address.houseno,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Area And Street",
+        value: item.address.area_and_street,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "City/Town/District",
+        value: item.address.city_town_district,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Pincode",
+        value: item.address.pincode,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "State",
+        value: item.address.state,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Country",
+        value: item.address.country,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Donor Name",
+        value: item.donorName,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Donor Email",
+        value: item.donorEmail,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Donor Phone",
+        value: item.donorPhone,
+        index: (i += 1),
+      });
+      return ret;
     },
   },
   async mounted() {

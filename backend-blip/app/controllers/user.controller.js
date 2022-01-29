@@ -7,6 +7,7 @@ const db = require("../models");
 const tokenController = require("./token.controller.js");
 const user = db.user;
 const donation = db.donation;
+const partner = db.partner;
 
 exports.handleUserCreation = async (req, res) => {
   try {
@@ -244,16 +245,30 @@ exports.handleUserDonation = async (req, res) => {
           findObj.userId = userId;
         }
         const result = await mongodb.findAll(donation, findObj);
-        const objArray = result.map((d) => {
-          const obj = d.toObject();
-          delete obj.partnerId;
-          delete obj.donorName;
-          delete obj.donorPhone;
-          delete obj.donorEmail;
-          return obj;
-        });
+        const objArray = await Promise.all(
+          result.map(async (d) => {
+            const obj = d.toObject();
+            const findObj2 = {
+              _id: obj.partnerId,
+            };
+            delete obj.partnerId;
+            const result2 = await mongodb.findOne(partner, findObj2);
+            const obj2 = result2.toObject();
+            delete obj2._id;
+            delete obj2.partnerName;
+            delete obj2.type;
+            delete obj2.password;
+            delete obj2.role;
+            delete obj2.__v;
+            delete obj2.createdAt;
+            delete obj2.updatedAt;
+            Object.assign(obj, obj2);
+            return obj;
+          })
+        );
         res.status(codes.ACCEPTED).json({ donations: objArray });
       } catch (error) {
+        console.log(error);
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });
         } else if (error === errors.VALIDATION_FAILED) {
