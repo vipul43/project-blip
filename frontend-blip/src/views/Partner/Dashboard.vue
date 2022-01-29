@@ -45,6 +45,12 @@
                 hide-details
                 outlined
               ></v-text-field>
+              <v-switch
+                class="ml-4"
+                v-model="isArchived"
+                inset
+                label="View Archived"
+              ></v-switch>
             </v-card-title>
             <v-data-table
               :headers="headers"
@@ -52,8 +58,44 @@
               :search="search"
               :loading="tableLoading"
               mobile-breakpoint
-              :key="donationDetails.length"
             >
+              <template #[`item.donationId`]="{ item }">
+                <v-menu open-on-hover transition="scale-y-transition">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn text v-bind="attrs" v-on="on">
+                      {{ item._id }}
+                    </v-btn>
+                  </template>
+                  <v-card v-if="item.isAssigned" height="200">
+                    <v-card-title class="text--h6">
+                      Donor Details
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-list>
+                      <template v-for="(ob, value, index) in getItems(item)">
+                        <v-list-item :key="index">
+                          <v-list-item-content class="text--h6">
+                            {{ ob.key }}: {{ ob.value }}
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-list>
+                  </v-card>
+                  <v-card v-else height="150">
+                    <v-card-title class="text--h6">
+                      Donor Details
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-content class="text--h6">
+                          Donor Not Yet Assigned
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-card>
+                </v-menu>
+              </template>
               <template #[`item.donationType`]="{ item }">
                 <v-chip :key="item.donationType">{{
                   item.donationType
@@ -68,17 +110,37 @@
                 >{{ formatDateTime(item.createdAt) }}
               </template>
               <template #[`item.actions`]="{ item }">
-                <v-tooltip bottom>
+                <v-tooltip v-if="item.isPartnerArchived" bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" @click="archiveItem(item)">
-                      mdi-archive
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="unarchiveDonation(item)"
+                    >
+                      mdi-archive-arrow-down
+                    </v-icon>
+                  </template>
+                  <span>Unarchive</span>
+                </v-tooltip>
+                <v-tooltip v-else bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="archiveDonation(item)"
+                    >
+                      mdi-archive-arrow-up
                     </v-icon>
                   </template>
                   <span>Archive</span>
                 </v-tooltip>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" @click="reportItem(item)">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="reportDonation(item)"
+                    >
                       mdi-alert-octagon
                     </v-icon>
                   </template>
@@ -198,21 +260,8 @@
                   </v-row>
                   <v-spacer></v-spacer>
                   <v-card-actions class="justify-end">
-                    <v-btn
-                      @click="
-                        trackDialog = false;
-                        clear();
-                      "
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      :disabled="invalid"
-                      @click="
-                        saveDonation();
-                        trackDialog = false;
-                      "
-                    >
+                    <v-btn @click="clear()"> Cancel </v-btn>
+                    <v-btn :disabled="invalid" @click="saveDonation()">
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -228,7 +277,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getPartnerDonation, addPartnerDonation } from "../../api.js";
+import {
+  getPartnerDonation,
+  addPartnerDonation,
+  updatePartnerDonation,
+} from "../../api.js";
 import { required, digits, email, max, regex } from "vee-validate/dist/rules";
 import {
   extend,
@@ -268,7 +321,7 @@ export default {
       headers: [
         {
           text: "Donation Id",
-          value: "_id",
+          value: "donationId",
         },
         {
           text: "Donor Name",
@@ -332,7 +385,14 @@ export default {
         title: "",
         text: "",
       },
+      isArchived: false,
     };
+  },
+  computed: {
+    ...mapGetters({
+      authenticated: "auth/authenticated",
+      user: "auth/user",
+    }),
   },
   methods: {
     formatDateTime(dateTime) {
@@ -358,50 +418,126 @@ export default {
       this.track.donationDescription = "";
       this.$refs.observer.reset();
     },
+    async getDonation() {
+      this.tableLoading = true;
+      getPartnerDonation(this.user._id, this.isArchived)
+        .then((response) => response.donations)
+        .then((donations) => {
+          this.donationDetails = donations;
+          this.tableLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async saveDonation() {
       addPartnerDonation(this.track, this.user._id)
         .then((response) => response.donation)
-        .then((donation) => {
-          console.log(donation);
+        .then(async () => {
           this.snackbar.color = "success";
           this.snackbar.icon = "mdi-check-circle";
           this.snackbar.title = "Success";
-          this.snackbar.text = "Update Successful.";
+          this.snackbar.text = "Save Successful";
           this.snackbar.active = true;
           this.trackDialog = false;
           this.clear();
-          this.$router.go(this.$router.currentRoute);
+          await this.getDonation();
         })
         .catch((error) => {
           console.log(error);
           this.snackbar.color = "error";
           this.snackbar.icon = "mdi-alert-circle";
           this.snackbar.title = "Error";
-          this.snackbar.text = "Failed to Update.";
+          this.snackbar.text = "Failed to Save";
           this.snackbar.active = true;
         });
     },
     deactivateSnackar() {
       this.snackbar.active = false;
     },
-  },
-  computed: {
-    ...mapGetters({
-      authenticated: "auth/authenticated",
-      user: "auth/user",
-    }),
+    async archiveDonation(donation) {
+      updatePartnerDonation(this.user._id, donation._id, {
+        isPartnerArchived: true,
+      })
+        .then((response) => response.donation)
+        .then(async () => {
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          this.snackbar.text = "Archive Successful";
+          this.snackbar.active = true;
+          await this.getDonation();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Failed to Archive";
+          this.snackbar.active = true;
+        });
+    },
+    async unarchiveDonation(donation) {
+      updatePartnerDonation(this.user._id, donation._id, {
+        isPartnerArchived: false,
+      })
+        .then((response) => response.donation)
+        .then(async () => {
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          this.snackbar.text = "Unarchive Successful";
+          this.snackbar.active = true;
+          await this.getDonation();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Failed to Unarchive";
+          this.snackbar.active = true;
+        });
+    },
+    async reportDonation(donation) {
+      console.log(donation.donationName);
+    },
+    getItems(item) {
+      let i = 0;
+      const ret = [];
+      ret.push({
+        key: "First Name",
+        value: item.firstName,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Email",
+        value: item.email,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Phone",
+        value: item.phone,
+        index: (i += 1),
+      });
+      ret.push({
+        key: "Donation Description",
+        value: item.donationDescription,
+        index: (i += 1),
+      });
+      return ret;
+    },
   },
   async mounted() {
-    this.tableLoading = true;
-    getPartnerDonation(this.user._id)
-      .then((response) => response.donations)
-      .then((donations) => {
-        this.donationDetails = donations;
-        this.tableLoading = false;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await this.getDonation();
+  },
+  watch: {
+    isArchived: {
+      async handler() {
+        await this.getDonation();
+      },
+      immediate: true,
+    },
   },
   metaInfo() {
     return {
