@@ -149,7 +149,7 @@ export default {
             this.snackbar.color = "error";
             this.snackbar.icon = "mdi-alert-circle";
             this.snackbar.title = "Error";
-            this.snackbar.text = "Invalid Admin User Credentials.";
+            this.snackbar.text = "Invalid Admin User Credentials";
             this.snackbar.active = true;
           });
       }

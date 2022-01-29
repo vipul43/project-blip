@@ -366,7 +366,7 @@ export default {
             this.snackbar.color = "success";
             this.snackbar.icon = "mdi-check-circle";
             this.snackbar.title = "Success";
-            this.snackbar.text = "Update Successful.";
+            this.snackbar.text = "Update Successful";
             this.snackbar.active = true;
             this.toggleEditable();
           })
@@ -374,7 +374,7 @@ export default {
             this.snackbar.color = "error";
             this.snackbar.icon = "mdi-alert-circle";
             this.snackbar.title = "Error";
-            this.snackbar.text = "Failed to Update.";
+            this.snackbar.text = "Failed to Update";
             this.snackbar.active = true;
             this.toggleEditable();
           });
