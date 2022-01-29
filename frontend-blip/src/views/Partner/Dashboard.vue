@@ -72,12 +72,17 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-list>
-                      <template v-for="(ob, value, index) in getItems(item)">
-                        <v-list-item :key="index">
-                          <v-list-item-content class="text--h6">
-                            {{ ob.key }}: {{ ob.value }}
-                          </v-list-item-content>
-                        </v-list-item>
+                      <template v-for="(ob, index) in getItems(item)">
+                        <div style="max-width: 400px" :key="index">
+                          <tbody>
+                            <tr>
+                              <td style="width: 200px">
+                                <b>{{ ob.key }}: </b>
+                              </td>
+                              <td>{{ ob.value }}</td>
+                            </tr>
+                          </tbody>
+                        </div>
                       </template>
                     </v-list>
                   </v-card>
