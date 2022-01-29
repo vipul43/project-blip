@@ -126,9 +126,16 @@ export const addPartnerDonation = async (donation, partnerId) => {
   );
   return response.data;
 };
-export const getPartnerDonation = async (partnerId) => {
+export const getPartnerDonation = async (userId, isArchived) => {
   const response = await httpClient.get(
-    `/partner/donation-details/${partnerId}?role=Partner`
+    `/partner/donation-details/${userId}?isArchived=${isArchived}&role=Partner`
+  );
+  return response.data;
+};
+export const updatePartnerDonation = async (userId, donationId, donation) => {
+  const response = await httpClient.put(
+    `/partner/donation-details/${userId}/update/${donationId}?role=Partner`,
+    donation
   );
   return response.data;
 };
