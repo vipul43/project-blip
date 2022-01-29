@@ -72,7 +72,7 @@ app.get(
   "/user/donation-details/:userId",
   auth.authenticate,
   async (req, res) => {
-    await userController.handleUserDonation(req, res, false);
+    await userController.handleUserDonation(req, res);
   }
 );
 
@@ -81,16 +81,7 @@ app.put(
   "/user/donation-details/:userId/update/:donationId",
   auth.authenticate,
   async (req, res) => {
-    await userController.handleUserDonation(req, res, null);
-  }
-);
-
-// get archived user associated donations
-app.get(
-  "/user/donation-details/archived/:userId",
-  auth.authenticate,
-  async (req, res) => {
-    await userController.handleUserDonation(req, res, true);
+    await userController.handleUserDonation(req, res);
   }
 );
 

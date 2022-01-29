@@ -227,18 +227,22 @@ exports.handleUserDeletion = async (req, res) => {
   }
 };
 
-exports.handleUserDonation = async (req, res, isArchived) => {
+exports.handleUserDonation = async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const userId = req.params.userId;
         if (!userId) throw errors.INVALID_PAYLOAD;
-        const findObj = {
-          userId: userId,
-          isArchived: isArchived,
-        };
-        delete req.body.isArchived;
+        if (!req.query) throw errors.INVALID_PAYLOAD;
+        const isArchived = req.query.isArchived;
+        const findObj = {};
+        if (isArchived) {
+          findObj.userId = userId;
+          findObj.isArchived = isArchived;
+        } else {
+          findObj.userId = userId;
+        }
         const result = await mongodb.findAll(donation, findObj);
         const objArray = result.map((d) => {
           const obj = d.toObject();

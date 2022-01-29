@@ -29,6 +29,7 @@ httpClient.interceptors.request.use((config) => {
 });
 
 /*************************** User APIs ***************************/
+//User CRUD Operations
 export const createUser = async (user) => {
   const response = await httpClient.post(`/user/signup`, JSON.stringify(user));
   return response.data;
@@ -65,6 +66,7 @@ export const deleteUser = async (user) => {
   );
   return response.data;
 };
+//Donation CRUD Operations from User POV
 export const addUserDonation = async (user, userId) => {
   const response = await httpClient.post(
     `/user/donation-details/${userId}?role=User`,
@@ -72,27 +74,13 @@ export const addUserDonation = async (user, userId) => {
   );
   return response.data;
 };
-export const getUserDonation = async (userId) => {
+export const getUserDonation = async (userId, isArchived) => {
   const response = await httpClient.get(
-    `/user/donation-details/${userId}?role=User`
+    `/user/donation-details/${userId}?isArchived=${isArchived}&role=User`
   );
   return response.data;
 };
-export const archiveUserDonation = async (userId, donationId, donation) => {
-  const response = await httpClient.put(
-    `/user/donation-details/${userId}/update/${donationId}?role=User`,
-    donation
-  );
-  return response.data;
-};
-export const unarchiveUserDonation = async (userId, donationId, donation) => {
-  const response = await httpClient.put(
-    `/user/donation-details/${userId}/update/${donationId}?role=User`,
-    donation
-  );
-  return response.data;
-};
-export const issueUserDonation = async (userId, donationId, donation) => {
+export const updateUserDonation = async (userId, donationId, donation) => {
   const response = await httpClient.put(
     `/user/donation-details/${userId}/update/${donationId}?role=User`,
     donation
@@ -101,6 +89,7 @@ export const issueUserDonation = async (userId, donationId, donation) => {
 };
 
 /*************************** Partner APIs ***************************/
+//Partner CRUD Operations
 export const createPartner = async (user) => {
   const response = await httpClient.post(
     `/partner/signup`,
@@ -129,6 +118,7 @@ export const invalidatePartner = async (user) => {
   );
   return response.data;
 };
+//Donation CRUD Operations from Partner POV
 export const addPartnerDonation = async (donation, partnerId) => {
   const response = await httpClient.post(
     `/partner/donation-details/${partnerId}?role=Partner`,
@@ -144,6 +134,7 @@ export const getPartnerDonation = async (partnerId) => {
 };
 
 /*************************** Admin APIs ***************************/
+//Admin CRUD Operations
 export const validateAdmin = async (user) => {
   const response = await httpClient.post(`/admin/signin`, JSON.stringify(user));
   return response.data;
@@ -162,6 +153,7 @@ export const invalidateAdmin = async (user) => {
   );
   return response.data;
 };
+//Fetch All Users for Admin View
 export const getUsers = async () => {
   const response = await httpClient.get(`admin/users?role=Admin`);
   return response.data;

@@ -45,6 +45,12 @@
                 hide-details
                 outlined
               ></v-text-field>
+              <v-switch
+                class="ml-4"
+                v-model="isArchived"
+                inset
+                label="Show Archived"
+              ></v-switch>
             </v-card-title>
             <v-data-table
               :headers="headers"
@@ -67,14 +73,26 @@
                 >{{ formatDateTime(item.createdAt) }}
               </template>
               <template #[`item.actions`]="{ item }">
-                <v-tooltip bottom>
+                <v-tooltip v-if="item.isArchived" bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="unarchiveDonation(item)"
+                    >
+                      mdi-archive-arrow-down
+                    </v-icon>
+                  </template>
+                  <span>Unarchive</span>
+                </v-tooltip>
+                <v-tooltip v-else bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
                       v-on="on"
                       @click="archiveDonation(item)"
                     >
-                      mdi-archive
+                      mdi-archive-arrow-up
                     </v-icon>
                   </template>
                   <span>Archive</span>
@@ -151,23 +169,6 @@
           </v-container>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="archiveDialog" persistent max-width="290">
-        <v-card>
-          <v-container>
-            <v-card-title class="text-h5"> Confirm </v-card-title>
-            <v-card-text
-              >Archiving this donation will make it hidden. But you can always
-              unarchive from the archive section and view the donation. Are you
-              sure you want to archive this donation?</v-card-text
-            >
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn @click="archiveDialog = false"> Cancel </v-btn>
-              <v-btn @click="archiveDialog = false"> Confirm </v-btn>
-            </v-card-actions>
-          </v-container>
-        </v-card>
-      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -177,7 +178,7 @@ import { mapGetters } from "vuex";
 import {
   getUserDonation,
   addUserDonation,
-  archiveUserDonation,
+  updateUserDonation,
 } from "../../api.js";
 import { required, digits, email, max, regex } from "vee-validate/dist/rules";
 import {
@@ -273,8 +274,7 @@ export default {
         title: "",
         text: "",
       },
-      archiveDialog: false,
-      archive: null,
+      isArchived: false,
     };
   },
   computed: {
@@ -306,7 +306,7 @@ export default {
     },
     async getDonation() {
       this.tableLoading = true;
-      getUserDonation(this.user._id)
+      getUserDonation(this.user._id, this.isArchived)
         .then((response) => response.donations)
         .then((donations) => {
           this.donationDetails = donations;
@@ -343,8 +343,18 @@ export default {
       this.snackbar.active = false;
     },
     async archiveDonation(donation) {
-      // this.archiveDialog = false;
-      archiveUserDonation(this.user._id, donation._id, { isArchived: true })
+      updateUserDonation(this.user._id, donation._id, { isArchived: true })
+        .then((response) => response.donation)
+        .then(async (donation) => {
+          console.log(donation);
+          await this.getDonation();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async unarchiveDonation(donation) {
+      updateUserDonation(this.user._id, donation._id, { isArchived: false })
         .then((response) => response.donation)
         .then(async (donation) => {
           console.log(donation);
@@ -360,6 +370,14 @@ export default {
   },
   async mounted() {
     await this.getDonation();
+  },
+  watch: {
+    isArchived: {
+      async handler() {
+        await this.getDonation();
+      },
+      immediate: true,
+    },
   },
   metaInfo() {
     return {
