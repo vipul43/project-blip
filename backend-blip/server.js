@@ -125,6 +125,15 @@ app.get(
   }
 );
 
+// Update archived status and issues of a donation
+app.put(
+  "/partner/donation-details/:partnerId/update/:donationId",
+  auth.authenticate,
+  async (req, res) => {
+    await partnerController.handlePartnerDonation(req, res);
+  }
+);
+
 /*************************** Admin Crons ***************************/
 cron.schedule("30 2 * * *", async () => {
   console.log("Initiating Removal of Expired Tokens.");
