@@ -15,7 +15,10 @@ const cron = require("node-cron");
 // setting up express app
 const app = express();
 var corsOptions = {
-  origin: "http://localhost:8080",
+  origin:
+    process.env.NODE_ENV === "production"
+      ? "https://project-blip.herokuapp.com"
+      : "http://localhost:8080",
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
