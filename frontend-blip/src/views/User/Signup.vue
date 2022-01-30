@@ -114,7 +114,13 @@
             </v-col>
           </v-row>
 
-          <v-btn class="mr-4" type="submit" :disabled="invalid" @click="signUp">
+          <v-btn
+            class="mr-4"
+            type="submit"
+            :disabled="invalid"
+            :loading="signUpLoading"
+            @click="signUp"
+          >
             Sign Up
           </v-btn>
           <v-btn @click="clear"> Clear </v-btn>
@@ -185,21 +191,25 @@ export default {
       password: "",
     },
     showPassword: false,
+    signUpLoading: false,
   }),
   methods: {
     ...mapActions({
       register: "auth/register",
     }),
     async signUp() {
+      this.signUpLoading = true;
       const valid = await this.$refs.observer.validate();
       if (valid) {
         this.register({ credentials: this.user, userType: "User" })
           .then(() => {
+            this.signUpLoading = false;
             this.$router.replace({
               name: "UserDashboard",
             });
           })
           .catch((error) => {
+            this.signUpLoading = false;
             console.log(error);
             //raise error alert
           });

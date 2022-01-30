@@ -234,7 +234,13 @@
             </v-col>
           </v-row>
 
-          <v-btn class="mr-4" type="submit" :disabled="invalid" @click="signUp">
+          <v-btn
+            class="mr-4"
+            type="submit"
+            :disabled="invalid"
+            :loading="signUpLoading"
+            @click="signUp"
+          >
             Sign Up
           </v-btn>
           <v-btn @click="clear"> Clear </v-btn>
@@ -322,21 +328,25 @@ export default {
     states: [],
     cities_towns_districts: [],
     showPassword: false,
+    signUpLoading: false,
   }),
   methods: {
     ...mapActions({
       register: "auth/register",
     }),
     async signUp() {
+      this.signUpLoading = true;
       const valid = await this.$refs.observer.validate();
       if (valid) {
         this.register({ credentials: this.partner, userType: "Partner" })
           .then(() => {
+            this.signUpLoading = false;
             this.$router.replace({
               name: "PartnerDashboard",
             });
           })
           .catch((error) => {
+            this.signUpLoading = false;
             console.log(error);
             //raise error alert
           });
