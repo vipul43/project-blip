@@ -117,9 +117,9 @@ export default {
   components: { ValidationProvider, ValidationObserver },
   data: () => ({
     partner: {
-      partnerName: "giveIndia",
-      email: "giveindia@gmail.com",
-      password: "12345678",
+      partnerName: "",
+      email: "",
+      password: "",
     },
     snackbar: {
       active: false,
