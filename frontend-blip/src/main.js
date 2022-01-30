@@ -4,9 +4,12 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueMeta from "vue-meta";
+import VueApexCharts from "vue-apexcharts";
 
 Vue.config.productionTip = false;
 Vue.use(VueMeta);
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
 
 store.dispatch("auth/attempt", {
   token: JSON.parse(localStorage["blip-token"] || null),
