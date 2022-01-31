@@ -188,7 +188,11 @@
                   <v-spacer></v-spacer>
                   <v-card-actions class="justify-end">
                     <v-btn @click="clear()"> Cancel </v-btn>
-                    <v-btn :disabled="invalid" @click="saveDonation()">
+                    <v-btn
+                      :disabled="invalid"
+                      :loading="saveLoading"
+                      @click="saveDonation()"
+                    >
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -305,6 +309,7 @@ export default {
         text: "",
       },
       isArchived: false,
+      saveLoading: false,
     };
   },
   computed: {
@@ -329,6 +334,7 @@ export default {
       await this.$refs.observer.validate();
     },
     clear() {
+      this.saveLoading = false;
       this.trackDialog = false;
       this.track.donationId = "";
       this.track.donationName = "";
@@ -347,7 +353,7 @@ export default {
         });
     },
     async saveDonation() {
-      this.trackDialog = false;
+      this.saveLoading = true;
       addUserDonation(this.track, this.user._id)
         .then((response) => response.donation)
         .then(async () => {
@@ -361,6 +367,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.saveLoading = false;
           this.snackbar.color = "error";
           this.snackbar.icon = "mdi-alert-circle";
           this.snackbar.title = "Error";
