@@ -121,7 +121,11 @@
                 </v-col>
               </v-row>
               <v-card-actions>
-                <v-btn :disabled="!editable || invalid" @click="updateProfile">
+                <v-btn
+                  :disabled="!editable || invalid"
+                  :loading="updateLoading"
+                  @click="updateProfile"
+                >
                   Update
                 </v-btn>
                 <v-btn :disabled="!editable || invalid" @click="reset">
@@ -320,6 +324,7 @@ export default {
       text: "",
     },
     showPassword: false,
+    updateLoading: false,
   }),
   computed: {
     ...mapGetters({
@@ -336,6 +341,7 @@ export default {
       delete: "auth/delete",
     }),
     toggleEditable() {
+      this.updateLoading = false;
       this.editable = !this.editable;
     },
     async submit() {
@@ -359,6 +365,7 @@ export default {
       }
     },
     async updateProfile() {
+      this.updateLoading = true;
       const valid = await this.$refs.observer.validate();
       if (valid) {
         this.update({ credentials: this.user, userType: "User" })
