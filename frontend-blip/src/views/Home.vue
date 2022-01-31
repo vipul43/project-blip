@@ -20,7 +20,7 @@
       <v-container>
         <v-carousel
           cycle
-          hide-delimiter-background
+          hide-delimiters
           show-arrows-on-hover
           prev-icon="mdi-arrow-left"
           next-icon="mdi-arrow-right"
