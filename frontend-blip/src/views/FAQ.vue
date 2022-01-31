@@ -5,9 +5,11 @@
         <v-col>
           <v-expansion-panels popout focusable>
             <v-expansion-panel v-for="(item, i) in faqs" :key="i">
-              <v-expansion-panel-header>{{
-                item.question
-              }}</v-expansion-panel-header>
+              <v-expansion-panel-header disable-icon-rotate>
+                <template v-slot:actions>
+                  <v-icon> mdi-lightbulb-on </v-icon> </template
+                >{{ item.question }}</v-expansion-panel-header
+              >
               <v-expansion-panel-content>
                 {{ item.answer }}
               </v-expansion-panel-content>
@@ -25,12 +27,12 @@ export default {
   data: () => ({
     faqs: [
       {
-        question: "What is this?",
+        question: "What is Project BLiP?",
         answer:
           "We are a Non-profitable organization that connects people to their nearest donation centers online. And keep track of the donation made at the donation center for the people till the blood work is utilized. People connected with us can know the status of their donated blood work as it goes through various locations and stages and gets an acknowledgment of their donation in Share Non-Fungible Token(NFT)(what is NFT? Read here) and Rewards. Users can generate a unique share NFT after each donation and share it on their social media platforms to publicize their good work.",
       },
       {
-        question: "How does this work?",
+        question: "How does tracking donation work?",
         answer:
           "You just need to signup on our User Sign Up page and search for Project BLiP associated donation centers near them on the Donate Blood page and make the donation at the center. After the donation, you need to provide basic details at the donation center like name and contact info. Within 24hrs you will receive a donation id on your provided contact info, enter the donation id on the Track Blood pop-up. Voila!! Now you can view the donations on your dashboard and track them.",
       },
