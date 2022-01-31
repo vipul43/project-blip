@@ -36,52 +36,49 @@
     </div>
     <div style="background: #222831">
       <v-container>
-        <v-row justify="center">
-          <v-col sm="6">
-            <v-sheet color="white" elevation="24" height="250" width="400"
-              ><apexchart
-                type="pie"
-                width="380"
-                :options="chartOptions"
-                :series="series"
-              ></apexchart></v-sheet
-          ></v-col>
-          <v-col sm="6">
-            <v-sheet color="white" elevation="24" height="250" width="400"
-              ><apexchart
-                type="pie"
-                width="380"
-                :options="chartOptions"
-                :series="series"
-              ></apexchart></v-sheet
-          ></v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-col sm="6">
-            <v-sheet color="white" elevation="24" height="250" width="400"
-              ><apexchart
-                type="pie"
-                width="380"
-                :options="chartOptions"
-                :series="series"
-              ></apexchart></v-sheet
-          ></v-col>
-          <v-col sm="6">
-            <v-sheet color="white" elevation="24" height="250" width="400"
-              ><apexchart
-                type="pie"
-                width="380"
-                :options="chartOptions"
-                :series="series"
-              ></apexchart></v-sheet
-          ></v-col>
-        </v-row>
+        <div class="pa-4" style="color: white; font-size: 3em">
+          How Project BLiP is working?
+        </div>
+        <div class="pb-8">
+          <v-row justify="center">
+            <v-col sm="4">
+              <v-card color="#56657c" dark tile height="200">
+                <v-card-subtitle> #Active Partner(s) </v-card-subtitle>
+                <v-card-text style="font-size: 6em" class="pa-11">
+                  {{ activeUsersCount }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col sm="4">
+              <v-card color="#56657c" dark tile height="200">
+                <v-card-subtitle> #Active User(s) </v-card-subtitle>
+                <v-card-text style="font-size: 6em" class="pa-11">
+                  {{ activePartnersCount }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col sm="4">
+              <v-card color="#56657c" dark tile height="200">
+                <v-card-subtitle> #Donation(s) </v-card-subtitle>
+                <v-card-text style="font-size: 6em" class="pa-11">
+                  {{ donationsCount }}
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
       </v-container>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  getActiveUsersCount,
+  getActivePartnersCount,
+  getDonationsCount,
+} from "../api.js";
+
 export default {
   name: "Home",
   components: {},
@@ -104,6 +101,9 @@ export default {
         src: "https://vipul43.sirv.com/projectblip/slides/slide03.png",
       },
     ],
+    activeUsersCount: 0,
+    activePartnersCount: 0,
+    donationsCount: 0,
     series: [44, 55, 13, 43, 22],
     chartOptions: {
       chart: {
@@ -126,6 +126,32 @@ export default {
       ],
     },
   }),
+  async mounted() {
+    getActiveUsersCount()
+      .then((response) => response.count)
+      .then((count) => {
+        this.activeUsersCount = count;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    getActivePartnersCount()
+      .then((response) => response.count)
+      .then((count) => {
+        this.activePartnersCount = count;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    getDonationsCount()
+      .then((response) => response.count)
+      .then((count) => {
+        this.donationsCount = count;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   metaInfo() {
     return {
       title: "Project BLiP",

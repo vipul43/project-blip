@@ -169,6 +169,20 @@ export const getUsers = async () => {
   return response.data;
 };
 
+/*************************** Stats APIs ***************************/
+export const getActiveUsersCount = async () => {
+  const response = await httpClient.get(`/stats/active-users-count`);
+  return response.data;
+};
+export const getActivePartnersCount = async () => {
+  const response = await httpClient.get(`/stats/active-partners-count`);
+  return response.data;
+};
+export const getDonationsCount = async () => {
+  const response = await httpClient.get(`/stats/donations-count`);
+  return response.data;
+};
+
 /*************************** External APIs ***************************/
 // Country, State and City APIs
 export const getAllCountries = async () => {

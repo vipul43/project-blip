@@ -9,6 +9,7 @@ const mongodb = require("./app/utils/mongodb.util.js");
 const userController = require("./app/controllers/user.controller.js");
 const partnerController = require("./app/controllers/partner.controller.js");
 const adminController = require("./app/controllers/admin.controller.js");
+const statsController = require("./app/controllers/stats.controller.js");
 const auth = require("./app/middlewares/auth.middleware.js");
 const cron = require("node-cron");
 
@@ -164,6 +165,19 @@ app.post("/admin/signout", auth.authenticate, async (req, res) => {
 
 app.get("/admin/users", auth.authenticate, async (req, res) => {
   await adminController.handleAdminFetchUsers(req, res);
+});
+
+/*************************** Stats APIs ***************************/
+app.get("/stats/active-users-count", async (req, res) => {
+  await statsController.handleActiveUserCount(req, res);
+});
+
+app.get("/stats/active-partners-count", async (req, res) => {
+  await statsController.handleActivePartnerCount(req, res);
+});
+
+app.get("/stats/donations-count", async (req, res) => {
+  await statsController.handleDonationCount(req, res);
 });
 
 // listening
