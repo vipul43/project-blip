@@ -4,11 +4,12 @@
 
 ---
 
-| METHOD |                     URL                      |             ACTION             | STATUS  |
-| :----: | :------------------------------------------: | :----------------------------: | :-----: |
-|  GET   |             `/stats/users-count`             |    gets total donated users    | PENDING |
-|  GET   |           `/stats/donations-count`           |      gets total donations      | PENDING |
-|  GET   | `/stats/donations-count/:donation-center-id` | gets total donations by center | PENDING |
+| METHOD |                     URL                      |              ACTION              | STATUS  |
+| :----: | :------------------------------------------: | :------------------------------: | :-----: |
+|  GET   |         `/stats/active-users-count`          |  gets total active users count   | PENDING |
+|  GET   |        `/stats/active-partners-count`        | gets total active partners count | PENDING |
+|  GET   |           `/stats/donations-count`           |    gets total donations count    | PENDING |
+|  GET   | `/stats/donations-count/:donation-center-id` |  gets total donations by center  | PENDING |
 
 ### API - ADMIN LEVEL
 
