@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    alias: ["/home"],
     name: "Home",
     component: Home,
   },
@@ -177,7 +178,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (!store.getters["auth/authenticated"]) {
         return next({
-          name: "UserSignIn",
+          name: "UserSignUp",
         });
       } else {
         next();

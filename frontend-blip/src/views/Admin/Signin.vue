@@ -82,7 +82,13 @@
             </v-col>
           </v-row>
 
-          <v-btn class="mr-4" type="submit" :disabled="invalid" @click="signIn">
+          <v-btn
+            class="mr-4"
+            type="submit"
+            :disabled="invalid"
+            :loading="signInLoading"
+            @click="signIn"
+          >
             Sign In
           </v-btn>
           <v-btn @click="clear"> Clear </v-btn>
@@ -131,21 +137,25 @@ export default {
       text: "",
     },
     showPassword: false,
+    signInLoading: false,
   }),
   methods: {
     ...mapActions({
       validate: "auth/validate",
     }),
     async signIn() {
+      this.signInLoading = true;
       const valid = await this.$refs.observer.validate();
       if (valid) {
         this.validate({ credentials: this.user, userType: "Admin" })
           .then(() => {
+            this.signInLoading = false;
             this.$router.replace({
               name: "Home",
             });
           })
           .catch((error) => {
+            this.signInLoading = false;
             this.snackbar.color = "error";
             this.snackbar.icon = "mdi-alert-circle";
             this.snackbar.title = "Error";

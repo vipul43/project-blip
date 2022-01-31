@@ -4,12 +4,12 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-btn id="btn" to="/user/signup" x-large depressed dark
+            <v-btn id="btn" to="/donate-blood" x-large depressed dark
               >Donate Blood</v-btn
             >
           </v-col>
           <v-col cols="12" sm="6">
-            <v-btn id="btn" to="/user/signup" x-large depressed dark
+            <v-btn id="btn" :to="getTrackRoute()" x-large depressed dark
               >Track Blood</v-btn
             >
           </v-col>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import {
   getActiveUsersCount,
   getActivePartnersCount,
@@ -151,6 +153,27 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+  },
+  computed: {
+    ...mapGetters({
+      authenticated: "auth/authenticated",
+      user: "auth/user",
+    }),
+  },
+  methods: {
+    getTrackRoute() {
+      if (this.authenticated) {
+        if (this.user.role === "User") {
+          return "/user/dashboard";
+        } else if (this.user.role === "Partner") {
+          return "/partner/dashboard";
+        } else {
+          return "";
+        }
+      } else {
+        return "/user/signup";
+      }
+    },
   },
   metaInfo() {
     return {
