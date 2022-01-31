@@ -4,12 +4,12 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-btn id="btn" to="/donate-blood" x-large depressed dark
+            <v-btn id="btn" to="/user/signup" x-large depressed dark
               >Donate Blood</v-btn
             >
           </v-col>
           <v-col cols="12" sm="6">
-            <v-btn id="btn" to="/track-blood" x-large depressed dark
+            <v-btn id="btn" to="/user/signup" x-large depressed dark
               >Track Blood</v-btn
             >
           </v-col>
