@@ -31,7 +31,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="Phone Number"
-                rules="digits:10|regex:^[0-9]{10}$"
+                rules="digits:10|required|regex:^[0-9]{10}$"
               >
                 <v-text-field
                   v-model="partner.phone"
@@ -40,6 +40,7 @@
                   :error-messages="errors"
                   label="Phone Number *"
                   outlined
+                  required
                   dense
                 ></v-text-field>
               </validation-provider>
