@@ -47,7 +47,7 @@
         </v-list>
       </v-menu>
       <template v-slot:extension>
-        <v-tabs centered slider-color="#222831" show-arrows>
+        <v-tabs centered slider-color="#222831" show-arrows center-active>
           <v-tab v-for="(tab, i) in tabs" :key="i" :to="tab.src">
             {{ tab.title }}
           </v-tab>

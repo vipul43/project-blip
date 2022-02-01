@@ -2,13 +2,13 @@
   <div id="home">
     <div style="background: #fd7014">
       <v-container>
-        <v-row>
-          <v-col cols="12" sm="6">
+        <v-row justify="center">
+          <v-col sm="6">
             <v-btn id="btn" to="/donate-blood" x-large depressed dark
               >Donate Blood</v-btn
             >
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col sm="6">
             <v-btn id="btn" :to="getTrackRoute()" x-large depressed dark
               >Track Blood</v-btn
             >
@@ -18,23 +18,14 @@
     </div>
     <div style="background: #fd7014">
       <v-container>
-        <v-responsive :aspect-ratio="1188 / 630">
-          <v-carousel
-            cycle
-            hide-delimiters
-            show-arrows-on-hover
-            prev-icon="mdi-arrow-left"
-            next-icon="mdi-arrow-right"
-            height="auto"
-          >
-            <v-carousel-item
-              v-for="(slide, i) in slides"
-              :key="i"
-              :src="slide.src"
-              eager
-            ></v-carousel-item>
-          </v-carousel>
-        </v-responsive>
+        <v-carousel cycle hide-delimiters show-arrows-on-hover>
+          <v-carousel-item
+            v-for="(slide, i) in slides"
+            :key="i"
+            :src="slide.src"
+            eager
+          ></v-carousel-item>
+        </v-carousel>
       </v-container>
     </div>
     <div style="background: #222831">
@@ -91,19 +82,19 @@ export default {
     slides: [
       {
         title: "Landing",
-        src: "https://vipul43.sirv.com/projectblip/slides/landing.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/landing.svg",
       },
       {
         title: "Slide01",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide01.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide01.svg",
       },
       {
         title: "Slide02",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide02.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide02.svg",
       },
       {
         title: "Slide03",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide03.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide03.svg",
       },
     ],
     activeUsersCount: 0,

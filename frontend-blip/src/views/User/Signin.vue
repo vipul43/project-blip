@@ -22,9 +22,9 @@
     </v-snackbar>
     <v-container>
       <v-row justify="center">
-        <v-col cols="12" sm="2"
+        <v-col sm="2"
           ><v-img
-            src="https://vipul43.sirv.com/projectblip/logos/logo-v2-color-300dpi.png"
+            src="https://vipul43.sirv.com/projectblip/logos/logo-v2-color-300dpi.svg"
           ></v-img>
         </v-col>
       </v-row>
