@@ -18,20 +18,23 @@
     </div>
     <div style="background: #fd7014">
       <v-container>
-        <v-carousel
-          cycle
-          hide-delimiters
-          show-arrows-on-hover
-          prev-icon="mdi-arrow-left"
-          next-icon="mdi-arrow-right"
-        >
-          <v-carousel-item
-            v-for="(slide, i) in slides"
-            :key="i"
-            :src="slide.src"
-            eager
-          ></v-carousel-item>
-        </v-carousel>
+        <v-responsive :aspect-ratio="1188 / 630">
+          <v-carousel
+            cycle
+            hide-delimiters
+            show-arrows-on-hover
+            prev-icon="mdi-arrow-left"
+            next-icon="mdi-arrow-right"
+            height="auto"
+          >
+            <v-carousel-item
+              v-for="(slide, i) in slides"
+              :key="i"
+              :src="slide.src"
+              eager
+            ></v-carousel-item>
+          </v-carousel>
+        </v-responsive>
       </v-container>
     </div>
     <div style="background: #222831">
