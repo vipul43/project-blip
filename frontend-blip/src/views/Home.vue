@@ -18,7 +18,7 @@
     </div>
     <div style="background: #fd7014">
       <v-container>
-        <v-carousel cycle hide-delimiters show-arrows-on-hover>
+        <v-carousel cycle hide-delimiters show-arrows-on-hover height="auto">
           <v-carousel-item
             v-for="(slide, i) in slides"
             :key="i"
@@ -82,19 +82,19 @@ export default {
     slides: [
       {
         title: "Landing",
-        src: "https://vipul43.sirv.com/projectblip/slides/landing.svg",
+        src: "https://vipul43.sirv.com/projectblip/slides/landing.png",
       },
       {
         title: "Slide01",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide01.svg",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide01.png",
       },
       {
         title: "Slide02",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide02.svg",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide02.png",
       },
       {
         title: "Slide03",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide03.svg",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide03.png",
       },
     ],
     activeUsersCount: 0,
