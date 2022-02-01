@@ -18,7 +18,10 @@ const app = express();
 var corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
-      ? "https://project-blip.herokuapp.com"
+      ? [
+          "http://project-blip.herokuapp.com",
+          "https://project-blip.herokuapp.com",
+        ]
       : "http://localhost:8080",
 };
 app.use(cors(corsOptions));
