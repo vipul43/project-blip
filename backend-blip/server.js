@@ -10,6 +10,7 @@ const userController = require("./app/controllers/user.controller.js");
 const partnerController = require("./app/controllers/partner.controller.js");
 const adminController = require("./app/controllers/admin.controller.js");
 const statsController = require("./app/controllers/stats.controller.js");
+const blogController = require("./app/controllers/blog.controller.js");
 const auth = require("./app/middlewares/auth.middleware.js");
 const cron = require("node-cron");
 
@@ -187,6 +188,19 @@ app.get("/stats/active-partners-count", async (req, res) => {
 
 app.get("/stats/donations-count", async (req, res) => {
   await statsController.handleDonationCount(req, res);
+});
+
+/*************************** Blogs APIs ***************************/
+app.get("/blogs", async (req, res) => {
+  await blogController.handleBlogFetchAll(req, res);
+});
+
+app.post("/blogs", async (req, res) => {
+  await blogController.handleBlogCreation(req, res);
+});
+
+app.get("/blogs/:blogId", async (req, res) => {
+  await blogController.handleBlogFetch(req, res);
 });
 
 // listening
