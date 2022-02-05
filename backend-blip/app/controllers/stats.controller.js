@@ -1,4 +1,3 @@
-const errors = require("../utils/errors.util.js");
 const codes = require("../utils/codes.util.js");
 const mongodb = require("../utils/mongodb.util.js");
 const db = require("../models");
