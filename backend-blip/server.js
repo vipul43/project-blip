@@ -11,6 +11,7 @@ const partnerController = require("./app/controllers/partner.controller.js");
 const adminController = require("./app/controllers/admin.controller.js");
 const statsController = require("./app/controllers/stats.controller.js");
 const blogController = require("./app/controllers/blog.controller.js");
+const faqController = require("./app/controllers/faq.controller.js");
 const auth = require("./app/middlewares/auth.middleware.js");
 const cron = require("node-cron");
 
@@ -201,6 +202,11 @@ app.post("/blogs", async (req, res) => {
 
 app.get("/blogs/:blogId", async (req, res) => {
   await blogController.handleBlogFetch(req, res);
+});
+
+/*************************** FAQ APIs ***************************/
+app.get("/faqs", async (req, res) => {
+  await faqController.handleFAQFetchAll(req, res);
 });
 
 // listening

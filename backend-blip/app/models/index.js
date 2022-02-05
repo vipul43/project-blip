@@ -10,5 +10,6 @@ db.token = require("./token.model.js")(mongoose);
 db.donation = require("./donation.model.js")(mongoose);
 db.admin = require("./admin.model.js")(mongoose);
 db.blog = require("./blog.model.js")(mongoose);
+db.faq = require("./faq.model.js")(mongoose);
 
 module.exports = db;
