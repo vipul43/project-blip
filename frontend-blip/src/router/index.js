@@ -158,7 +158,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (
         store.getters["auth/authenticated"] &&
-        store.getters["auth/user"].role === "partner"
+        store.getters["auth/user"].role === "Partner"
       ) {
         next();
       } else {
