@@ -111,6 +111,11 @@ export default {
               title: "Dashboard",
               src: "/partner/dashboard",
             });
+          } else if (this.user.role === "Admin") {
+            this.tabs = this.tabs.concat({
+              title: "Dashboard",
+              src: "/admin/dashboard",
+            });
           }
         } else if (!authenticated && this.tabs.length == 7) {
           this.tabs.splice(this.tabs.length - 1, 1);
