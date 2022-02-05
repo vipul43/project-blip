@@ -50,7 +50,7 @@ exports.handleUserCreation = async (req, res) => {
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -93,7 +93,7 @@ exports.handleUserValidation = async (req, res) => {
     } else if (error === error.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -180,7 +180,7 @@ exports.handleUserUpdation = async (req, res) => {
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -223,7 +223,7 @@ exports.handleUserDeletion = async (req, res) => {
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -254,16 +254,18 @@ exports.handleUserDonation = async (req, res) => {
             delete obj.partnerId;
             delete obj.isPartnerArchived;
             const result2 = await mongodb.findOne(partner, findObj2);
-            const obj2 = result2.toObject();
-            delete obj2._id;
-            delete obj2.partnerName;
-            delete obj2.type;
-            delete obj2.password;
-            delete obj2.role;
-            delete obj2.__v;
-            delete obj2.createdAt;
-            delete obj2.updatedAt;
-            Object.assign(obj, obj2);
+            if (result2) {
+              const obj2 = result2.toObject();
+              delete obj2._id;
+              delete obj2.username;
+              delete obj2.type;
+              delete obj2.password;
+              delete obj2.role;
+              delete obj2.__v;
+              delete obj2.createdAt;
+              delete obj2.updatedAt;
+              Object.assign(obj, obj2);
+            }
             return obj;
           })
         );
@@ -275,7 +277,9 @@ exports.handleUserDonation = async (req, res) => {
         } else if (error === errors.VALIDATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;
@@ -305,7 +309,9 @@ exports.handleUserDonation = async (req, res) => {
         } else if (error === errors.CREATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;
@@ -335,7 +341,9 @@ exports.handleUserDonation = async (req, res) => {
         } else if (error === errors.CREATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;

@@ -28,6 +28,40 @@ const routes = [
     },
   },
   {
+    path: "/admin/dashboard",
+    name: "AdminDashboard",
+    component: () => import("../views/Admin/Dashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "Admin"
+      ) {
+        next();
+      } else {
+        return next({
+          name: "Home",
+        });
+      }
+    },
+  },
+  {
+    path: "/admin/profile",
+    name: "AdminProfile",
+    component: () => import("../views/Admin/Profile.vue"),
+    beforeEnter: (to, from, next) => {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "Admin"
+      ) {
+        next();
+      } else {
+        return next({
+          name: "Home",
+        });
+      }
+    },
+  },
+  {
     path: "/user/signin",
     name: "UserSignIn",
     component: () => import("../views/User/Signin.vue"),
@@ -60,20 +94,15 @@ const routes = [
     name: "UserDashboard",
     component: () => import("../views/User/Dashboard.vue"),
     beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/authenticated"]) {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "User"
+      ) {
+        next();
+      } else {
         return next({
           name: "Home",
         });
-      } else {
-        if (
-          store.getters["auth/user"].role === "Partner" ||
-          store.getters["auth/user"].role === "Admin"
-        ) {
-          return next({
-            name: "Home",
-          });
-        }
-        next();
       }
     },
   },
@@ -82,20 +111,15 @@ const routes = [
     name: "UserProfile",
     component: () => import("../views/User/Profile.vue"),
     beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/authenticated"]) {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "User"
+      ) {
+        next();
+      } else {
         return next({
           name: "Home",
         });
-      } else {
-        if (
-          store.getters["auth/user"].role === "Partner" ||
-          store.getters["auth/user"].role === "Admin"
-        ) {
-          return next({
-            name: "Home",
-          });
-        }
-        next();
       }
     },
   },
@@ -132,20 +156,15 @@ const routes = [
     name: "PartnerDashboard",
     component: () => import("../views/Partner/Dashboard.vue"),
     beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/authenticated"]) {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "partner"
+      ) {
+        next();
+      } else {
         return next({
           name: "Home",
         });
-      } else {
-        if (
-          store.getters["auth/user"].role === "User" ||
-          store.getters["auth/user"].role === "Admin"
-        ) {
-          return next({
-            name: "Home",
-          });
-        }
-        next();
       }
     },
   },
@@ -154,20 +173,15 @@ const routes = [
     name: "PartnerProfile",
     component: () => import("../views/Partner/Profile.vue"),
     beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/authenticated"]) {
+      if (
+        store.getters["auth/authenticated"] &&
+        store.getters["auth/user"].role === "Partner"
+      ) {
+        next();
+      } else {
         return next({
           name: "Home",
         });
-      } else {
-        if (
-          store.getters["auth/user"].role === "User" ||
-          store.getters["auth/user"].role === "Admin"
-        ) {
-          return next({
-            name: "Home",
-          });
-        }
-        next();
       }
     },
   },

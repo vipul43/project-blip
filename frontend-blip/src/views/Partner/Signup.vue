@@ -83,15 +83,15 @@
             <v-col cols="12" sm="3">
               <validation-provider
                 v-slot="{ errors }"
-                name="Partner Name"
+                name="Username"
                 rules="required|max:10|min:5|alpha_dash"
               >
                 <v-text-field
-                  v-model="partner.partnerName"
+                  v-model="partner.username"
                   autocomplete="username"
                   :counter="10"
                   :error-messages="errors"
-                  label="Partner Name *"
+                  label="User Name *"
                   outlined
                   required
                   dense
@@ -310,7 +310,7 @@ export default {
   data: () => ({
     partner: {
       orgName: "",
-      partnerName: "",
+      username: "",
       email: "",
       phone: "",
       type: "Donation Center",
@@ -358,7 +358,7 @@ export default {
     },
     clear() {
       this.partner.orgName = "";
-      this.partner.partnerName = "";
+      this.partner.username = "";
       this.partner.email = "";
       this.partner.phone = "";
       this.partner.type = "Donation Center";

@@ -11,19 +11,15 @@ module.exports = (mongoose) => {
           message: "{VALUE} is not a valid Organisation Name.",
         },
       },
-      partnerName: {
+      username: {
         type: String,
         unique: [true, "Partnername Already Exists."],
         lowercase: true,
         trim: true,
         required: [true, "Partner Name is Required."],
         validate: {
-          validator: (partnerName) => {
-            return (
-              !!partnerName &&
-              partnerName.length >= 5 &&
-              partnerName.length <= 10
-            );
+          validator: (username) => {
+            return !!username && username.length >= 5 && username.length <= 10;
           },
           message: "{VALUE} is not a valid Partner Name.",
         },

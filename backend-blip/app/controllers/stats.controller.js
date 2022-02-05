@@ -12,7 +12,7 @@ exports.handleActiveUserCount = async (req, res) => {
     const count = result.length;
     res.status(codes.OK).json({ count: count });
   } catch (error) {
-    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
   }
 };
 
@@ -22,7 +22,7 @@ exports.handleActivePartnerCount = async (req, res) => {
     const count = result.length;
     res.status(codes.OK).json({ count: count });
   } catch (error) {
-    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
   }
 };
 
@@ -32,6 +32,6 @@ exports.handleDonationCount = async (req, res) => {
     const count = result.length;
     res.status(codes.OK).json({ count: count });
   } catch (error) {
-    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
   }
 };

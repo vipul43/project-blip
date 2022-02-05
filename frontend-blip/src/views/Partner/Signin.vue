@@ -35,14 +35,14 @@
             <v-col sm="3">
               <validation-provider
                 v-slot="{ errors }"
-                name="Partnername"
+                name="Username"
                 rules="required"
               >
                 <v-text-field
-                  v-model="partner.partnerName"
+                  v-model="partner.username"
                   autocomplete="username"
                   :error-messages="errors"
-                  label="Partner Name *"
+                  label="User Name *"
                   outlined
                   required
                   dense
@@ -123,7 +123,7 @@ export default {
   components: { ValidationProvider, ValidationObserver },
   data: () => ({
     partner: {
-      partnerName: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -168,7 +168,7 @@ export default {
       await this.$refs.observer.validate();
     },
     clear() {
-      this.partner.partnerName = "";
+      this.partner.username = "";
       this.partner.email = "";
       this.partner.password = "";
       this.$refs.observer.reset();

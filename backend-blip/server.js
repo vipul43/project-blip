@@ -31,6 +31,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connecting to mongodb database
 mongodb.connect(db);
 
+/*************************** Base APIs ***************************/
+// Sending reponse HTML
+app.get("/", async (req, res) => {
+  res.sendFile("/public/response.html", { root: __dirname });
+});
+
 /*************************** User APIs ***************************/
 // Signing up user by creating entry in database,
 //generating jwt token to send as payload

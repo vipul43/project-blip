@@ -9,6 +9,31 @@ const admin = db.admin;
 const user = db.user;
 const partner = db.partner;
 
+// helper functions
+async function getAllUsers() {
+  const findObj = {};
+  let userResults = await mongodb.findAll(user, findObj);
+  userResults = userResults.map((u) => {
+    const obj = u.toObject();
+    delete obj.password;
+    return obj;
+  });
+  let partnerResults = await mongodb.findAll(partner, findObj);
+  partnerResults = partnerResults.map((u) => {
+    const obj = u.toObject();
+    delete obj.password;
+    return obj;
+  });
+  let adminResults = await mongodb.findAll(admin, findObj);
+  adminResults = adminResults.map((u) => {
+    const obj = u.toObject();
+    delete obj.password;
+    return obj;
+  });
+  const users = userResults.concat(partnerResults, adminResults);
+  return users;
+}
+
 exports.handleExpiredTokens = async () => {
   try {
     await tokenController.expireAll();
@@ -42,6 +67,7 @@ exports.handleAdminValidation = async (req, res) => {
     await tokenController.save(result._id, token);
     const obj = result.toObject();
     obj.adminId = result._id;
+    obj.allUsers = await getAllUsers();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ token: token, user: obj });
   } catch (error) {
@@ -56,7 +82,7 @@ exports.handleAdminValidation = async (req, res) => {
     } else if (error === error.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -117,13 +143,9 @@ exports.handleAdminInvalidation = async (req, res) => {
 
 exports.handleAdminFetchUsers = async (req, res) => {
   try {
-    const findObj = {};
-    const userResults = await mongodb.findAll(user, findObj);
-    const partnerResults = await mongodb.findAll(partner, findObj);
-    const adminResults = await mongodb.findAll(admin, findObj);
-    const users = userResults.concat(partnerResults, adminResults);
+    const users = await getAllUsers();
     res.status(codes.ACCEPTED).json({ users: users });
   } catch (error) {
-    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
   }
 };

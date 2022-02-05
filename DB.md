@@ -44,7 +44,7 @@ Schema
 {
     _id: ObjectId,
     orgName: String,
-    partnerName: String,
+    username: String,
     email: String,
     phone: String,
     type: enum("Donation Center", "Hospital"),

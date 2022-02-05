@@ -26,7 +26,7 @@ exports.handlePartnerCreation = async (req, res) => {
     payload.role = "Partner";
     const result = await mongodb.createOne(partner, payload);
     const token = auth.generate({
-      partnerName: result.partnerName,
+      username: result.username,
       email: result.email,
       password: result.password,
       role: result.role,
@@ -50,7 +50,7 @@ exports.handlePartnerCreation = async (req, res) => {
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -59,10 +59,10 @@ exports.handlePartnerValidation = async (req, res) => {
   try {
     const payload = req.body;
     if (!payload) throw errors.INVALID_PAYLOAD;
-    if (!payload.partnerName) throw errors.INVALID_PAYLOAD;
+    if (!payload.username) throw errors.INVALID_PAYLOAD;
     if (!payload.email) throw errors.INVALID_PAYLOAD;
     const findObj = {
-      partnerName: payload.partnerName,
+      username: payload.username,
       email: payload.email,
     };
     const result = await mongodb.findOne(partner, findObj);
@@ -71,7 +71,7 @@ exports.handlePartnerValidation = async (req, res) => {
     const valid = await crypt.compareHash(payload.password, result.password);
     if (!valid) throw errors.VALIDATION_FAILED;
     const token = auth.generate({
-      partnerName: result.partnerName,
+      username: result.username,
       email: result.email,
       password: result.password,
       role: result.role,
@@ -93,7 +93,7 @@ exports.handlePartnerValidation = async (req, res) => {
     } else if (error === errors.UPDATION_FAILED) {
       res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
     } else {
-      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
     }
   }
 };
@@ -199,7 +199,9 @@ exports.handlePartnerDonation = async (req, res) => {
         } else if (error === errors.VALIDATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;
@@ -220,7 +222,9 @@ exports.handlePartnerDonation = async (req, res) => {
         } else if (error === errors.CREATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;
@@ -250,7 +254,9 @@ exports.handlePartnerDonation = async (req, res) => {
         } else if (error === errors.CREATION_FAILED) {
           res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
         } else {
-          res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+          res
+            .status(codes.INTERNAL_SERVER_ERROR)
+            .json({ error: error.toString() });
         }
       }
       break;
