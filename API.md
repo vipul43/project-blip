@@ -6,9 +6,9 @@
 
 | METHOD |                     URL                      |              ACTION              | STATUS  |
 | :----: | :------------------------------------------: | :------------------------------: | :-----: |
-|  GET   |         `/stats/active-users-count`          |  gets total active users count   | PENDING |
-|  GET   |        `/stats/active-partners-count`        | gets total active partners count | PENDING |
-|  GET   |           `/stats/donations-count`           |    gets total donations count    | PENDING |
+|  GET   |         `/stats/active-users-count`          |  gets total active users count   |  DONE   |
+|  GET   |        `/stats/active-partners-count`        | gets total active partners count |  DONE   |
+|  GET   |           `/stats/donations-count`           |    gets total donations count    |  DONE   |
 |  GET   | `/stats/donations-count/:donation-center-id` |  gets total donations by center  | PENDING |
 
 ### API - ADMIN LEVEL
