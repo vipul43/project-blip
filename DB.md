@@ -119,3 +119,35 @@ Schema
     _v: 0
 }
 ```
+
+#### FAQ Collectoins - `faqs`
+
+---
+
+```
+Schema
+{
+    _id: ObjectId,
+    question: String,
+    answer: String,
+    createdAt: Date,
+    updatedAt: Date,
+    _v: 0
+}
+```
+
+#### Blog Collections - `blogs`
+
+---
+
+```
+Schema
+{
+    _id: ObjectId,
+    title: String,
+    content: String,
+    createdAt: Date,
+    updatedAt: Date,
+    _v: 0
+}
+```
