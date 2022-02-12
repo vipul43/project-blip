@@ -16,7 +16,7 @@
         </v-row>
       </v-container>
     </div>
-    <div style="background: #fd7014">
+    <div class="pb-4" style="background: #fd7014">
       <v-container>
         <v-carousel cycle hide-delimiters show-arrows-on-hover height="auto">
           <v-carousel-item
@@ -82,19 +82,19 @@ export default {
     slides: [
       {
         title: "Landing",
-        src: "https://vipul43.sirv.com/projectblip/slides/landing.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/landing-v2.png",
       },
       {
         title: "Slide01",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide01.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide01-v2.png",
       },
       {
         title: "Slide02",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide02.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide02-v2.png",
       },
       {
         title: "Slide03",
-        src: "https://vipul43.sirv.com/projectblip/slides/slide03.png",
+        src: "https://vipul43.sirv.com/projectblip/slides/slide03-v2.png",
       },
     ],
     activeUsersCount: 0,
