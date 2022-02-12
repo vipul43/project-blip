@@ -32,17 +32,11 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item to="/user/signin">
-            <v-list-item-title>User Sign In</v-list-item-title>
+          <v-list-item to="/user/login">
+            <v-list-item-title>User Log In</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/user/signup">
-            <v-list-item-title>User Sign Up</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/partner/signin">
-            <v-list-item-title>Partner Sign In</v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/partner/signup">
-            <v-list-item-title>Partner Sign Up</v-list-item-title>
+          <v-list-item to="/partner/login">
+            <v-list-item-title>Partner Log In</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

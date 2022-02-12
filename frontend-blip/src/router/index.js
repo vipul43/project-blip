@@ -62,23 +62,9 @@ const routes = [
     },
   },
   {
-    path: "/user/signin",
-    name: "UserSignIn",
-    component: () => import("../views/User/Signin.vue"),
-    beforeEnter: (to, from, next) => {
-      if (store.getters["auth/authenticated"]) {
-        return next({
-          name: "Home",
-        });
-      } else {
-        next();
-      }
-    },
-  },
-  {
-    path: "/user/signup",
-    name: "UserSignUp",
-    component: () => import("../views/User/Signup.vue"),
+    path: "/user/login",
+    name: "UserLogIn",
+    component: () => import("../views/User/Login.vue"),
     beforeEnter: (to, from, next) => {
       if (store.getters["auth/authenticated"]) {
         return next({
@@ -124,23 +110,9 @@ const routes = [
     },
   },
   {
-    path: "/partner/signin",
-    name: "PartnerSignIn",
-    component: () => import("../views/Partner/Signin.vue"),
-    beforeEnter: (to, from, next) => {
-      if (store.getters["auth/authenticated"]) {
-        return next({
-          name: "Home",
-        });
-      } else {
-        next();
-      }
-    },
-  },
-  {
-    path: "/partner/signup",
-    name: "PartnerSignUp",
-    component: () => import("../views/Partner/Signup.vue"),
+    path: "/partner/login",
+    name: "PartnerLogIn",
+    component: () => import("../views/Partner/Login.vue"),
     beforeEnter: (to, from, next) => {
       if (store.getters["auth/authenticated"]) {
         return next({
