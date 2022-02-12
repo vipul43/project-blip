@@ -128,7 +128,7 @@
               recieve the reset link to your mailbox.
             </v-card-subtitle>
             <v-card-text class="pa-2">
-              <validation-observer ref="observer" v-slot="{ invalid }">
+              <validation-observer ref="observer2" v-slot="{ invalid }">
                 <form @submit.prevent="submit()">
                   <v-row justify="center">
                     <v-col sm="10">
@@ -165,11 +165,11 @@
                   </v-row>
                   <v-spacer></v-spacer>
                   <v-card-actions class="justify-end">
-                    <v-btn @click="resetClear()"> Cancel </v-btn>
+                    <v-btn @click="resetClear"> Cancel </v-btn>
                     <v-btn
                       :disabled="invalid"
                       :loading="resetLoading"
-                      @click="resetPassword()"
+                      @click="resetPassword"
                     >
                       Reset Password
                     </v-btn>
@@ -267,12 +267,13 @@ export default {
     },
     async resetPassword() {
       this.resetLoading = true;
+      const valid = await this.$refs.observer2.validate();
     },
     resetClear() {
       this.resetDialog = false;
       this.reset.username = "";
       this.reset.email = "";
-      this.$refs.observer.reset();
+      this.$refs.observer2.reset();
     },
     deactivateSnackar() {
       this.snackbar.active = false;
