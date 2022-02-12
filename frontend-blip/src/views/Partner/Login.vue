@@ -37,13 +37,13 @@ export default {
     tab: null,
     items: [
       {
-        tabTitle: "Sign In",
+        tabTitle: "Partner Sign In",
         tabText: "New here? Go ahead and",
         tabAction: "Sign Up",
         tabComponent: "PartnerSignIn",
       },
       {
-        tabTitle: "Sign Up",
+        tabTitle: "Partner Sign Up",
         tabText: "Already have an account?",
         tabAction: "Sign In",
         tabComponent: "PartnerSignUp",
@@ -52,7 +52,6 @@ export default {
   }),
   methods: {
     switchTab(action) {
-      console.log(this.tab);
       if (action === "Sign Up") {
         this.tab = 1;
       } else if (action === "Sign In") {
