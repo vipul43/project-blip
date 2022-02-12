@@ -165,7 +165,7 @@ export default {
           return "";
         }
       } else {
-        return "/user/signup";
+        return "/user/login";
       }
     },
   },

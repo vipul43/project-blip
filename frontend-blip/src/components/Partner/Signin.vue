@@ -75,9 +75,34 @@
                   required
                   :type="showPassword ? 'text' : 'password'"
                   dense
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                ></v-text-field>
+                >
+                  <template slot="append">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          @click="showPassword = !showPassword"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          {{ showPassword ? "mdi-eye" : "mdi-eye-off" }}
+                        </v-icon>
+                      </template>
+                      {{ showPassword ? "Hide password" : "Show password" }}
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          @click="resetDialog = true"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          mdi-lock-question
+                        </v-icon>
+                      </template>
+                      Forgot Password?
+                    </v-tooltip>
+                  </template>
+                </v-text-field>
               </validation-provider>
             </v-col>
           </v-row>
@@ -91,9 +116,70 @@
           >
             Sign In
           </v-btn>
-          <v-btn @click="clear"> Clear </v-btn>
+          <v-btn @click="signInClear"> Clear </v-btn>
         </form>
       </validation-observer>
+      <v-dialog v-model="resetDialog" persistent max-width="500">
+        <v-card>
+          <v-container>
+            <v-card-title class="text-h5">Reset Password</v-card-title>
+            <v-card-subtitle class="pa-2">
+              Enter registered username, email and click on Reset Password to
+              recieve the reset link to your mailbox.
+            </v-card-subtitle>
+            <v-card-text class="pa-2">
+              <validation-observer ref="observer" v-slot="{ invalid }">
+                <form @submit.prevent="submit()">
+                  <v-row justify="center">
+                    <v-col sm="10">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        name="Username"
+                        rules="required"
+                      >
+                        <v-text-field
+                          v-model="reset.username"
+                          autocomplete="username"
+                          :error-messages="errors"
+                          label="User Name *"
+                          outlined
+                          required
+                          dense
+                        ></v-text-field>
+                      </validation-provider>
+                      <validation-provider
+                        v-slot="{ errors }"
+                        name="Email"
+                        rules="required|email"
+                      >
+                        <v-text-field
+                          v-model="reset.email"
+                          :error-messages="errors"
+                          label="E-mail *"
+                          outlined
+                          required
+                          dense
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                  </v-row>
+                  <v-spacer></v-spacer>
+                  <v-card-actions class="justify-end">
+                    <v-btn @click="resetClear()"> Cancel </v-btn>
+                    <v-btn
+                      :disabled="invalid"
+                      :loading="resetLoading"
+                      @click="resetPassword()"
+                    >
+                      Reset Password
+                    </v-btn>
+                  </v-card-actions>
+                </form>
+              </validation-observer>
+            </v-card-text>
+          </v-container>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -138,6 +224,12 @@ export default {
     },
     showPassword: false,
     signInLoading: false,
+    resetDialog: false,
+    reset: {
+      username: "",
+      email: "",
+    },
+    resetLoading: false,
   }),
   methods: {
     ...mapActions({
@@ -167,10 +259,19 @@ export default {
     async submit() {
       await this.$refs.observer.validate();
     },
-    clear() {
+    signInClear() {
       this.partner.username = "";
       this.partner.email = "";
       this.partner.password = "";
+      this.$refs.observer.reset();
+    },
+    async resetPassword() {
+      this.resetLoading = true;
+    },
+    resetClear() {
+      this.resetDialog = false;
+      this.reset.username = "";
+      this.reset.email = "";
       this.$refs.observer.reset();
     },
     deactivateSnackar() {

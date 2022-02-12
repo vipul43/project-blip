@@ -107,9 +107,22 @@
                   required
                   :type="showPassword ? 'text' : 'password'"
                   dense
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                ></v-text-field>
+                >
+                  <template slot="append">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          @click="showPassword = !showPassword"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          {{ showPassword ? "mdi-eye" : "mdi-eye-off" }}
+                        </v-icon>
+                      </template>
+                      {{ showPassword ? "Hide password" : "Show password" }}
+                    </v-tooltip>
+                  </template>
+                </v-text-field>
               </validation-provider>
             </v-col>
           </v-row>

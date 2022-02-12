@@ -19,13 +19,7 @@ const httpClient2 = axios.create({
 
 httpClient.interceptors.request.use((config) => {
   const token = store.getters["auth/token"];
-  if (
-    token &&
-    config.url != "/user/signin" &&
-    config.url != "/user/signup" &&
-    config.url != "/partner/signin" &&
-    config.url != "/partner/signup"
-  ) {
+  if (token && config.url != "/user/login" && config.url != "/partner/login") {
     config.headers["Authorization"] = `Bearer ${store.getters["auth/token"]}`;
   }
   return config;
