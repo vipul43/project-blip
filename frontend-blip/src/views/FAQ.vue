@@ -32,7 +32,7 @@ export default {
       },
       {
         question: "How does tracking donation work?",
-        answer: `<p>You just need to signup on our <a href="https://project-blip.herokuapp.com/user/signup">User Sign Up</a> page and search for Project BLiP associated donation centers near them on the <a href="https://project-blip.herokuapp.com/donate-blood">Donate Blood</a> page and make the donation at the center. After the donation, you need to provide basic details at the donation center like name and contact info. Within 24hrs you will receive a donation id on your provided contact info, enter the donation id on the Track Blood pop-up. Voila!! Now you can view the donations on your dashboard and track them.</p>`,
+        answer: `<p>You just need to signup on our <a href="https://project-blip.herokuapp.com/user/login">User Log In</a> page and search for Project BLiP associated donation centers near them on the <a href="https://project-blip.herokuapp.com/donate-blood">Donate Blood</a> page and make the donation at the center. After the donation, you need to provide basic details at the donation center like name and contact info. Within 24hrs you will receive a donation id on your provided contact info, enter the donation id on the Track Blood pop-up. Voila!! Now you can view the donations on your dashboard and track them.</p>`,
       },
       {
         question: "What do I get?",
@@ -45,7 +45,7 @@ export default {
       },
       {
         question: "How do I make a donation?",
-        answer: `<p>Just head onto our <a href="https://project-blip.herokuapp.com/user/signup">User Sign Up</a> page and enter the details to create an account on our platform. Then head onto <a href="https://project-blip.herokuapp.com/donate-blood">Donate Blood</a> page and find Project BLiP associated centers nearest to your current location. Make a stop at the center and get the donation work done. Make sure to provide your contact details at the donation center to help us track your donation for you.</p>`,
+        answer: `<p>Just head onto our <a href="https://project-blip.herokuapp.com/user/login">User Log In</a> page and enter the details to create an account on our platform. Then head onto <a href="https://project-blip.herokuapp.com/donate-blood">Donate Blood</a> page and find Project BLiP associated centers nearest to your current location. Make a stop at the center and get the donation work done. Make sure to provide your contact details at the donation center to help us track your donation for you.</p>`,
       },
       {
         question: "How can I track my donation?",
