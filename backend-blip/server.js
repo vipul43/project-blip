@@ -73,6 +73,10 @@ app.post("/user/delete", auth.authenticate, async (req, res) => {
   await userController.handleUserDeletion(req, res);
 });
 
+app.post("/user/reset-password", async (req, res) => {
+  await userController.handleUserResetPassword(req, res);
+});
+
 // Add new donation to user by adding assiging the donation to user
 app.post(
   "/user/donation-details/:userId",
@@ -122,6 +126,10 @@ app.post("/partner/auth", auth.authenticate, async (req, res) => {
 //blacklisting the token to avoid further login with same token
 app.post("/partner/signout", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerInvalidation(req, res);
+});
+
+app.post("/partner/reset-password", async (req, res) => {
+  await partnerController.handlePartnerResetPassword(req, res);
 });
 
 app.post(

@@ -110,6 +110,20 @@ const routes = [
     },
   },
   {
+    path: "/user/reset-password",
+    name: "UserResetPassword",
+    component: () => import("../views/User/ResetPassword.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
+      }
+    },
+  },
+  {
     path: "/partner/login",
     name: "PartnerLogIn",
     component: () => import("../views/Partner/Login.vue"),
@@ -154,6 +168,20 @@ const routes = [
         return next({
           name: "Home",
         });
+      }
+    },
+  },
+  {
+    path: "/partner/reset-password",
+    name: "PartnerResetPassword",
+    component: () => import("../views/Partner/ResetPassword.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        return next({
+          name: "Home",
+        });
+      } else {
+        next();
       }
     },
   },

@@ -151,6 +151,42 @@ exports.handlePartnerInvalidation = async (req, res) => {
   }
 };
 
+exports.handlePartnerResetPassword = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.username) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      username: payload.username,
+      email: payload.email,
+    };
+    const invalid = await mongodb.findOne(partner, findObj);
+    if (!invalid) throw errors.USER_NOT_FOUND;
+    if (!payload.password) throw errors.INVALID_PAYLOAD;
+    const hashedPassword = await crypt.hashAndSalt(payload.password);
+    if (!hashedPassword) throw errors.HASHING_FAILED;
+    payload.password = hashedPassword;
+    const updateConfig = {
+      upsert: false,
+    };
+    await mongodb.updateOne(partner, findObj, payload, updateConfig);
+    res.status(codes.ACCEPTED).json({ user: payload });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.USER_NOT_FOUND) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.HASHING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
+    }
+  }
+};
+
 exports.handlePartnerDonation = async (req, res) => {
   switch (req.method) {
     case "GET":

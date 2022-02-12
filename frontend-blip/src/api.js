@@ -69,6 +69,13 @@ export const deleteUser = async (user) => {
   );
   return response.data;
 };
+export const resetPasswordUser = async (user) => {
+  const response = await httpClient.post(
+    `/user/reset-password?role=User`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
 //Donation CRUD Operations from User POV
 export const addUserDonation = async (user, userId) => {
   const response = await httpClient.post(
@@ -117,6 +124,13 @@ export const authPartner = async (user) => {
 export const invalidatePartner = async (user) => {
   const response = await httpClient.post(
     `/partner/signout?role=Partner`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const resetPasswordPartner = async (user) => {
+  const response = await httpClient.post(
+    `/partner/reset-password?role=Partner`,
     JSON.stringify(user)
   );
   return response.data;
