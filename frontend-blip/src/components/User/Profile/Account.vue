@@ -166,7 +166,7 @@
                 <div class="pb-6">
                   <v-btn
                     class="mr-4"
-                    :disabled="user.emailVerified"
+                    :disabled="user.isEmailVerified"
                     @click="verifyEmail()"
                     >Verify Email</v-btn
                   >
@@ -303,8 +303,8 @@ export default {
       email: "",
       phone: "",
       role: "",
-      emailVerified: true,
-      phoneVerified: true,
+      isEmailVerified: null,
+      isPhoneVerified: null,
       createdAt: "",
       updatedAt: "",
     },

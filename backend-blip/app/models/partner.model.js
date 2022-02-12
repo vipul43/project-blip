@@ -40,6 +40,11 @@ module.exports = (mongoose) => {
           message: "{VALUE} is not a valid Email.",
         },
       },
+      isEmailVerified: {
+        type: Boolean,
+        required: [true, "Is Email Verified? is Required."],
+        default: false,
+      },
       phone: {
         type: String,
         trim: true,
@@ -55,6 +60,11 @@ module.exports = (mongoose) => {
           },
           message: "{VALUE} is not a valid Phone Number.",
         },
+      },
+      isPhoneVerified: {
+        type: Boolean,
+        required: [true, "Is Phone Verified? is Required."],
+        default: false,
       },
       type: {
         type: String,
