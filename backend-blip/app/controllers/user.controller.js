@@ -245,7 +245,7 @@ exports.handleUserGenerateResetPasswordLink = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      auth: "Reset-Password",
+      auth: "User-Reset-Password",
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);

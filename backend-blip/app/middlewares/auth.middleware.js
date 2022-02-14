@@ -10,8 +10,10 @@ function getSecret(auth) {
     return process.env.PARTNER_JWT_TOKEN_SECRET;
   } else if (auth === "Admin") {
     return process.env.ADMIN_JWT_TOKEN_SECRET;
-  } else if (auth === "Reset-Password") {
-    return process.env.RESET_PASSWORD_JWT_TOKEN_SECRET;
+  } else if (auth === "User-Reset-Password") {
+    return process.env.USER_RESET_PASSWORD_JWT_TOKEN_SECRET;
+  } else if (auth === "Partner-Reset-Password") {
+    return process.env.PARTNER_RESET_PASSWORD_JWT_TOKEN_SECRET;
   } else {
     throw errors.TOKEN_GENERATION_FAILED;
   }

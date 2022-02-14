@@ -168,7 +168,7 @@ exports.handlePartnerGenerateResetPasswordLink = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      auth: "Reset-Password",
+      auth: "Partner-Reset-Password",
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);

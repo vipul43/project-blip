@@ -73,7 +73,7 @@ export const genResetPasswordLinkUser = async (user) => {
 export const resetPasswordUser = async (token, user) => {
   httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.post(
-    `/user/reset-password?auth=Reset-Password`,
+    `/user/reset-password?auth=User-Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;
@@ -140,7 +140,7 @@ export const genResetPasswordLinkPartner = async (user) => {
 export const resetPasswordPartner = async (token, user) => {
   httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.post(
-    `/partner/reset-password?auth=Reset-Password`,
+    `/partner/reset-password?auth=Partner-Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;
