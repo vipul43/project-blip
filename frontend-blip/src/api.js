@@ -37,28 +37,28 @@ export const validateUser = async (user) => {
 };
 export const authUser = async (user) => {
   const response = await httpClient.post(
-    `/user/auth?role=User`,
+    `/user/auth?auth=User`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const invalidateUser = async (user) => {
   const response = await httpClient.post(
-    `/user/signout?role=User`,
+    `/user/signout?auth=User`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const updateUser = async (user) => {
   const response = await httpClient.post(
-    `/user/update?role=User`,
+    `/user/update?auth=User`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const deleteUser = async (user) => {
   const response = await httpClient.post(
-    `/user/delete?role=User`,
+    `/user/delete?auth=User`,
     JSON.stringify(user)
   );
   return response.data;
@@ -73,7 +73,7 @@ export const genResetPasswordLinkUser = async (user) => {
 export const resetPasswordUser = async (token, user) => {
   httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.post(
-    `/user/reset-password?role=User`,
+    `/user/reset-password?auth=Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;
@@ -81,20 +81,20 @@ export const resetPasswordUser = async (token, user) => {
 //Donation CRUD Operations from User POV
 export const addUserDonation = async (user, userId) => {
   const response = await httpClient.post(
-    `/user/donation-details/${userId}?role=User`,
+    `/user/donation-details/${userId}?auth=User`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const getUserDonation = async (userId, isArchived) => {
   const response = await httpClient.get(
-    `/user/donation-details/${userId}?isArchived=${isArchived}&role=User`
+    `/user/donation-details/${userId}?isArchived=${isArchived}&auth=User`
   );
   return response.data;
 };
 export const updateUserDonation = async (userId, donationId, donation) => {
   const response = await httpClient.put(
-    `/user/donation-details/${userId}/update/${donationId}?role=User`,
+    `/user/donation-details/${userId}/update/${donationId}?auth=User`,
     donation
   );
   return response.data;
@@ -118,21 +118,21 @@ export const validatePartner = async (user) => {
 };
 export const authPartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/auth?role=Partner`,
+    `/partner/auth?auth=Partner`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const invalidatePartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/signout?role=Partner`,
+    `/partner/signout?auth=Partner`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const resetPasswordPartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/reset-password?role=Partner`,
+    `/partner/reset-password?auth=Partner`,
     JSON.stringify(user)
   );
   return response.data;
@@ -140,20 +140,20 @@ export const resetPasswordPartner = async (user) => {
 //Donation CRUD Operations from Partner POV
 export const addPartnerDonation = async (donation, partnerId) => {
   const response = await httpClient.post(
-    `/partner/donation-details/${partnerId}?role=Partner`,
+    `/partner/donation-details/${partnerId}?auth=Partner`,
     JSON.stringify(donation)
   );
   return response.data;
 };
 export const getPartnerDonation = async (userId, isArchived) => {
   const response = await httpClient.get(
-    `/partner/donation-details/${userId}?isArchived=${isArchived}&role=Partner`
+    `/partner/donation-details/${userId}?isArchived=${isArchived}&auth=Partner`
   );
   return response.data;
 };
 export const updatePartnerDonation = async (userId, donationId, donation) => {
   const response = await httpClient.put(
-    `/partner/donation-details/${userId}/update/${donationId}?role=Partner`,
+    `/partner/donation-details/${userId}/update/${donationId}?auth=Partner`,
     donation
   );
   return response.data;
@@ -167,21 +167,21 @@ export const validateAdmin = async (user) => {
 };
 export const authAdmin = async (user) => {
   const response = await httpClient.post(
-    `/admin/auth?role=Admin`,
+    `/admin/auth?auth=Admin`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const invalidateAdmin = async (user) => {
   const response = await httpClient.post(
-    `/admin/signout?role=Admin`,
+    `/admin/signout?auth=Admin`,
     JSON.stringify(user)
   );
   return response.data;
 };
 //Fetch All Users for Admin View
 export const getUsers = async () => {
-  const response = await httpClient.get(`admin/users?role=Admin`);
+  const response = await httpClient.get(`admin/users?auth=Admin`);
   return response.data;
 };
 

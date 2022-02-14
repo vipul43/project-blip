@@ -30,7 +30,7 @@ exports.handleUserCreation = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      role: result.role,
+      auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);
@@ -75,7 +75,7 @@ exports.handleUserValidation = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      role: result.role,
+      auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);
@@ -245,7 +245,7 @@ exports.handleUserGenerateResetPasswordLink = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      role: result.role,
+      auth: "Reset-Password",
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);

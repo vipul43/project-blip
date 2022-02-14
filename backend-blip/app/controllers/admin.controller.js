@@ -61,7 +61,7 @@ exports.handleAdminValidation = async (req, res) => {
       username: result.username,
       email: result.email,
       password: result.password,
-      role: result.role,
+      auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);
