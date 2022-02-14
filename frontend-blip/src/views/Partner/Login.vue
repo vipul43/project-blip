@@ -2,7 +2,7 @@
   <div id="partner-log-in">
     <v-container>
       <v-card flat>
-        <v-tabs v-model="tab" centered slider-color="#222831">
+        <v-tabs color="#fd7014" v-model="tab" centered slider-color="#222831">
           <v-tab v-for="item in items" :key="item.tabTitle">
             {{ item.tabTitle }}
           </v-tab>
