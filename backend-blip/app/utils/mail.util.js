@@ -1,17 +1,17 @@
 var nodemailer = require("nodemailer");
 const errors = require("../utils/errors.util.js");
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.OFFL_GMAIL_ID,
+    pass: process.env.APP_PASSWORD_OFFL_GMAIL,
+  },
+});
+
 exports.generateResetPasswordLinkUser = async (token, user) => {
   try {
     const link = `http://localhost:8080/user/reset-password?token=${token}`;
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.OFFL_GMAIL_ID,
-        pass: process.env.APP_PASSWORD_OFFL_GMAIL,
-      },
-    });
     const status = await transporter.sendMail({
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
@@ -28,14 +28,6 @@ exports.generateResetPasswordLinkUser = async (token, user) => {
 exports.generateResetPasswordLinkPartner = async (token, user) => {
   try {
     const link = `http://localhost:8080/partner/reset-password?token=${token}`;
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.OFFL_GMAIL_ID,
-        pass: process.env.APP_PASSWORD_OFFL_GMAIL,
-      },
-    });
     const status = await transporter.sendMail({
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
