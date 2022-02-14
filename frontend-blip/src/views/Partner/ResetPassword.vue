@@ -144,7 +144,7 @@ export default {
       this.resetPasswordLoading = true;
       const valid = await this.$refs.observer.validate();
       if (valid) {
-        resetPasswordPartner(this.user)
+        resetPasswordPartner(this.$route.query.token, this.user)
           .then(() => {
             this.resetPasswordLoading = false;
             this.snackbar.color = "success";

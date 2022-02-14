@@ -249,7 +249,7 @@ exports.handleUserGenerateResetPasswordLink = async (req, res) => {
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
     await tokenController.save(result._id, token);
-    const status = await mail.generateResetPasswordLink(token, result);
+    const status = await mail.generateResetPasswordLinkUser(token, result);
     res.status(codes.ACCEPTED).json({ status: status });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -297,6 +297,7 @@ exports.handleUserResetPassword = async (req, res) => {
     };
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     await tokenController.delete(result._id, token);
+    delete payload.password;
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {

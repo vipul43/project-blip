@@ -193,6 +193,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from "vee-validate";
+import { genResetPasswordLinkPartner } from "../../api.js";
 
 setInteractionMode("eager");
 extend("required", {
@@ -268,6 +269,27 @@ export default {
     async resetPassword() {
       this.resetLoading = true;
       const valid = await this.$refs.observer2.validate();
+      if (valid) {
+        genResetPasswordLinkPartner(this.reset)
+          .then((response) => {
+            this.resetLoading = false;
+            this.resetClear();
+            this.snackbar.color = "success";
+            this.snackbar.icon = "mdi-check-circle";
+            this.snackbar.title = "Success";
+            this.snackbar.text = "Successfully sent reset password link";
+            this.snackbar.active = true;
+          })
+          .catch((error) => {
+            this.resetLoading = false;
+            console.log(error);
+            this.snackbar.color = "error";
+            this.snackbar.icon = "mdi-alert-circle";
+            this.snackbar.title = "Error";
+            this.snackbar.text = "Unable to send reset password link";
+            this.snackbar.active = true;
+          });
+      }
     },
     resetClear() {
       this.resetDialog = false;

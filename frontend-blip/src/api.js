@@ -130,9 +130,17 @@ export const invalidatePartner = async (user) => {
   );
   return response.data;
 };
-export const resetPasswordPartner = async (user) => {
+export const genResetPasswordLinkPartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/reset-password?auth=Partner`,
+    `/partner/gen-reset-password-link`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const resetPasswordPartner = async (token, user) => {
+  httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
+  const response = await httpClient.post(
+    `/partner/reset-password?auth=Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;

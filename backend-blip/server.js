@@ -132,7 +132,11 @@ app.post("/partner/signout", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerInvalidation(req, res);
 });
 
-app.post("/partner/reset-password", async (req, res) => {
+app.post("/partner/gen-reset-password-link", async (req, res) => {
+  await partnerController.handlePartnerGenerateResetPasswordLink(req, res);
+});
+
+app.post("/partner/reset-password", auth.authenticate, async (req, res) => {
   await partnerController.handlePartnerResetPassword(req, res);
 });
 

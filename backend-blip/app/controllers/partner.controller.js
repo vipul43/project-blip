@@ -2,6 +2,7 @@ const errors = require("../utils/errors.util.js");
 const codes = require("../utils/codes.util.js");
 const crypt = require("../utils/crypt.util.js");
 const mongodb = require("../utils/mongodb.util.js");
+const mail = require("../utils/mail.util.js");
 const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenController = require("./token.controller.js");
@@ -151,6 +152,45 @@ exports.handlePartnerInvalidation = async (req, res) => {
   }
 };
 
+exports.handlePartnerGenerateResetPasswordLink = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.username) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      username: payload.username,
+      email: payload.email,
+    };
+    const result = await mongodb.findOne(partner, findObj);
+    if (!result) throw errors.INVALID_USER_CREDENTIALS;
+    const token = auth.generate({
+      username: result.username,
+      email: result.email,
+      password: result.password,
+      auth: "Reset-Password",
+    });
+    if (!token) throw errors.TOKEN_GENERATION_FAILED;
+    await tokenController.save(result._id, token);
+    const status = await mail.generateResetPasswordLinkPartner(token, result);
+    res.status(codes.ACCEPTED).json({ status: status });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.INVALID_USER_CREDENTIALS) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.MAIL_SENDING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
+    }
+  }
+};
+
 exports.handlePartnerResetPassword = async (req, res) => {
   try {
     const payload = req.body;
@@ -161,8 +201,16 @@ exports.handlePartnerResetPassword = async (req, res) => {
       username: payload.username,
       email: payload.email,
     };
-    const invalid = await mongodb.findOne(partner, findObj);
-    if (!invalid) throw errors.USER_NOT_FOUND;
+    const result = await mongodb.findOne(partner, findObj);
+    if (!result) throw errors.USER_NOT_FOUND;
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    const valid = await tokenController.find(result._id, token);
+    if (!valid) throw errors.AUTHENTICATION_FAILED;
     if (!payload.password) throw errors.INVALID_PAYLOAD;
     const hashedPassword = await crypt.hashAndSalt(payload.password);
     if (!hashedPassword) throw errors.HASHING_FAILED;
@@ -171,10 +219,14 @@ exports.handlePartnerResetPassword = async (req, res) => {
       upsert: false,
     };
     await mongodb.updateOne(partner, findObj, payload, updateConfig);
+    await tokenController.delete(result._id, token);
+    delete payload.password;
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.AUTHENTICATION_FAILED) {
+      res.status(codes.FORBIDDEN).json({ error: error });
     } else if (error === errors.USER_NOT_FOUND) {
       res.status(codes.BAD_REQUEST).json({ error: error });
     } else if (error === errors.HASHING_FAILED) {
