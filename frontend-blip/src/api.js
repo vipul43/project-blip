@@ -63,7 +63,15 @@ export const deleteUser = async (user) => {
   );
   return response.data;
 };
-export const resetPasswordUser = async (user) => {
+export const genResetPasswordLinkUser = async (user) => {
+  const response = await httpClient.post(
+    `/user/gen-reset-password-link`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const resetPasswordUser = async (token, user) => {
+  httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.post(
     `/user/reset-password?role=User`,
     JSON.stringify(user)

@@ -119,6 +119,7 @@ const routes = [
           name: "Home",
         });
       } else {
+        console.log(to.query);
         next();
       }
     },

@@ -73,7 +73,11 @@ app.post("/user/delete", auth.authenticate, async (req, res) => {
   await userController.handleUserDeletion(req, res);
 });
 
-app.post("/user/reset-password", async (req, res) => {
+app.post("/user/gen-reset-password-link", async (req, res) => {
+  await userController.handleUserGenerateResetPasswordLink(req, res);
+});
+
+app.post("/user/reset-password", auth.authenticate, async (req, res) => {
   await userController.handleUserResetPassword(req, res);
 });
 
