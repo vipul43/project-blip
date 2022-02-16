@@ -99,7 +99,14 @@ exports.handleAdminAuthentication = async (req, res) => {
     if (!token) throw errors.INVALID_PAYLOAD;
     const valid = await tokenController.find(payload.adminId, token);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
-    res.status(codes.ACCEPTED).json(payload);
+    const findObj = {
+      _id: payload.adminId,
+    };
+    const result = await mongodb.findOne(admin, findObj);
+    if (!result) throw errors.AUTHENTICATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json(obj);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });

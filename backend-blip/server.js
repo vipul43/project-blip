@@ -81,6 +81,14 @@ app.post("/user/reset-password", auth.authenticate, async (req, res) => {
   await userController.handleUserResetPassword(req, res);
 });
 
+app.post("/user/gen-verify-email-link", async (req, res) => {
+  await userController.handleUserGenerateVerifyEmailLink(req, res);
+});
+
+app.post("/user/verify-email", auth.authenticate, async (req, res) => {
+  await userController.handleUserVerifyEmail(req, res);
+});
+
 // Add new donation to user by adding assiging the donation to user
 app.post(
   "/user/donation-details/:userId",

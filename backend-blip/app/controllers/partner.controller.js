@@ -109,9 +109,16 @@ exports.handlePartnerAuthentication = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(req.body._id, token);
+    const valid = await tokenController.find(payload._id, token);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
-    res.status(codes.ACCEPTED).json(req.body);
+    const findObj = {
+      _id: payload._id,
+    };
+    const result = await mongodb.findOne(partner, findObj);
+    if (!result) throw errors.AUTHENTICATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json(obj);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });

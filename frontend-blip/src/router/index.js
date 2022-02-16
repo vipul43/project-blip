@@ -119,8 +119,21 @@ const routes = [
           name: "Home",
         });
       } else {
-        console.log(to.query);
         next();
+      }
+    },
+  },
+  {
+    path: "/user/verify-email",
+    name: "UserVerifyEmail",
+    component: () => import("../views/User/VerifyEmail.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        next();
+      } else {
+        return next({
+          name: "Home",
+        });
       }
     },
   },

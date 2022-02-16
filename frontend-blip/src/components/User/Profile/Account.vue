@@ -142,43 +142,63 @@
         <v-card-text>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="user.email"
-                autocomplete="off"
-                label="E-mail *"
-                outlined
-                required
-                dense
-                disabled
-              ></v-text-field>
-              <v-text-field
-                v-model="user.phone"
-                autocomplete="off"
-                :counter="10"
-                label="Phone Number"
-                outlined
-                dense
-                disabled
-              ></v-text-field>
+              <v-row>
+                <v-col>
+                  <v-card :color="_user.isEmailVerified ? 'success' : 'error'">
+                    <v-card-subtitle
+                      >{{ _user.email }}
+                      <v-icon>{{
+                        _user.isEmailVerified
+                          ? "mdi-check-circle"
+                          : "mdi-alert-circle"
+                      }}</v-icon></v-card-subtitle
+                    >
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-card :color="_user.isPhoneVerified ? 'success' : 'error'">
+                    <v-card-subtitle
+                      >{{ _user.phone }}
+                      <v-icon>{{
+                        _user.isPhoneVerified
+                          ? "mdi-check-circle"
+                          : "mdi-alert-circle"
+                      }}</v-icon></v-card-subtitle
+                    >
+                  </v-card>
+                </v-col>
+              </v-row>
             </v-col>
             <v-card-actions>
               <v-col cols="12" sm="3">
-                <div class="pb-6">
-                  <v-btn
-                    class="mr-4"
-                    :disabled="user.isEmailVerified"
-                    @click="verifyEmail()"
-                    >Verify Email</v-btn
-                  >
-                </div>
-                <div class="pb-6">
-                  <v-btn
-                    class="mr-4"
-                    :disabled="user.phoneVerified"
-                    @click="verifyPhone()"
-                    >Verify Phone</v-btn
-                  >
-                </div>
+                <v-row>
+                  <v-col>
+                    <div class="pb-6">
+                      <v-btn
+                        class="mr-4"
+                        :disabled="_user.isEmailVerified"
+                        :loading="verifyEmailLoading"
+                        @click="verifyEmail()"
+                        >Verify Email
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div class="pb-6">
+                      <v-btn
+                        class="mr-4"
+                        :disabled="_user.phoneVerified"
+                        :loading="verifyPhoneLoading"
+                        @click="verifyPhone()"
+                        >Verify Phone
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-card-actions>
           </v-row>
@@ -191,13 +211,13 @@
           <v-row>
             <v-col cols="12" sm="6"> Account Created At </v-col>
             <v-col cols="12" sm="6">
-              {{ formatDateTime(user.createdAt) }}
+              {{ formatDateTime(_user.createdAt) }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="6"> Account Last Updated At </v-col>
             <v-col cols="12" sm="6">
-              {{ formatDateTime(user.updatedAt) }}
+              {{ formatDateTime(_user.updatedAt) }}
             </v-col>
           </v-row>
         </v-card-text>
@@ -264,6 +284,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from "vee-validate";
+import { genVerifyEmailPasswordLinkUser } from "../../../api.js";
 
 setInteractionMode("eager");
 extend("digits", {
@@ -325,6 +346,8 @@ export default {
     },
     showPassword: false,
     updateLoading: false,
+    verifyEmailLoading: false,
+    verifyPhoneLoading: false,
   }),
   computed: {
     ...mapGetters({
@@ -399,7 +422,31 @@ export default {
           console.log(error);
         });
     },
-    verifyEmail() {},
+    verifyEmail() {
+      this.verifyEmailLoading = true;
+      genVerifyEmailPasswordLinkUser(this._user)
+        .then((response) => {
+          this.verifyEmailLoading = false;
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          if (!!response.status) {
+            this.snackbar.text = "Verification link sent to mail";
+          } else {
+            this.snackbar.text = "Email already verified";
+            this.$router.go();
+          }
+          this.snackbar.active = true;
+        })
+        .catch((error) => {
+          this.verifyEmailLoading = false;
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Failed to send verification link to mail";
+          this.snackbar.active = true;
+        });
+    },
     verifyPhone() {},
     formatDateTime(dirtyDateTime) {
       if (dirtyDateTime) {

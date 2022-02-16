@@ -16,7 +16,7 @@ exports.generateResetPasswordLinkUser = async (token, user) => {
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
       subject: `Reset Password`,
-      html: `<p>Hi ${user.username},<br>Your Reset Password Link is <a href="${link}">here</a>.<br>The link will expire in 30mins.<br><br></p><p>Project BLiP</p>`,
+      html: `<p>Hi ${user.username},<br>Your Reset Password Link is <a href="${link}">here</a>.<br>This is a one time use link and will expire in 30mins.<br><br></p><p>Project BLiP</p>`,
     });
     return status;
   } catch (error) {
@@ -32,7 +32,23 @@ exports.generateResetPasswordLinkPartner = async (token, user) => {
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
       subject: `Reset Password`,
-      html: `<p>Hi ${user.username},<br>Your Reset Password Link is <a href="${link}">here</a>.<br>The link will expire in 30mins.<br><br></p><p>Project BLiP</p>`,
+      html: `<p>Hi ${user.username},<br>Your Reset Password Link is <a href="${link}">here</a>.<br>This is a one time use link and will expire in 30mins.<br><br></p><p>Project BLiP</p>`,
+    });
+    return status;
+  } catch (error) {
+    console.log(error);
+    throw errors.MAIL_SENDING_FAILED;
+  }
+};
+
+exports.generateVerifyEmailLinkUser = async (token, user) => {
+  try {
+    const link = `http://localhost:8080/user/verify-email?token=${token}`;
+    const status = await transporter.sendMail({
+      from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
+      to: user.email,
+      subject: `Verify Email`,
+      html: `<p>Hi ${user.username},<br>Your Verify Email Link for ${user.email} is <a href="${link}">here</a>.<br>This is a one time use link and will expire in 30mins.<br><br></p><p>Project BLiP</p>`,
     });
     return status;
   } catch (error) {

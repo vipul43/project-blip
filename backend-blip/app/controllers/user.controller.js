@@ -111,7 +111,14 @@ exports.handleUserAuthentication = async (req, res) => {
     if (!token) throw errors.INVALID_PAYLOAD;
     const valid = await tokenController.find(payload._id, token);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
-    res.status(codes.ACCEPTED).json(payload);
+    const findObj = {
+      _id: payload._id,
+    };
+    const result = await mongodb.findOne(user, findObj);
+    if (!result) throw errors.AUTHENTICATION_FAILED;
+    const obj = result.toObject();
+    delete obj.password;
+    res.status(codes.ACCEPTED).json(obj);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -298,6 +305,96 @@ exports.handleUserResetPassword = async (req, res) => {
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     await tokenController.delete(result._id, token);
     delete payload.password;
+    res.status(codes.ACCEPTED).json({ user: payload });
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.AUTHENTICATION_FAILED) {
+      res.status(codes.FORBIDDEN).json({ error: error });
+    } else if (error === errors.USER_NOT_FOUND) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.HASHING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.UPDATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
+    }
+  }
+};
+
+exports.handleUserGenerateVerifyEmailLink = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload.username) throw errors.INVALID_PAYLOAD;
+    if (!payload.email) throw errors.INVALID_PAYLOAD;
+    const findObj = {
+      username: payload.username,
+      email: payload.email,
+    };
+    const result = await mongodb.findOne(user, findObj);
+    if (!result) throw errors.INVALID_USER_CREDENTIALS;
+    if (!result.isEmailVerified) {
+      const token = auth.generate({
+        username: result.username,
+        email: result.email,
+        password: result.password,
+        auth: "User-Verify-Email",
+      });
+      if (!token) throw errors.TOKEN_GENERATION_FAILED;
+      await tokenController.save(result._id, token);
+      const status = await mail.generateVerifyEmailLinkUser(token, result);
+      res.status(codes.ACCEPTED).json({ status: status });
+    } else {
+      res.status(codes.ACCEPTED).json();
+    }
+  } catch (error) {
+    if (error === errors.INVALID_PAYLOAD) {
+      res.status(codes.BAD_REQUEST).json({ error: error });
+    } else if (error === errors.INVALID_USER_CREDENTIALS) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.VALIDATION_FAILED) {
+      res.status(codes.UNAUTHORIZED).json({ error: error });
+    } else if (error === errors.TOKEN_GENERATION_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else if (error === errors.MAIL_SENDING_FAILED) {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error });
+    } else {
+      res.status(codes.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
+    }
+  }
+};
+
+exports.handleUserVerifyEmail = async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!!payload.isEmailVerified) throw errors.INVALID_PAYLOAD;
+    if (!payload.isEmailVerified) {
+      if (!payload.username) throw errors.INVALID_PAYLOAD;
+      if (!payload.email) throw errors.INVALID_PAYLOAD;
+      const findObj = {
+        username: payload.username,
+        email: payload.email,
+      };
+      const result = await mongodb.findOne(user, findObj);
+      if (!result) throw errors.USER_NOT_FOUND;
+      const headers = req.headers;
+      if (!headers) throw errors.INVALID_PAYLOAD;
+      const authHeader = headers["authorization"];
+      if (!authHeader) throw errors.INVALID_PAYLOAD;
+      const token = authHeader.split(" ")[1];
+      if (!token) throw errors.INVALID_PAYLOAD;
+      const valid = await tokenController.find(result._id, token);
+      if (!valid) throw errors.AUTHENTICATION_FAILED;
+      payload.isEmailVerified = true;
+      const updateConfig = {
+        upsert: false,
+      };
+      await mongodb.updateOne(user, findObj, payload, updateConfig);
+      await tokenController.delete(result._id, token);
+    }
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {

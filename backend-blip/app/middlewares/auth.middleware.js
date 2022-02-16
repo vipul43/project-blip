@@ -14,6 +14,8 @@ function getSecret(auth) {
     return process.env.USER_RESET_PASSWORD_JWT_TOKEN_SECRET;
   } else if (auth === "Partner-Reset-Password") {
     return process.env.PARTNER_RESET_PASSWORD_JWT_TOKEN_SECRET;
+  } else if (auth === "User-Verify-Email") {
+    return process.env.USER_VERIFY_EMAIL_JWT_TOKEN_SECRET;
   } else {
     throw errors.TOKEN_GENERATION_FAILED;
   }
