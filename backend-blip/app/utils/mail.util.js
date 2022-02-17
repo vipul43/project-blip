@@ -8,10 +8,14 @@ const transporter = nodemailer.createTransport({
     pass: process.env.APP_PASSWORD_OFFL_GMAIL,
   },
 });
+const apiBase =
+  process.env.NODE_ENV === "production"
+    ? `https://project-blip.herokuapp.com`
+    : `http://localhost:8080`;
 
 exports.generateResetPasswordLinkUser = async (token, user) => {
   try {
-    const link = `http://localhost:8080/user/reset-password?token=${token}`;
+    const link = `${apiBase}/user/reset-password?token=${token}`;
     const status = await transporter.sendMail({
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
@@ -27,7 +31,7 @@ exports.generateResetPasswordLinkUser = async (token, user) => {
 
 exports.generateResetPasswordLinkPartner = async (token, user) => {
   try {
-    const link = `http://localhost:8080/partner/reset-password?token=${token}`;
+    const link = `${apiBase}/partner/reset-password?token=${token}`;
     const status = await transporter.sendMail({
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
@@ -43,7 +47,7 @@ exports.generateResetPasswordLinkPartner = async (token, user) => {
 
 exports.generateVerifyEmailLinkUser = async (token, user) => {
   try {
-    const link = `http://localhost:8080/user/verify-email?token=${token}`;
+    const link = `${apiBase}/user/verify-email?token=${token}`;
     const status = await transporter.sendMail({
       from: `"Project BLiP" <${process.env.OFFL_GMAIL_ID}>`,
       to: user.email,
