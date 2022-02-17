@@ -15,3 +15,4 @@ exports.USER_NOT_FOUND = "User Not Found";
 exports.DELETION_FAILED = "Could Not Delete";
 exports.HTTP_NOT_ALLOWED = "HTTP Method Not Allowed";
 exports.MAIL_SENDING_FAILED = "Unable to send mail";
+exports.MESSAGE_SENDING_FAILED = "Unable to send message";

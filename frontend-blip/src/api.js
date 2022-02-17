@@ -25,7 +25,8 @@ httpClient.interceptors.request.use((config) => {
     config.url != "/partner/login" &&
     !config.url.startsWith("/user/reset-password") &&
     !config.url.startsWith("/partner/reset-password") &&
-    !config.url.startsWith("/user/verify-email")
+    !config.url.startsWith("/user/verify-email") &&
+    !config.url.startsWith("/user/verify-phone")
   ) {
     config.headers["Authorization"] = `Bearer ${store.getters["auth/token"]}`;
   }
@@ -85,7 +86,7 @@ export const resetPasswordUser = async (token, user) => {
   );
   return response.data;
 };
-export const genVerifyEmailPasswordLinkUser = async (user) => {
+export const genVerifyEmailLinkUser = async (user) => {
   const response = await httpClient.post(
     `/user/gen-verify-email-link`,
     JSON.stringify(user)
@@ -96,6 +97,21 @@ export const verifyEmailUser = async (token, user) => {
   httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.post(
     `/user/verify-email?auth=User-Verify-Email`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const genVerifyPhoneLinkUser = async (user) => {
+  const response = await httpClient.post(
+    `/user/gen-verify-phone-link`,
+    JSON.stringify(user)
+  );
+  return response.data;
+};
+export const verifyPhoneUser = async (token, user) => {
+  httpClient.defaults.headers.post["Authorization"] = `Bearer ${token}`;
+  const response = await httpClient.post(
+    `/user/verify-phone?auth=User-Verify-Phone`,
     JSON.stringify(user)
   );
   return response.data;

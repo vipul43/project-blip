@@ -191,7 +191,7 @@
                     <div class="pb-6">
                       <v-btn
                         class="mr-4"
-                        :disabled="_user.phoneVerified"
+                        :disabled="_user.isPhoneVerified"
                         :loading="verifyPhoneLoading"
                         @click="verifyPhone()"
                         >Verify Phone
@@ -284,7 +284,10 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from "vee-validate";
-import { genVerifyEmailPasswordLinkUser } from "../../../api.js";
+import {
+  genVerifyEmailLinkUser,
+  genVerifyPhoneLinkUser,
+} from "../../../api.js";
 
 setInteractionMode("eager");
 extend("digits", {
@@ -424,7 +427,7 @@ export default {
     },
     verifyEmail() {
       this.verifyEmailLoading = true;
-      genVerifyEmailPasswordLinkUser(this._user)
+      genVerifyEmailLinkUser(this._user)
         .then((response) => {
           this.verifyEmailLoading = false;
           this.snackbar.color = "success";
@@ -447,7 +450,32 @@ export default {
           this.snackbar.active = true;
         });
     },
-    verifyPhone() {},
+    verifyPhone() {
+      this.verifyPhoneLoading = true;
+      genVerifyPhoneLinkUser(this._user)
+        .then((response) => {
+          console.log(response);
+          this.verifyPhoneLoading = false;
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          if (!!response.status) {
+            this.snackbar.text = "Verification link sent to phone";
+          } else {
+            this.snackbar.text = "Phone already verified";
+            // this.$router.go();
+          }
+          this.snackbar.active = true;
+        })
+        .catch((error) => {
+          this.verifyPhoneLoading = false;
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Failed to send verification link to phone";
+          this.snackbar.active = true;
+        });
+    },
     formatDateTime(dirtyDateTime) {
       if (dirtyDateTime) {
         const dirtyDateTimeArray = dirtyDateTime.split("T");

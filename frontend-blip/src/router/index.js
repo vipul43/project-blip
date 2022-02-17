@@ -138,6 +138,20 @@ const routes = [
     },
   },
   {
+    path: "/user/verify-phone",
+    name: "UserVerifyPhone",
+    component: () => import("../views/User/VerifyPhone.vue"),
+    beforeEnter: (to, from, next) => {
+      if (store.getters["auth/authenticated"]) {
+        next();
+      } else {
+        return next({
+          name: "Home",
+        });
+      }
+    },
+  },
+  {
     path: "/partner/login",
     name: "PartnerLogIn",
     component: () => import("../views/Partner/Login.vue"),
