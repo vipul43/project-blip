@@ -9,7 +9,7 @@ function tokenExpired(creationDateTime) {
   return currDateTime - creationDateTime > auth.tokenExpirySeconds * 1000;
 }
 
-exports.save = async (userId, token) => {
+exports.save = async (userId, token, auth) => {
   const findObj = {
     userId: userId,
   };
@@ -18,6 +18,7 @@ exports.save = async (userId, token) => {
       tokens: {
         token: token,
         creation: new Date(),
+        auth: auth,
       },
     },
   };
@@ -31,7 +32,7 @@ exports.save = async (userId, token) => {
   }
 };
 
-exports.delete = async (userId, token) => {
+exports.delete = async (userId, token, auth) => {
   const findObj = {
     userId: userId,
   };
@@ -39,6 +40,7 @@ exports.delete = async (userId, token) => {
     $pull: {
       tokens: {
         token: token,
+        auth: auth,
       },
     },
   };
@@ -52,12 +54,13 @@ exports.delete = async (userId, token) => {
   }
 };
 
-exports.find = async (userId, token) => {
+exports.find = async (userId, token, auth) => {
   const findObj = {
     userId: userId,
     tokens: {
       $elemMatch: {
         token: token,
+        auth: auth,
       },
     },
   };
@@ -78,7 +81,7 @@ exports.expireAll = async () => {
       const tokens = user.tokens;
       tokens.forEach((item) => {
         if (tokenExpired(item.creation)) {
-          module.exports.delete(userId, item.token);
+          module.exports.delete(userId, item.token, item.auth);
         }
       });
     });

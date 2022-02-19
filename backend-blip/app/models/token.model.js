@@ -17,6 +17,21 @@ module.exports = (mongoose) => {
             type: Date,
             required: [true, "Creation Date Time is Required."],
           },
+          auth: {
+            type: String,
+            required: [true, "Auth is Required."],
+            enum: {
+              values: [
+                "User",
+                "Partner",
+                "Admin",
+                "User-Reset-Password",
+                "Partner-Reset-Password",
+                "User-Verify-Email",
+                "User-Verify-Phone",
+              ],
+            },
+          },
         },
       ],
     },

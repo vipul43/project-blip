@@ -34,7 +34,7 @@ exports.handleUserCreation = async (req, res) => {
       auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.CREATED).json({ token: token, user: obj });
@@ -79,7 +79,7 @@ exports.handleUserValidation = async (req, res) => {
       auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ token: token, user: obj });
@@ -110,7 +110,11 @@ exports.handleUserAuthentication = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(payload._id, token);
+    const valid = await tokenController.find(
+      payload._id,
+      token,
+      req.query.auth
+    );
     if (!valid) throw errors.AUTHENTICATION_FAILED;
     const findObj = {
       _id: payload._id,
@@ -145,7 +149,7 @@ exports.handleUserInvalidation = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(payload._id, token);
+    await tokenController.delete(payload._id, token, req.query.auth);
     res.status(codes.ACCEPTED).json(payload);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -216,7 +220,7 @@ exports.handleUserDeletion = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(result._id, token);
+    await tokenController.delete(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ user: obj });
@@ -256,7 +260,7 @@ exports.handleUserGenerateResetPasswordLink = async (req, res) => {
       auth: "User-Reset-Password",
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const status = await mail.generateResetPasswordLinkUser(token, result);
     res.status(codes.ACCEPTED).json({ status: status });
   } catch (error) {
@@ -294,7 +298,7 @@ exports.handleUserResetPassword = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(result._id, token);
+    const valid = await tokenController.find(result._id, token, req.query.auth);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
     if (!payload.password) throw errors.INVALID_PAYLOAD;
     const hashedPassword = await crypt.hashAndSalt(payload.password);
@@ -304,7 +308,7 @@ exports.handleUserResetPassword = async (req, res) => {
       upsert: false,
     };
     await mongodb.updateOne(user, findObj, payload, updateConfig);
-    await tokenController.delete(result._id, token);
+    await tokenController.delete(result._id, token, req.query.auth);
     delete payload.password;
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {
@@ -344,7 +348,7 @@ exports.handleUserGenerateVerifyEmailLink = async (req, res) => {
         auth: "User-Verify-Email",
       });
       if (!token) throw errors.TOKEN_GENERATION_FAILED;
-      await tokenController.save(result._id, token);
+      await tokenController.save(result._id, token, req.query.auth);
       const status = await mail.generateVerifyEmailLinkUser(token, result);
       res.status(codes.ACCEPTED).json({ status: status });
     } else {
@@ -387,14 +391,18 @@ exports.handleUserVerifyEmail = async (req, res) => {
       if (!authHeader) throw errors.INVALID_PAYLOAD;
       const token = authHeader.split(" ")[1];
       if (!token) throw errors.INVALID_PAYLOAD;
-      const valid = await tokenController.find(result._id, token);
+      const valid = await tokenController.find(
+        result._id,
+        token,
+        req.query.auth
+      );
       if (!valid) throw errors.AUTHENTICATION_FAILED;
       payload.isEmailVerified = true;
       const updateConfig = {
         upsert: false,
       };
       await mongodb.updateOne(user, findObj, payload, updateConfig);
-      await tokenController.delete(result._id, token);
+      await tokenController.delete(result._id, token, req.query.auth);
     }
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {
@@ -434,7 +442,7 @@ exports.handleUserGenerateVerifyPhoneLink = async (req, res) => {
         auth: "User-Verify-Phone",
       });
       if (!token) throw errors.TOKEN_GENERATION_FAILED;
-      await tokenController.save(result._id, token);
+      await tokenController.save(result._id, token, req.query.auth);
       const status = await phone.generateVerifyPhoneLinkUser(token, result);
       res.status(codes.ACCEPTED).json({ status: status });
     } else {
@@ -477,14 +485,18 @@ exports.handleUserVerifyPhone = async (req, res) => {
       if (!authHeader) throw errors.INVALID_PAYLOAD;
       const token = authHeader.split(" ")[1];
       if (!token) throw errors.INVALID_PAYLOAD;
-      const valid = await tokenController.find(result._id, token);
+      const valid = await tokenController.find(
+        result._id,
+        token,
+        req.query.auth
+      );
       if (!valid) throw errors.AUTHENTICATION_FAILED;
       payload.isPhoneVerified = true;
       const updateConfig = {
         upsert: false,
       };
       await mongodb.updateOne(user, findObj, payload, updateConfig);
-      await tokenController.delete(result._id, token);
+      await tokenController.delete(result._id, token, req.query.auth);
     }
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {

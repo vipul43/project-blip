@@ -64,7 +64,7 @@ exports.handleAdminValidation = async (req, res) => {
       auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const obj = result.toObject();
     obj.adminId = result._id;
     obj.allUsers = await getAllUsers();
@@ -97,7 +97,11 @@ exports.handleAdminAuthentication = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(payload.adminId, token);
+    const valid = await tokenController.find(
+      payload.adminId,
+      token,
+      req.query.auth
+    );
     if (!valid) throw errors.AUTHENTICATION_FAILED;
     const findObj = {
       _id: payload.adminId,
@@ -133,7 +137,7 @@ exports.handleAdminInvalidation = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(payload.adminId, token);
+    await tokenController.delete(payload.adminId, token, req.query.auth);
     res.status(codes.ACCEPTED).json(payload);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {

@@ -33,7 +33,7 @@ exports.handlePartnerCreation = async (req, res) => {
       auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.CREATED).json({ token: token, user: obj });
@@ -78,7 +78,7 @@ exports.handlePartnerValidation = async (req, res) => {
       auth: result.role,
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
+    await tokenController.save(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ token: token, user: obj });
@@ -109,7 +109,11 @@ exports.handlePartnerAuthentication = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(payload._id, token);
+    const valid = await tokenController.find(
+      payload._id,
+      token,
+      req.query.auth
+    );
     if (!valid) throw errors.AUTHENTICATION_FAILED;
     const findObj = {
       _id: payload._id,
@@ -144,7 +148,7 @@ exports.handlePartnerInvalidation = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(req.body._id, token);
+    await tokenController.delete(req.body._id, token, req.query.auth);
     res.status(codes.ACCEPTED).json(req.body);
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -178,8 +182,12 @@ exports.handlePartnerGenerateResetPasswordLink = async (req, res) => {
       auth: "Partner-Reset-Password",
     });
     if (!token) throw errors.TOKEN_GENERATION_FAILED;
-    await tokenController.save(result._id, token);
-    const status = await mail.generateResetPasswordLinkPartner(token, result);
+    await tokenController.save(result._id, token, req.query.auth);
+    const status = await mail.generateResetPasswordLinkPartner(
+      token,
+      result,
+      req.query.auth
+    );
     res.status(codes.ACCEPTED).json({ status: status });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -216,7 +224,7 @@ exports.handlePartnerResetPassword = async (req, res) => {
     if (!authHeader) throw errors.INVALID_PAYLOAD;
     const token = authHeader.split(" ")[1];
     if (!token) throw errors.INVALID_PAYLOAD;
-    const valid = await tokenController.find(result._id, token);
+    const valid = await tokenController.find(result._id, token, req.query.auth);
     if (!valid) throw errors.AUTHENTICATION_FAILED;
     if (!payload.password) throw errors.INVALID_PAYLOAD;
     const hashedPassword = await crypt.hashAndSalt(payload.password);
@@ -226,7 +234,7 @@ exports.handlePartnerResetPassword = async (req, res) => {
       upsert: false,
     };
     await mongodb.updateOne(partner, findObj, payload, updateConfig);
-    await tokenController.delete(result._id, token);
+    await tokenController.delete(result._id, token, req.query.auth);
     delete payload.password;
     res.status(codes.ACCEPTED).json({ user: payload });
   } catch (error) {

@@ -21,8 +21,8 @@ httpClient.interceptors.request.use((config) => {
   const token = store.getters["auth/token"];
   if (
     token &&
-    config.url != "/user/login" &&
-    config.url != "/partner/login" &&
+    !config.url.startsWith("/user/login") &&
+    !config.url.startsWith("/partner/login") &&
     !config.url.startsWith("/user/reset-password") &&
     !config.url.startsWith("/partner/reset-password") &&
     !config.url.startsWith("/user/verify-email") &&
@@ -36,11 +36,17 @@ httpClient.interceptors.request.use((config) => {
 /*************************** User APIs ***************************/
 //User CRUD Operations
 export const createUser = async (user) => {
-  const response = await httpClient.post(`/user/signup`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/signup?auth=User`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const validateUser = async (user) => {
-  const response = await httpClient.post(`/user/signin`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/user/signin?auth=User`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const authUser = async (user) => {
@@ -73,7 +79,7 @@ export const deleteUser = async (user) => {
 };
 export const genResetPasswordLinkUser = async (user) => {
   const response = await httpClient.post(
-    `/user/gen-reset-password-link`,
+    `/user/gen-reset-password-link?auth=User-Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;
@@ -88,7 +94,7 @@ export const resetPasswordUser = async (token, user) => {
 };
 export const genVerifyEmailLinkUser = async (user) => {
   const response = await httpClient.post(
-    `/user/gen-verify-email-link`,
+    `/user/gen-verify-email-link?auth=User-Verify-Email`,
     JSON.stringify(user)
   );
   return response.data;
@@ -103,7 +109,7 @@ export const verifyEmailUser = async (token, user) => {
 };
 export const genVerifyPhoneLinkUser = async (user) => {
   const response = await httpClient.post(
-    `/user/gen-verify-phone-link`,
+    `/user/gen-verify-phone-link?auth=User-Verify-Phone`,
     JSON.stringify(user)
   );
   return response.data;
@@ -142,14 +148,14 @@ export const updateUserDonation = async (userId, donationId, donation) => {
 //Partner CRUD Operations
 export const createPartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/signup`,
+    `/partner/signup?auth=Partner`,
     JSON.stringify(user)
   );
   return response.data;
 };
 export const validatePartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/signin`,
+    `/partner/signin?auth=Partner`,
     JSON.stringify(user)
   );
   return response.data;
@@ -170,7 +176,7 @@ export const invalidatePartner = async (user) => {
 };
 export const genResetPasswordLinkPartner = async (user) => {
   const response = await httpClient.post(
-    `/partner/gen-reset-password-link`,
+    `/partner/gen-reset-password-link?auth=Partner-Reset-Password`,
     JSON.stringify(user)
   );
   return response.data;
@@ -208,7 +214,10 @@ export const updatePartnerDonation = async (userId, donationId, donation) => {
 /*************************** Admin APIs ***************************/
 //Admin CRUD Operations
 export const validateAdmin = async (user) => {
-  const response = await httpClient.post(`/admin/signin`, JSON.stringify(user));
+  const response = await httpClient.post(
+    `/admin/signin?auth=Admin`,
+    JSON.stringify(user)
+  );
   return response.data;
 };
 export const authAdmin = async (user) => {
