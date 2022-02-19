@@ -259,7 +259,11 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn :disabled="allowDelete()" color="error" @click="deleteUser()"
+          <v-btn
+            :disabled="allowDelete()"
+            :loading="deleteLoading"
+            color="error"
+            @click="deleteUser()"
             >Delete User Account</v-btn
           >
         </v-card-actions>
@@ -351,6 +355,7 @@ export default {
     updateLoading: false,
     verifyEmailLoading: false,
     verifyPhoneLoading: false,
+    deleteLoading: false,
   }),
   computed: {
     ...mapGetters({
@@ -414,15 +419,27 @@ export default {
       }
     },
     deleteUser() {
+      this.deleteLoading = true;
       Object.assign(this.user, this.del);
       this.delete({ credentials: this.user, userType: "User" })
         .then(() => {
+          this.deleteLoading = false;
+          this.snackbar.color = "success";
+          this.snackbar.icon = "mdi-check-circle";
+          this.snackbar.title = "Success";
+          this.snackbar.text = "Successfully delete account";
+          this.snackbar.active = true;
           this.$router.replace({
             name: "Home",
           });
         })
         .catch((error) => {
-          console.log(error);
+          this.deleteLoading = false;
+          this.snackbar.color = "error";
+          this.snackbar.icon = "mdi-alert-circle";
+          this.snackbar.title = "Error";
+          this.snackbar.text = "Failed delete account";
+          this.snackbar.active = true;
         });
     },
     verifyEmail() {
