@@ -202,6 +202,14 @@ exports.handleUserDeletion = async (req, res) => {
   try {
     const payload = req.body;
     if (!payload) throw errors.INVALID_PAYLOAD;
+    if (!payload._id) throw errors.INVALID_PAYLOAD;
+    const headers = req.headers;
+    if (!headers) throw errors.INVALID_PAYLOAD;
+    const authHeader = headers["authorization"];
+    if (!authHeader) throw errors.INVALID_PAYLOAD;
+    const token = authHeader.split(" ")[1];
+    if (!token) throw errors.INVALID_PAYLOAD;
+    await tokenController.delete(payload._id, token, req.query.auth);
     if (!payload.username) throw errors.INVALID_PAYLOAD;
     if (!payload.email) throw errors.INVALID_PAYLOAD;
     const findObj = {
@@ -214,13 +222,6 @@ exports.handleUserDeletion = async (req, res) => {
     const valid = await crypt.compareHash(payload.password, result.password);
     if (!valid) throw errors.VALIDATION_FAILED;
     await mongodb.deleteOne(user, result);
-    const headers = req.headers;
-    if (!headers) throw errors.INVALID_PAYLOAD;
-    const authHeader = headers["authorization"];
-    if (!authHeader) throw errors.INVALID_PAYLOAD;
-    const token = authHeader.split(" ")[1];
-    if (!token) throw errors.INVALID_PAYLOAD;
-    await tokenController.delete(result._id, token, req.query.auth);
     const obj = result.toObject();
     delete obj.password;
     res.status(codes.ACCEPTED).json({ user: obj });
@@ -523,6 +524,14 @@ exports.handleUserDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const userId = req.params.userId;
         if (!userId) throw errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(userId, token, req.query.auth);
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         if (!req.query) throw errors.INVALID_PAYLOAD;
         const isArchived = req.query.isArchived;
         const findObj = {};
@@ -578,6 +587,14 @@ exports.handleUserDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const userId = req.params.userId;
         if (!userId) throw errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(userId, token, req.query.auth);
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         payload.isAssigned = true;
         payload.userId = userId;
         payload.donationStatus = "ASSIGNED";
@@ -610,6 +627,14 @@ exports.handleUserDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const userId = req.params.userId;
         if (!userId) errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(userId, token, req.query.auth);
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         const donationId = req.params.donationId;
         if (!donationId) throw errors.INVALID_PAYLOAD;
         const findObj = {

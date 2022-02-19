@@ -261,6 +261,18 @@ exports.handlePartnerDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const partnerId = req.params.partnerId;
         if (!partnerId) throw errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(
+          partnerId,
+          token,
+          req.query.auth
+        );
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         if (!req.query) throw errors.INVALID_PAYLOAD;
         const isArchived = req.query.isArchived;
         const findObj = {};
@@ -315,6 +327,18 @@ exports.handlePartnerDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const partnerId = req.params.partnerId;
         if (!partnerId) throw errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(
+          partnerId,
+          token,
+          req.query.auth
+        );
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         payload.partnerId = partnerId;
         const result = await mongodb.createOne(donation, payload);
         const obj = result.toObject();
@@ -338,6 +362,18 @@ exports.handlePartnerDonation = async (req, res) => {
         if (!req.params) throw errors.INVALID_PAYLOAD;
         const partnerId = req.params.partnerId;
         if (!partnerId) errors.INVALID_PAYLOAD;
+        const headers = req.headers;
+        if (!headers) throw errors.INVALID_PAYLOAD;
+        const authHeader = headers["authorization"];
+        if (!authHeader) throw errors.INVALID_PAYLOAD;
+        const token = authHeader.split(" ")[1];
+        if (!token) throw errors.INVALID_PAYLOAD;
+        const valid = await tokenController.find(
+          partnerId,
+          token,
+          req.query.auth
+        );
+        if (!valid) throw errors.AUTHENTICATION_FAILED;
         const donationId = req.params.donationId;
         if (!donationId) throw errors.INVALID_PAYLOAD;
         const findObj = {
