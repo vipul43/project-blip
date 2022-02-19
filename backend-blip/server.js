@@ -228,10 +228,6 @@ app.get("/blogs", async (req, res) => {
   await blogController.handleBlogFetchAll(req, res);
 });
 
-app.post("/blogs", async (req, res) => {
-  await blogController.handleBlogCreation(req, res);
-});
-
 app.get("/blogs/:blogId", async (req, res) => {
   await blogController.handleBlogFetch(req, res);
 });

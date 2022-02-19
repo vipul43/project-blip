@@ -1,6 +1,8 @@
 ## API DOCUMENTATION
 
-### API - STATS
+### API - OPEN LEVEL
+
+#### STATS
 
 ---
 
@@ -10,6 +12,14 @@
 |  GET   |        `/stats/active-partners-count`        | gets total active partners count |  DONE   |
 |  GET   |           `/stats/donations-count`           |    gets total donations count    |  DONE   |
 |  GET   | `/stats/donations-count/:donation-center-id` |  gets total donations by center  | PENDING |
+
+#### BLOG
+
+---
+
+| METHOD |        URL        |     ACTION     | STATUS  |
+| :----: | :---------------: | :------------: | :-----: |
+|  GET   | `/blog/all-blogs` | gets all blogs | PENDING |
 
 ### API - ADMIN LEVEL
 

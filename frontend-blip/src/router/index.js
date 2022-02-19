@@ -233,6 +233,12 @@ const routes = [
     component: () => import("../views/Blog.vue"),
   },
   {
+    path: "/blog/:blogId",
+    name: "BlogPost",
+    component: () => import("../components/BlogPost.vue"),
+    props: (route) => ({ blogId: route.params.blogId }),
+  },
+  {
     path: "/donate",
     name: "Donate",
     component: () => import("../views/Donate.vue"),

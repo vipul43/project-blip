@@ -259,3 +259,14 @@ export const getCitiesByStateAndCountry = async (ciso, siso) => {
   const response = await httpClient2.get(`${ciso}/states/${siso}/cities`);
   return response.data;
 };
+
+/*************************** Open APIs ***************************/
+// Blog
+export const getAllBlogs = async () => {
+  const response = await httpClient.get(`/blogs`);
+  return response.data;
+};
+export const getBlog = async (blogId) => {
+  const response = await httpClient.get(`/blogs/${blogId}`);
+  return response.data;
+};
