@@ -7,7 +7,7 @@ export default {
   name: "Contact",
   metaInfo() {
     return {
-      title: "Contact - Project BLiP",
+      title: "Contact | Project BLiP",
     };
   },
 };

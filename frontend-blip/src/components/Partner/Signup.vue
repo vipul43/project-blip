@@ -419,7 +419,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Partner Sign Up - Project BLiP",
+      title: "Partner Sign Up | Project BLiP",
     };
   },
 };

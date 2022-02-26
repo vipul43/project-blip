@@ -89,7 +89,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Account Profile - Project BLiP",
+      title: "Account Profile | Project BLiP",
     };
   },
 };

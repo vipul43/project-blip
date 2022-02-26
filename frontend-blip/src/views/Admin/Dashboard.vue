@@ -9,7 +9,7 @@ export default {
   data: () => ({}),
   metaInfo() {
     return {
-      title: "Admin Dashboard - Project BLiP",
+      title: "Admin Dashboard | Project BLiP",
     };
   },
 };

@@ -303,7 +303,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Partner Sign In - Project BLiP",
+      title: "Partner Sign In | Project BLiP",
     };
   },
 };

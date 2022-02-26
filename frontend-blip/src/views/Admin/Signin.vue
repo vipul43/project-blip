@@ -179,7 +179,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Admin Sign In - Project BLiP",
+      title: "Admin Sign In | Project BLiP",
     };
   },
 };

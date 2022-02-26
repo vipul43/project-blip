@@ -181,7 +181,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Partner Reset Password - Project BLiP",
+      title: "Partner Reset Password | Project BLiP",
     };
   },
 };

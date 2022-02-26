@@ -243,7 +243,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "User Sign Up - Project BLiP",
+      title: "User Sign Up | Project BLiP",
     };
   },
 };

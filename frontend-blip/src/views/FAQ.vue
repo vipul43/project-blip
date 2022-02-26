@@ -65,7 +65,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "FAQ - Project BLiP",
+      title: "FAQ | Project BLiP",
     };
   },
 };

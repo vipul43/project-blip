@@ -554,7 +554,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Partner Dashboard - Project BLiP",
+      title: "Partner Dashboard | Project BLiP",
     };
   },
 };

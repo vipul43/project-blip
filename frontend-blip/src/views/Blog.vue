@@ -44,7 +44,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Blog - Project BLiP",
+      title: "Blog | Project BLiP",
     };
   },
 };

@@ -7,7 +7,7 @@ export default {
   name: "PartnerProfile",
   metaInfo() {
     return {
-      title: "Partner Profile - Project BLiP",
+      title: "Partner Profile | Project BLiP",
     };
   },
 };

@@ -75,7 +75,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "User Verify Email - Project BLiP",
+      title: "User Verify Email | Project BLiP",
     };
   },
 };

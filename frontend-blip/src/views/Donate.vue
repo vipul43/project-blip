@@ -7,7 +7,7 @@ export default {
   name: "Donate",
   metaInfo() {
     return {
-      title: "Donate - Project BLiP",
+      title: "Donate | Project BLiP",
     };
   },
 };

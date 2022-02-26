@@ -505,7 +505,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: "Dashboard - Project BLiP",
+      title: "Dashboard | Project BLiP",
     };
   },
 };
