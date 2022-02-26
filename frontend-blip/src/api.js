@@ -279,3 +279,8 @@ export const getBlog = async (blogId) => {
   const response = await httpClient.get(`/blogs/${blogId}`);
   return response.data;
 };
+// FAQ
+export const getAllFAQs = async () => {
+  const response = await httpClient.get(`/faqs`);
+  return response.data;
+};

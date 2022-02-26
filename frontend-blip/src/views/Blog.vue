@@ -1,19 +1,22 @@
 <template>
   <div id="blog">
     <v-container>
-      <v-row v-for="blog in blogs" :key="blog._id" justify="center">
-        <v-col>
-          <v-card hover link :to="getBlogLink(blog)">
-            <v-card-title>{{ blog.title }}</v-card-title>
-            <v-img
-              v-if="blog.cover"
-              height="200"
-              :src="getBlogCover(blog)"
-            ></v-img>
-            <v-card-text class="pa-4">{{ blog.context }}</v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+      <div v-if="blogs.length">
+        <v-row v-for="blog in blogs" :key="blog._id" justify="center">
+          <v-col>
+            <v-card hover link :to="getBlogLink(blog)">
+              <v-card-title>{{ blog.title }}</v-card-title>
+              <v-img
+                v-if="blog.cover"
+                height="200"
+                :src="getBlogCover(blog)"
+              ></v-img>
+              <v-card-text class="pa-4">{{ blog.context }}</v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>No Blogs Yet</div>
     </v-container>
   </div>
 </template>

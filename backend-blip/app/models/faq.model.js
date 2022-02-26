@@ -5,9 +5,19 @@ module.exports = (mongoose) => {
         type: String,
         required: [true, "FAQ Question is Required."],
       },
-      Answer: {
+      answer: {
         type: String,
         required: [true, "FAQ Answer is Required"],
+      },
+      by: {
+        type: String,
+        required: [true, "By is Required"],
+        enum: {
+          values: ["User", "Partner", "Admin"],
+        },
+      },
+      name: {
+        type: String,
       },
     },
     { timestamps: true }
