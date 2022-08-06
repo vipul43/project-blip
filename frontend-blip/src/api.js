@@ -270,16 +270,16 @@ export const getCitiesByStateAndCountry = async (ciso, siso) => {
 };
 
 /*************************** Open APIs ***************************/
-// Blog
-export const getAllBlogs = async () => {
-  const response = await httpClient.get(`/blogs`);
-  return response.data;
-};
-export const getBlog = async (blogId) => {
-  const response = await httpClient.get(`/blogs/${blogId}`);
-  return response.data;
-};
-// FAQ
+// Blog TODO: LATER
+// export const getAllBlogs = async () => {
+//   const response = await httpClient.get(`/blogs`);
+//   return response.data;
+// };
+// export const getBlog = async (blogId) => {
+//   const response = await httpClient.get(`/blogs/${blogId}`);
+//   return response.data;
+// };
+// // FAQ
 export const getAllFAQs = async () => {
   const response = await httpClient.get(`/faqs`);
   return response.data;

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="blog-post">
     <v-container>
       <h1 class="pb-2">{{ blog.title }}</h1>
@@ -24,4 +24,4 @@ export default {
     });
   },
 };
-</script>
+</script> -->

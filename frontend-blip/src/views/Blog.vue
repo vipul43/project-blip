@@ -1,4 +1,21 @@
 <template>
+  <div id="blog">This is Blog.</div>
+</template>
+
+<script>
+export default {
+  name: "Blog",
+  metaInfo() {
+    return {
+      title: "Blog - Project BLiP",
+    };
+  },
+};
+</script>
+
+
+<!-- TODO: LATER -->
+<!-- <template>
   <div id="blog">
     <v-container>
       <div v-if="blogs.length">
@@ -48,4 +65,4 @@ export default {
     };
   },
 };
-</script>
+</script> -->
