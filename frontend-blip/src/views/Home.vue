@@ -37,7 +37,7 @@
           <v-row justify="center">
             <v-col sm="4">
               <v-card color="#56657c" dark tile height="200">
-                <v-card-subtitle> #Active Partner(s) </v-card-subtitle>
+                <v-card-subtitle> #Active User(s) </v-card-subtitle>
                 <v-card-text style="font-size: 6em" class="pa-11">
                   {{ activeUsersCount }}
                 </v-card-text>
@@ -45,7 +45,7 @@
             </v-col>
             <v-col sm="4">
               <v-card color="#56657c" dark tile height="200">
-                <v-card-subtitle> #Active User(s) </v-card-subtitle>
+                <v-card-subtitle> #Active Partner(s) </v-card-subtitle>
                 <v-card-text style="font-size: 6em" class="pa-11">
                   {{ activePartnersCount }}
                 </v-card-text>

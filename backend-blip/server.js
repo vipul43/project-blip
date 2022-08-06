@@ -1,19 +1,27 @@
 // importing modules
+// top level imports
 const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
+// db imports
 const db = require("./app/models");
 const mongodb = require("./app/utils/mongodb.util.js");
+
+// controller imports
 const userController = require("./app/controllers/user.controller.js");
 const partnerController = require("./app/controllers/partner.controller.js");
 const adminController = require("./app/controllers/admin.controller.js");
 const statsController = require("./app/controllers/stats.controller.js");
-const blogController = require("./app/controllers/blog.controller.js");
+// const blogController = require("./app/controllers/blog.controller.js");
 const faqController = require("./app/controllers/faq.controller.js");
+
+// low level imports
 const auth = require("./app/middlewares/auth.middleware.js");
 const cron = require("node-cron");
+const rateLimit = require('express-rate-limit')
 
 // setting up express app
 const app = express();
@@ -29,6 +37,14 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 100,
+	standardHeaders: true,
+	legacyHeaders: false,
+});
+app.use(limiter);
+
 
 // connecting to mongodb database
 mongodb.connect(db);
