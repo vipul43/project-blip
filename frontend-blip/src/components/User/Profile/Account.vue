@@ -468,30 +468,7 @@ export default {
         });
     },
     verifyPhone() {
-      this.verifyPhoneLoading = true;
-      genVerifyPhoneLinkUser(this._user)
-        .then((response) => {
-          console.log(response);
-          this.verifyPhoneLoading = false;
-          this.snackbar.color = "success";
-          this.snackbar.icon = "mdi-check-circle";
-          this.snackbar.title = "Success";
-          if (!!response.status) {
-            this.snackbar.text = "Verification link sent to phone";
-          } else {
-            this.snackbar.text = "Phone already verified";
-            // this.$router.go();
-          }
-          this.snackbar.active = true;
-        })
-        .catch((error) => {
-          this.verifyPhoneLoading = false;
-          this.snackbar.color = "error";
-          this.snackbar.icon = "mdi-alert-circle";
-          this.snackbar.title = "Error";
-          this.snackbar.text = "Failed to send verification link to phone";
-          this.snackbar.active = true;
-        });
+      this.verifyPhoneLoading = false;
     },
     formatDateTime(dirtyDateTime) {
       if (dirtyDateTime) {

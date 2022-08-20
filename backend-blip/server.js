@@ -105,14 +105,6 @@ app.post("/user/verify-email", auth.authenticate, async (req, res) => {
   await userController.handleUserVerifyEmail(req, res);
 });
 
-app.post("/user/gen-verify-phone-link", async (req, res) => {
-  await userController.handleUserGenerateVerifyPhoneLink(req, res);
-});
-
-app.post("/user/verify-phone", auth.authenticate, async (req, res) => {
-  await userController.handleUserVerifyPhone(req, res);
-});
-
 // Add new donation to user by adding assiging the donation to user
 app.post(
   "/user/donation-details/:userId",
