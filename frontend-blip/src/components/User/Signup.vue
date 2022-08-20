@@ -188,7 +188,7 @@ extend("email", {
 });
 extend("alpha_dash", {
   ...alpha_dash,
-  message: "{_field_} can not have spaces",
+  message: "{_field_} can not have non alpha-numeric characters(except underscore)",
 });
 
 export default {
