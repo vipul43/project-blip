@@ -26,6 +26,7 @@ exports.handlePartnerCreation = async (req, res) => {
     payload.password = hashedPassword;
     payload.role = "Partner";
     //here: payload
+    console.log("partner creation: ", payload)
     const result = await mongodb.createOne(partner, payload);
     const token = auth.generate({
       username: result.username,
@@ -235,6 +236,7 @@ exports.handlePartnerResetPassword = async (req, res) => {
       upsert: false,
     };
     //here: payload
+    console.log("partner reset password: ", payload)
     await mongodb.updateOne(partner, findObj, payload, updateConfig);
     await tokenController.delete(result._id, token, req.query.auth);
     delete payload.password;
@@ -343,6 +345,7 @@ exports.handlePartnerDonation = async (req, res) => {
         if (!valid) throw errors.AUTHENTICATION_FAILED;
         payload.partnerId = partnerId;
         //here: payload
+        console.log("partner donation creation: ", payload)
         const result = await mongodb.createOne(donation, payload);
         const obj = result.toObject();
         res.status(codes.CREATED).json({ donation: obj });
@@ -387,6 +390,7 @@ exports.handlePartnerDonation = async (req, res) => {
           upsert: false,
         };
         //here: payload
+        console.log("partner donation updation: ", payload)
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         payload.partnerId = partnerId;
         payload.donationId = donationId;

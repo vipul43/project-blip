@@ -25,8 +25,17 @@ exports.handleUserCreation = async (req, res) => {
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "User";
-    //here: payload
-    const result = await mongodb.createOne(user, payload);
+    //here: _payload
+    const _payload = {
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      username: payload.userName,
+      email: payload.email,
+      phone: payload.phone,
+      password: payload.password,
+      role: payload.role
+    };
+    const result = await mongodb.createOne(user, _payload);
     const token = auth.generate({
       username: result.username,
       email: result.email,
@@ -183,8 +192,22 @@ exports.handleUserUpdation = async (req, res) => {
     const updateConfig = {
       upsert: false,
     };
-    //here: payload
-    await mongodb.updateOne(user, findObj, payload, updateConfig);
+    //here: _payload
+    const _payload = {
+      _id: payload._id,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      username: payload.username,
+      email: payload.email,
+      phone: payload.phone,
+      role: payload.role,
+      isEmailVerified: payload.isEmailVerified,
+      isPhoneVerified: payload.isPhoneVerified,
+      createdAt: payload.createdAt,
+      updatedAt: payload.updatedAt,
+      __v: payload.__v
+    };
+    await mongodb.updateOne(user, findObj, _payload, updateConfig);
     res.status(codes.ACCEPTED).json({ token: token, user: payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
@@ -309,7 +332,12 @@ exports.handleUserResetPassword = async (req, res) => {
     const updateConfig = {
       upsert: false,
     };
-    //here: payload
+    //here: _payload
+    const _payload = {
+      username: payload.username,
+      email: payload.email,
+      password: payload.password
+    };
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     await tokenController.delete(result._id, token, req.query.auth);
     delete payload.password;
@@ -405,6 +433,7 @@ exports.handleUserVerifyEmail = async (req, res) => {
         upsert: false,
       };
       //here: payload
+      console.log("user verify email: ", payload)
       await mongodb.updateOne(user, findObj, payload, updateConfig);
       await tokenController.delete(result._id, token, req.query.auth);
     }
@@ -516,6 +545,7 @@ exports.handleUserDonation = async (req, res) => {
           upsert: false,
         };
         //here: payload
+        console.log("user donation creation: ", payload)
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         res.status(codes.CREATED).json({ donation: payload });
       } catch (error) {
@@ -555,6 +585,7 @@ exports.handleUserDonation = async (req, res) => {
           upsert: false,
         };
         //here: payload
+        console.log("user donation updation: ", payload)
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         payload.userId = userId;
         payload.donationId = donationId;
