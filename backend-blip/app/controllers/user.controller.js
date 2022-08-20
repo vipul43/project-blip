@@ -26,6 +26,7 @@ exports.handleUserCreation = async (req, res) => {
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "User";
+    //here: payload
     const result = await mongodb.createOne(user, payload);
     const token = auth.generate({
       username: result.username,
@@ -183,6 +184,7 @@ exports.handleUserUpdation = async (req, res) => {
     const updateConfig = {
       upsert: false,
     };
+    //here: payload
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     res.status(codes.ACCEPTED).json({ token: token, user: payload });
   } catch (error) {
@@ -308,6 +310,7 @@ exports.handleUserResetPassword = async (req, res) => {
     const updateConfig = {
       upsert: false,
     };
+    //here: payload
     await mongodb.updateOne(user, findObj, payload, updateConfig);
     await tokenController.delete(result._id, token, req.query.auth);
     delete payload.password;
@@ -402,6 +405,7 @@ exports.handleUserVerifyEmail = async (req, res) => {
       const updateConfig = {
         upsert: false,
       };
+      //here: payload
       await mongodb.updateOne(user, findObj, payload, updateConfig);
       await tokenController.delete(result._id, token, req.query.auth);
     }
@@ -496,6 +500,7 @@ exports.handleUserVerifyPhone = async (req, res) => {
       const updateConfig = {
         upsert: false,
       };
+      //here: payload
       await mongodb.updateOne(user, findObj, payload, updateConfig);
       await tokenController.delete(result._id, token, req.query.auth);
     }
@@ -606,6 +611,7 @@ exports.handleUserDonation = async (req, res) => {
         const updateConfig = {
           upsert: false,
         };
+        //here: payload
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         res.status(codes.CREATED).json({ donation: payload });
       } catch (error) {
@@ -644,6 +650,7 @@ exports.handleUserDonation = async (req, res) => {
         const updateConfig = {
           upsert: false,
         };
+        //here: payload
         await mongodb.updateOne(donation, findObj, payload, updateConfig);
         payload.userId = userId;
         payload.donationId = donationId;
