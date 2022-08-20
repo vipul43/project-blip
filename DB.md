@@ -84,6 +84,7 @@ Schema
         {
             token: String,
             creation: Date,
+            auth: enum("User", "Partner", "Admin", "User-Reset-Password", "Partner-Reset-Password", "User-Verify-Email", "User-Verify-Phone"),
             _id: ObjectId
         }
     ],
@@ -110,7 +111,8 @@ Schema
     isAssigned: Boolean,
     userId: ObjectId,
     donationName: String,
-    isArchived: Boolean,
+    isUserArchived: Boolean,
+    isPartnerArchived: Boolean,
     issues: [
         {
             issueName: String,
@@ -134,6 +136,8 @@ Schema
     _id: ObjectId,
     question: String,
     answer: String,
+    by: enum("User", "Partner", "Admin"),
+    name: String
     createdAt: Date,
     updatedAt: Date,
     _v: 0
@@ -149,7 +153,10 @@ Schema
 {
     _id: ObjectId,
     title: String,
+    context: String,
     content: String,
+    author: String,
+    cover: String,
     createdAt: Date,
     updatedAt: Date,
     _v: 0
