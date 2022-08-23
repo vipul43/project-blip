@@ -25,9 +25,26 @@ exports.handlePartnerCreation = async (req, res) => {
     if (!hashedPassword) throw errors.HASHING_FAILED;
     payload.password = hashedPassword;
     payload.role = "Partner";
-    //here: payload
-    console.log("partner creation: ", payload)
-    const result = await mongodb.createOne(partner, payload);
+    //here: _payload
+    const _payload = {
+      orgName: payload.orgName,
+      username: payload.username,
+      email: payload.email,
+      phone: payload.phone,
+      type: payload.type,
+      address: {
+        houseno: payload.address.houseno,
+        area_and_street: payload.address.area_and_street,
+        landmark: payload.address.landmark,
+        country: payload.address.country,
+        state: payload.address.state,
+        pincode: payload.address.pincode,
+        city_town_district: payload.address.city_town_district
+      },
+      password: payload.password,
+      role: payload.role
+    };
+    const result = await mongodb.createOne(partner, _payload);
     const token = auth.generate({
       username: result.username,
       email: result.email,
@@ -235,12 +252,16 @@ exports.handlePartnerResetPassword = async (req, res) => {
     const updateConfig = {
       upsert: false,
     };
-    //here: payload
-    console.log("partner reset password: ", payload)
-    await mongodb.updateOne(partner, findObj, payload, updateConfig);
+    //here: _payload
+    const _payload = {
+      username: payload.username,
+      email: payload.email,
+      password: payload.password
+    };
+    await mongodb.updateOne(partner, findObj, _payload, updateConfig);
     await tokenController.delete(result._id, token, req.query.auth);
-    delete payload.password;
-    res.status(codes.ACCEPTED).json({ user: payload });
+    delete _payload.password;
+    res.status(codes.ACCEPTED).json({ user: _payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -344,9 +365,17 @@ exports.handlePartnerDonation = async (req, res) => {
         );
         if (!valid) throw errors.AUTHENTICATION_FAILED;
         payload.partnerId = partnerId;
-        //here: payload
-        console.log("partner donation creation: ", payload)
-        const result = await mongodb.createOne(donation, payload);
+        //here: _payload
+        const _payload = {
+          donorName: payload.donorName,
+          donorPhone: payload.donorPhone,
+          donorEmail: payload.donorEmail,
+          donationType: payload.donationType,
+          donationQuantity: payload.donationQuantity,
+          donationDescription: payload.donationDescription,
+          partnerId: payload.partnerId
+        };
+        const result = await mongodb.createOne(donation, _payload);
         const obj = result.toObject();
         res.status(codes.CREATED).json({ donation: obj });
       } catch (error) {
@@ -389,12 +418,14 @@ exports.handlePartnerDonation = async (req, res) => {
         const updateConfig = {
           upsert: false,
         };
-        //here: payload
-        console.log("partner donation updation: ", payload)
-        await mongodb.updateOne(donation, findObj, payload, updateConfig);
-        payload.partnerId = partnerId;
-        payload.donationId = donationId;
-        res.status(codes.OK).json({ donation: payload });
+        //here: _payload
+        const _payload = { 
+          isPartnerArchived: payload.isPartnerArchived
+        };
+        await mongodb.updateOne(donation, findObj, _payload, updateConfig);
+        _payload.partnerId = partnerId;
+        _payload.donationId = donationId;
+        res.status(codes.OK).json({ donation: _payload });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });

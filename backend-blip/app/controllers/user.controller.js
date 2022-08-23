@@ -208,7 +208,7 @@ exports.handleUserUpdation = async (req, res) => {
       __v: payload.__v
     };
     await mongodb.updateOne(user, findObj, _payload, updateConfig);
-    res.status(codes.ACCEPTED).json({ token: token, user: payload });
+    res.status(codes.ACCEPTED).json({ token: token, user: _payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -338,10 +338,10 @@ exports.handleUserResetPassword = async (req, res) => {
       email: payload.email,
       password: payload.password
     };
-    await mongodb.updateOne(user, findObj, payload, updateConfig);
+    await mongodb.updateOne(user, findObj, _payload, updateConfig);
     await tokenController.delete(result._id, token, req.query.auth);
-    delete payload.password;
-    res.status(codes.ACCEPTED).json({ user: payload });
+    delete _payload.password;
+    res.status(codes.ACCEPTED).json({ user: _payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -407,6 +407,7 @@ exports.handleUserVerifyEmail = async (req, res) => {
     const payload = req.body;
     if (!payload) throw errors.INVALID_PAYLOAD;
     if (!!payload.isEmailVerified) throw errors.INVALID_PAYLOAD;
+    const _payload = {};
     if (!payload.isEmailVerified) {
       if (!payload.username) throw errors.INVALID_PAYLOAD;
       if (!payload.email) throw errors.INVALID_PAYLOAD;
@@ -432,12 +433,25 @@ exports.handleUserVerifyEmail = async (req, res) => {
       const updateConfig = {
         upsert: false,
       };
-      //here: payload
-      console.log("user verify email: ", payload)
-      await mongodb.updateOne(user, findObj, payload, updateConfig);
+      //here: _payload
+      _payload = {
+        _id: payload._id,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        username: payload.username,
+        email: payload.email,
+        phone: payload.phone,
+        role: payload.role,
+        createdAt: payload.createdAt,
+        updatedAt: payload.updatedAt,
+        __v: payload.__v,
+        isEmailVerified: payload.isEmailVerified,
+        isPhoneVerified: payload.isPhoneVerified
+      };
+      await mongodb.updateOne(user, findObj, _payload, updateConfig);
       await tokenController.delete(result._id, token, req.query.auth);
     }
-    res.status(codes.ACCEPTED).json({ user: payload });
+    res.status(codes.ACCEPTED).json({ user: _payload });
   } catch (error) {
     if (error === errors.INVALID_PAYLOAD) {
       res.status(codes.BAD_REQUEST).json({ error: error });
@@ -544,10 +558,15 @@ exports.handleUserDonation = async (req, res) => {
         const updateConfig = {
           upsert: false,
         };
-        //here: payload
-        console.log("user donation creation: ", payload)
-        await mongodb.updateOne(donation, findObj, payload, updateConfig);
-        res.status(codes.CREATED).json({ donation: payload });
+        //here: _payload
+        const _payload = {
+          donationName: payload.donationName,
+          isAssigned: payload.isAssigned,
+          userId: payload.userId,
+          donationStatus: payload.donationStatus
+        };
+        await mongodb.updateOne(donation, findObj, _payload, updateConfig);
+        res.status(codes.CREATED).json({ donation: _payload });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });
@@ -584,12 +603,14 @@ exports.handleUserDonation = async (req, res) => {
         const updateConfig = {
           upsert: false,
         };
-        //here: payload
-        console.log("user donation updation: ", payload)
-        await mongodb.updateOne(donation, findObj, payload, updateConfig);
-        payload.userId = userId;
-        payload.donationId = donationId;
-        res.status(codes.OK).json({ donation: payload });
+        //here: _payload
+        const _payload = {
+          isUserArchived: payload.isUserArchived
+        };
+        await mongodb.updateOne(donation, findObj, _payload, updateConfig);
+        _payload.userId = userId;
+        _payload.donationId = donationId;
+        res.status(codes.OK).json({ donation: _payload });
       } catch (error) {
         if (error === errors.INVALID_PAYLOAD) {
           res.status(codes.BAD_REQUEST).json({ error: error });
