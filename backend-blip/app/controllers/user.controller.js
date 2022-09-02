@@ -552,7 +552,7 @@ exports.handleUserDonation = async (req, res) => {
         payload.donationStatus = "ASSIGNED";
         if (!payload.donationId) throw errors.INVALID_PAYLOAD;
         const findObj = {
-          _id: payload.donationId,
+          donationId: payload.donationId,
         };
         delete payload.donationId;
         const updateConfig = {

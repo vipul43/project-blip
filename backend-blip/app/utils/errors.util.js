@@ -16,3 +16,4 @@ exports.DELETION_FAILED = "Could Not Delete";
 exports.HTTP_NOT_ALLOWED = "HTTP Method Not Allowed";
 exports.MAIL_SENDING_FAILED = "Unable to send mail";
 exports.MESSAGE_SENDING_FAILED = "Unable to send message";
+exports.RANDOM_NAMEGEN_FAILED = "Unable to generate random name";

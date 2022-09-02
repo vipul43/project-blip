@@ -6,6 +6,7 @@ const mail = require("../utils/mail.util.js");
 const auth = require("../middlewares/auth.middleware.js");
 const db = require("../models");
 const tokenController = require("./token.controller.js");
+const name = require("../utils/name.util.js");
 const partner = db.partner;
 const donation = db.donation;
 const user = db.user;
@@ -365,6 +366,7 @@ exports.handlePartnerDonation = async (req, res) => {
         );
         if (!valid) throw errors.AUTHENTICATION_FAILED;
         payload.partnerId = partnerId;
+        const randomName = await name.genRandomName();
         //here: _payload
         const _payload = {
           donorName: payload.donorName,
@@ -373,7 +375,8 @@ exports.handlePartnerDonation = async (req, res) => {
           donationType: payload.donationType,
           donationQuantity: payload.donationQuantity,
           donationDescription: payload.donationDescription,
-          partnerId: payload.partnerId
+          partnerId: payload.partnerId,
+          donationId: randomName
         };
         const result = await mongodb.createOne(donation, _payload);
         const obj = result.toObject();

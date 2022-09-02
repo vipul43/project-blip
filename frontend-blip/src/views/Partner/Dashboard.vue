@@ -1,5 +1,6 @@
 <template>
   <div id="partner-dashboard">
+    <!-- snackbar: archive, unarchive, add to donations table -->
     <v-snackbar
       v-model="snackbar.active"
       :color="snackbar.color"
@@ -20,7 +21,9 @@
         <v-btn text v-bind="attrs" @click="deactivateSnackar()"> Close </v-btn>
       </template>
     </v-snackbar>
+    <!-- container: entire page -->
     <v-container>
+      <!-- button: donate blood and track blood buttons -->
       <v-row>
         <v-col cols="12" sm="6">
           <v-btn id="btn" to="/donate-blood" x-large depressed dark
@@ -33,6 +36,7 @@
           >
         </v-col>
       </v-row>
+      <!-- datatable: donations table -->
       <v-row>
         <v-col cols="12">
           <v-card>
@@ -63,7 +67,7 @@
                 <v-menu open-on-hover transition="scale-y-transition">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn text v-bind="attrs" v-on="on">
-                      {{ item._id }}
+                      {{ item.donationId }}
                     </v-btn>
                   </template>
                   <v-card v-if="item.isAssigned" height="200">
@@ -156,6 +160,7 @@
           </v-card>
         </v-col></v-row
       >
+      <!-- dialog: track blood -->
       <v-dialog v-model="trackDialog" persistent max-width="500">
         <v-card>
           <v-container>

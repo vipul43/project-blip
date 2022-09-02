@@ -10,7 +10,9 @@ Collections
     users,
     partners,
     tokens,
-    donations
+    donations,
+    faqs,
+    blogs
 }
 ```
 
@@ -120,6 +122,7 @@ Schema
             issueRaised: Date,
         },
     ],
+    donationId: String,
     createdAt: Date,
     updatedAt: Date,
     _v: 0

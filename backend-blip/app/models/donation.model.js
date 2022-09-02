@@ -160,6 +160,11 @@ module.exports = (mongoose) => {
           },
         },
       ],
+      donationId: {
+        type: String,
+        required: [true, "Donation ID is Required."],
+        immutable: true,
+      },
     },
     { timestamps: true }
   );
