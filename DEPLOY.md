@@ -9,7 +9,7 @@
 1. Navigate to `backend-blip` directory.
 2. Add the changes made to Version Control staging.
 3. Commit the staged changes with a message.
-4. Push the committed code to heroku remote.
+4. Push the committed code to heroku remote.(`npm run start`)
 
 ### Code
 
@@ -31,7 +31,7 @@ git push heroku main
 1. Navigate to `frontend-blip` directory.
 2. Add the changes made to Version Control staging.
 3. Commit the staged changes with a message.
-4. Push the committed code to heroku remote.
+4. Push the committed code to heroku remote.(`npm run prod`)
 
 ### Code
 
