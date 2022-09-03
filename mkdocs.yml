@@ -1,0 +1,13 @@
+site_name: Project BLiP Documentation
+site_description: 'Documentation for Project BLiP services'
+site_author: 'Sai Vipul Mohan'
+docs_dir: docs/
+repo_name: 'vipul43/project-blip'
+repo_url: 'https://github.com/vipul43/project-blip'
+nav:
+    - API: API.md
+    - Database: DB.md
+    - Development: DEVELOP.md
+    - Deployment: DEPLOY.md
+theme:
+  name: 'material'
