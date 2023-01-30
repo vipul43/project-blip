@@ -21,7 +21,7 @@ const faqController = require("./app/controllers/faq.controller.js");
 // low level imports
 const auth = require("./app/middlewares/auth.middleware.js");
 const cron = require("node-cron");
-const rateLimit = require('express-rate-limit')
+const rateLimit = require("express-rate-limit");
 
 // setting up express app
 const app = express();
@@ -29,8 +29,8 @@ var corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
       ? [
-          "http://project-blip.herokuapp.com",
-          "https://project-blip.herokuapp.com",
+          "http://project-blip.onrender.com",
+          "https://project-blip.onrender.com",
         ]
       : "http://localhost:8080",
 };
@@ -38,13 +38,12 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	max: 100,
-	standardHeaders: true,
-	legacyHeaders: false,
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
-
 
 // connecting to mongodb database
 mongodb.connect(db);
