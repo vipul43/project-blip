@@ -2,3 +2,16 @@
 .DS_Store
 .vscode
 _drafts
+
+# dependencies
+node_modules/
+backend-blip/node_modules/
+frontend-blip/node_modules/
+
+# local env/config
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*

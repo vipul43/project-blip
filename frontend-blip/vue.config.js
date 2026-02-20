@@ -1,5 +1,17 @@
 module.exports = {
-    transpileDependencies: [
-        'vuetify'
-    ]
-}
+  transpileDependencies: ["vuetify"],
+  css: {
+    loaderOptions: {
+      sass: {
+        sassOptions: {
+          quietDeps: true,
+        },
+      },
+      scss: {
+        sassOptions: {
+          quietDeps: true,
+        },
+      },
+    },
+  },
+};

@@ -1,5 +1,21 @@
 # DEVELOP
 
+## Global Prerequisites
+
+- Node.js `>= 20`
+- npm `>= 10`
+- Configure `backend-blip/.env` and `frontend-blip/.env` from `.env.example` files.
+
+## Root Makefile
+
+```
+make help
+make install
+make dev-backend
+make dev-frontend
+make build-frontend
+```
+
 ## API DEVELOP
 
 ### Steps

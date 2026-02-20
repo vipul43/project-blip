@@ -3,7 +3,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 
 // db imports
@@ -35,11 +34,11 @@ var corsOptions = {
       : "http://localhost:8080",
 };
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  limit: 100,
   standardHeaders: true,
   legacyHeaders: false,
 });

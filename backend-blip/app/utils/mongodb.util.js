@@ -2,10 +2,7 @@ const errors = require("./errors.util.js");
 
 exports.connect = (db) => {
   db.mongoose
-    .connect(db.url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(db.url)
     .then(() => {
       console.log("Connected to the database!");
     })

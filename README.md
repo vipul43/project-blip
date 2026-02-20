@@ -4,6 +4,46 @@
 
 A comprehensive system to track donated blood, its components during various phases
 
+## Runtime Requirements
+
+- Node.js `>= 20`
+- npm `>= 10`
+- MongoDB Atlas/local instance
+
+## Quick Start
+
+1. Copy env templates:
+
+```
+cp backend-blip/.env.example backend-blip/.env
+cp frontend-blip/.env.example frontend-blip/.env
+```
+
+2. Install dependencies:
+
+```
+make install
+```
+
+3. Run backend and frontend in separate terminals:
+
+```
+make dev-backend
+make dev-frontend
+```
+
+4. Build frontend:
+
+```
+make build-frontend
+```
+
+5. Show all supported commands:
+
+```
+make help
+```
+
 ## Process Flow
 
 1. **start**(customer) logs into _start.projectblip.org_ and makes **donation** in project-blip associated **bank**(first party) --> _DONATED_
